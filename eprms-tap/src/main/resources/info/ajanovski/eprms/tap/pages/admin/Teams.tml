@@ -1,0 +1,10 @@
+<html t:type="layout" title="message:admin/Teams-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/Teams-pagelink}</h1>
+
+<table class="table table-sm" t:type="grid" t:source="teams"
+	t:exclude="teamId"></table>
+
+</html>

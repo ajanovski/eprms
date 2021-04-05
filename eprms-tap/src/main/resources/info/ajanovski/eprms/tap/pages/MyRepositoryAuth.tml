@@ -1,0 +1,24 @@
+<html t:type="layout" title="Index | epm"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+
+<h1>Repository Authentication</h1>
+
+<p>Please enter your new password for repository authentication.</p>
+
+<t:form t:id="AuthForm">
+
+	<div class="form-group">
+		<t:label t:for="password" />
+		<t:passwordfield t:id="password" />
+	</div>
+
+	<div class="form-group">
+		<t:label t:for="confirmPassword" />
+		<t:passwordfield t:id="confirmPassword" />
+	</div>
+
+	<t:submit t:value="OK" />
+
+</t:form>
+
+</html>

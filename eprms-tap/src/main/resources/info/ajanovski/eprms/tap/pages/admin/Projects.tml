@@ -1,0 +1,137 @@
+<html t:type="layout" title="message:admin/Projects-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/Projects-pagelink}</h1>
+
+<div class="row">
+	<div class="col-6">
+		<div class="card">
+			<div class="card-body">
+				<form t:type="form" id="selectProject" class="form-inline">
+					<label t:type="label" t:for="selectProject" /> <select
+						t:id="selectProject" t:type="select" t:model="projectModel"
+						t:value="selectedProject" t:zone="projectZone"
+						onchange="this.form.submit(); " />
+					<t:submit t:value="OK" />
+				</form>
+			</div>
+		</div>
+	</div>
+	<div class="col-6">
+		<div class="card mb-3" t:type="if" t:test="newProject">
+			<div class="card-body">
+				<h3>${message:Project-label}</h3>
+				<form t:id="NewProjectForm" t:type="beaneditform"
+					t:object="newProject" t:exclude="projectId"></form>
+			</div>
+		</div>
+
+		<div class="card mb-3" t:type="if" t:test="newTeam">
+			<div class="card-body">
+				<h3>${message:Team-label}</h3>
+				<form t:id="NewTeamForm" t:type="beaneditform" t:object="newTeam"
+					t:exclude="teamId"></form>
+			</div>
+		</div>
+
+		<div class="card mb-3" t:type="if" t:test="newTm">
+			<div class="card-body">
+				<h3>${message:TeamMember-label}</h3>
+				<form class="form-horizontal" t:id="teamMemberForm"
+					t:type="beaneditform" t:object="newTm" t:exclude="teamMemberId"
+					t:add="person" t:reorder="person, positionNumber, role"
+					t:submitLabel="OK">
+					<p:person>
+						<label t:type="label" t:for="selectPerson"></label>
+						<select t:id="selectPerson" t:type="select" t:source="persons"
+							t:value="newTm.person" t:model="personModel" />
+					</p:person>
+				</form>
+			</div>
+		</div>
+
+		<div class="card mb-3" t:type="if" t:test="newDb">
+			<div class="card-body">
+				<h3>${message:Database-label}</h3>
+				<form class="form-horizontal" t:id="newDatabaseForm"
+					t:type="beaneditform" t:object="newDb" t:exclude="databaseId,dateCreated"
+					t:submitLabel="OK"></form>
+			</div>
+		</div>
+
+		<div class="card mb-3" t:type="if" t:test="newRp">
+			<div class="card-body">
+				<h3>${message:Repository-label}</h3>
+				<form class="form-horizontal" t:id="newRepositoryForm"
+					t:type="beaneditform" t:object="newRp" t:exclude="repositoryId,dateCreated"
+					t:submitLabel="OK"></form>
+			</div>
+		</div>
+
+		<div>
+			<a t:type="actionlink" t:id="NewProject" class="btn btn-primary"><img
+				t:type="SVGIcon" t:path="scalable/actions/document-new.svg" />
+				${message:new-label} ${message:Project-label}</a>
+		</div>
+	</div>
+</div>
+
+
+<div t:type="zone" t:id="projectZone">
+	<div class="card mt-3" t:type="loop" t:source="projects"
+		t:value="project">
+		<div class="card-header">
+			<h3>${project.title}</h3>
+		</div>
+		<div class="card-body">
+			<div class="row">
+				<div class="col-4">
+					<p class="" t:type="loop" t:source="project.repositories"
+						t:value="repository">
+						<b>${message:repository-label}</b><br />${repository.url}
+					</p>
+					<p>
+						<a t:type="actionlink" t:context="project" t:id="NewRepository"
+							class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
+							t:path="scalable/actions/document-new.svg" />
+							${message:repository-label}
+						</a>
+					</p>
+
+					<p class="" t:type="loop" t:source="project.databases"
+						t:value="database">
+						<b>${message:database-label}</b><br />${database.name}
+					</p>
+					<p>
+						<a t:type="actionlink" t:context="project" t:id="NewDatabase"
+							class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
+							t:path="scalable/actions/document-new.svg" />
+							${message:database-label}
+						</a>
+					</p>
+
+				</div>
+				<div class="col-8">
+					<div class="card mb-3 p-3" t:type="loop"
+						t:source="project.responsibilities" t:value="responsibility">
+						<t:TeamMembersGrid t:team="responsibility.team" />
+						<p>
+							<a t:type="actionlink" t:context="responsibility.team"
+								t:id="addTeamMember" role="button"
+								class="btn btn-sm btn-primary "><img t:type="SVGIcon"
+								t:path="scalable/actions/document-new.svg" />
+								${message:add-label} ${message:TeamMember-label}</a>
+						</p>
+					</div>
+					<a t:type="actionlink" t:context="project" t:id="NewTeam"
+						class="btn btn-secondary"><img t:type="SVGIcon"
+						t:path="scalable/actions/document-new.svg" />
+						${message:Team-label}</a>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</html>

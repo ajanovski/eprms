@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+<head>
+<meta charset="utf-8" />
+<title>${title}</title>
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" content="${message:system-description}" />
+<meta name="author" content="${message:main-developer-name}" />
+<link rel="shortcut icon" href="${asset:context:/favicon.ico}" />
+<meta http-equiv="Expires" content="Mon, 26 Jul 1997 05:00:00 GMT" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+</head>
+<body style="padding-top: 4.5em;">
+	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
+		style="background-color: #03030f;">
+		<a class="navbar-brand" t:type="pagelink" t:page="index">${message:app-title-short}</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#mainMenu" aria-controls="mainMenu"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+		<div class="collapse navbar-collapse" id="mainMenu">
+			<ul class="navbar-nav mr-auto">
+				<li t:type="loop" t:source="studentPageNames" t:value="pageName"
+					class="nav-item"><a class="nav-link ${classForPageName}"
+					t:type="pagelink" t:page="prop:pageName">${pageNameTitle}</a></li>
+				<t:if t:test="userInfo.administrator">
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="mainMenuAdmin"
+						role="button" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false">${message:admin-label}</a>
+						<div class="dropdown-menu" aria-labelledby="mainMenuAdmin">
+							<t:loop t:source="adminPageNames" t:value="pageName">
+								<a class="dropdown-item ${classForPageName}" t:type="pagelink"
+									t:page="prop:pageName">${pageNameTitle}</a>
+							</t:loop>
+						</div></li>
+				</t:if>
+			</ul>
+			<ul class="navbar-nav navbar-right">
+				<li class="nav-item"><a class="nav-link" href=""
+					t:type="actionlink" t:id="localeToggle">${message:lang-label}
+						${displayLanguage}</a></li>
+				<li class="nav-item dropdown"><a
+					class="nav-link dropdown-toggle" href="#" id="mainMenuUserProfile"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"><t:SVGIcon
+							t:path="scalable/apps/system-users.svg" /> ${userInfo.userName}</a>
+					<div class="dropdown-menu" aria-labelledby="mainMenuUserProfile">
+						<t:if t:test="userInfo">
+							<a href="" t:type="pagelink" t:page="logout"
+								class="dropdown-item"><img t:type="SVGIcon"
+								t:path="scalable/actions/system-log-out.svg" />
+								${message:Logout-label}</a>
+						</t:if>
+					</div></li>
+			</ul>
+		</div>
+	</nav>
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<t:alerts />
+			</div>
+		</div>
+		<t:body />
+		<hr />
+		<footer>
+			<p>
+				Copyright &copy;${message:copyrightYear} <a
+					href="https://ajanovski.info">${message:copyrightHolder}</a>
+			</p>
+		</footer>
+	</div>
+</body>
+</html>

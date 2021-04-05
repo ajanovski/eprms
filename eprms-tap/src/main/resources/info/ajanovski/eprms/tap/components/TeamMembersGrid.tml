@@ -1,0 +1,16 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h5 class="card-title">${message:Team-label} - ${team.name}</h5>
+
+<t:grid class="table table-sm" t:source="teamMembers" t:row="teamMember"
+	t:model="beanModel">
+	<p:actionsCell>
+		<a t:type="actionlink" t:context="teamMember" t:id="deleteTeamMember"
+			role="button" class="btn btn-danger btn-sm "><img t:type="SVGIcon"
+								t:path="scalable/actions/list-remove.svg" /> ${message:remove-label}</a>
+	</p:actionsCell>
+	<t:body />
+</t:grid>
+
+</html>

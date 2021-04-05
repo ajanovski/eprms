@@ -1,0 +1,7 @@
+<html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<img
+	src="${imageUrl}" style="width: ${width}; height: ${height}; vertical-align: middle;" alt="${title}" title="${title}" />
+	
+</html>

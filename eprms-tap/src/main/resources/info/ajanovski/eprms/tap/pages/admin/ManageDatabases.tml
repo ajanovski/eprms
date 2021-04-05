@@ -1,0 +1,41 @@
+<html t:type="layout" title="message:admin/ManageDatabases-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/ManageDatabases-pagelink}</h1>
+
+
+<div class="row">
+	<div class="col-3">
+		<a t:type="actionlink" t:id="toggle" class="btn btn-primary">Show
+			databases for creation: ${isOnlyShowNotCreated}</a>
+	</div>
+	<div class="col-9">
+		<div class="card-body" t:type="if" t:test="editDatabase">
+			<h3>${message:Database-label}</h3>
+			<form class="form-horizontal" t:id="editDatabaseForm"
+				t:type="beaneditform" t:object="editDatabase" t:exclude="databaseId"
+				t:submitLabel="OK"></form>
+		</div>
+	</div>
+</div>
+
+<div t:type="if" t:test="isOnlyShowNotCreated">
+	<code>
+		<t:loop t:source="databases" t:value="database">./create_database.sh "${database.name}"
+			"${database.owner}" "${database.password}"<br />
+		</t:loop>
+	</code>
+	<p:else>
+		<table class="table table-sm" t:type="grid" t:source="databases"
+			t:row="database">
+			<p:databaseIdCell>
+				<a t:type="actionlink" t:id="edit" t:context="database"
+					class="btn btn-sm btn-secondary" t:mixins="confirm">${message:edit-label}</a>
+				<a t:type="actionlink" t:id="delete" t:context="database"
+					class="btn btn-sm btn-danger" t:mixins="confirm">${message:remove-label}</a>
+			</p:databaseIdCell>
+		</table>
+	</p:else>
+</div>
+</html>
