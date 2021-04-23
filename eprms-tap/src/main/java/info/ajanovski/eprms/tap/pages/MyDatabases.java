@@ -26,10 +26,10 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
-import info.ajanovski.eprms.tap.entities.Database;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ResourceManager;
 import info.ajanovski.eprms.tap.util.UserInfo;

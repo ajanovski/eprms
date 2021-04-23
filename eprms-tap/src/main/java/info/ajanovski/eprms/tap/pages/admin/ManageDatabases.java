@@ -8,9 +8,9 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
-import info.ajanovski.eprms.tap.entities.Database;
 import info.ajanovski.eprms.tap.services.GenericService;
 
 @AdministratorPage

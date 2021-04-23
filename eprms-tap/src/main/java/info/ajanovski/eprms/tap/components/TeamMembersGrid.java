@@ -33,8 +33,8 @@ import org.apache.tapestry5.commons.Messages;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import info.ajanovski.eprms.tap.entities.Team;
-import info.ajanovski.eprms.tap.entities.TeamMember;
+import info.ajanovski.eprms.model.entities.Team;
+import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.util.UserInfo;
 

@@ -7,9 +7,9 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
-import info.ajanovski.eprms.tap.entities.Repository;
 import info.ajanovski.eprms.tap.services.GenericService;
 
 @AdministratorPage

@@ -24,8 +24,10 @@ import java.io.IOException;
 import java.util.UUID;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.commons.Configuration;
 import org.apache.tapestry5.commons.MappedConfiguration;
 import org.apache.tapestry5.commons.OrderedConfiguration;
+import org.apache.tapestry5.hibernate.HibernateEntityPackageManager;
 import org.apache.tapestry5.http.services.Request;
 import org.apache.tapestry5.http.services.RequestFilter;
 import org.apache.tapestry5.http.services.RequestHandler;
@@ -42,9 +44,9 @@ import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentSource;
 import org.slf4j.Logger;
 
-import info.ajanovski.eprms.tap.services.data.GenericDao;
-import info.ajanovski.eprms.tap.services.data.PersonDao;
-import info.ajanovski.eprms.tap.services.data.ResourceDao;
+import info.ajanovski.eprms.tap.data.GenericDao;
+import info.ajanovski.eprms.tap.data.PersonDao;
+import info.ajanovski.eprms.tap.data.ResourceDao;
 import info.ajanovski.eprms.tap.util.AppConfig;
 
 @ImportModule(Bootstrap4Module.class)
@@ -68,12 +70,19 @@ public class AppModule {
 		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,mk");
 		configuration.add(SymbolConstants.HMAC_PASSPHRASE,
 				AppConfig.getString("tapestry.hmac-passphrase") + UUID.randomUUID());
+		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
+		configuration.add(SymbolConstants.COMPRESS_WHITESPACE, false);
 	}
 
 	@Contribute(SymbolProvider.class)
 	@ApplicationDefaults
 	public static void setupEnvironment(MappedConfiguration<String, Object> configuration) {
 		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
+	}
+
+	@Contribute(HibernateEntityPackageManager.class)
+	public static void addHibernateEntityPackageManager(Configuration<String> configuration) {
+		configuration.add("info.ajanovski.eprms.model.entities");
 	}
 
 	public RequestFilter buildTimingFilter(final Logger log) {
@@ -84,7 +93,7 @@ public class AppModule {
 					return handler.service(request, response);
 				} finally {
 					long elapsed = System.currentTimeMillis() - startTime;
-					log.info("Request time: {} ms", elapsed);
+					log.debug("Request time: {} ms", elapsed);
 				}
 			}
 		};
@@ -101,9 +110,8 @@ public class AppModule {
 	}
 
 	public static final void contributeComponentRequestHandler(
-			OrderedConfiguration<ComponentRequestFilter> configuration,
-			ComponentRequestFilter accessController, ApplicationStateManager asm,
-			ComponentSource componentSource) {
+			OrderedConfiguration<ComponentRequestFilter> configuration, ComponentRequestFilter accessController,
+			ApplicationStateManager asm, ComponentSource componentSource) {
 		configuration.add("AccessController", accessController, "before:*");
 	}
 

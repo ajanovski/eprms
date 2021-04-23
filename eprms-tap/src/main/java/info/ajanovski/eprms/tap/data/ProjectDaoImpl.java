@@ -16,31 +16,11 @@
  *     
  * You should have received a copy of the GNU General Public License
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
+ * 
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.services;
+package info.ajanovski.eprms.tap.data;
 
-import java.util.List;
-
-import info.ajanovski.eprms.model.entities.Database;
-import info.ajanovski.eprms.model.entities.Repository;
-
-public interface ResourceManager {
-
-	public List<Repository> getRepositoriesByPerson(long personId);
-
-	public List<Repository> getRepositoriesByTeam(long personId);
-
-	public List<Repository> getRepositoriesByProject(long personId);
-
-	public List<Repository> getActiveRepositoriesByPerson(long personId);
-
-	public List<Repository> getActiveRepositoriesByTeam(long personId);
-
-	public List<Repository> getActiveRepositoriesByProject(long personId);
-
-	public List<Database> getDatabasesByProject(long personId);
-
-	public List<Database> getActiveDatabasesByProject(long personId);
+public class ProjectDaoImpl implements ProjectDao {
 
 }

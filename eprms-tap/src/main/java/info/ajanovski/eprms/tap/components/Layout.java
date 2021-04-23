@@ -35,7 +35,7 @@ import org.apache.tapestry5.ioc.annotations.Symbol;
 import org.apache.tapestry5.services.PersistentLocale;
 import org.slf4j.Logger;
 
-import info.ajanovski.eprms.tap.entities.Person;
+import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.util.UserInfo;

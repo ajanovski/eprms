@@ -37,10 +37,14 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
+import org.springframework.web.servlet.LocaleResolver;
+import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import info.ajanovski.eprms.tap.util.AppConfig;
 import info.ajanovski.eprms.tap.util.UTF8Filter;
@@ -112,5 +116,21 @@ public class AppConfiguration {
 		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
 		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error404"));
 		return factory;
+	}
+
+	@Bean(name = "messageSource")
+	public MessageSource getMessageResource() {
+		ReloadableResourceBundleMessageSource messageResource = new ReloadableResourceBundleMessageSource();
+		messageResource.setBasename("classpath:app");
+		messageResource.setDefaultEncoding("UTF-8");
+		return messageResource;
+	}
+
+	@Bean(name = "localeResolver")
+	public LocaleResolver getLocaleResolver() {
+		CookieLocaleResolver resolver = new CookieLocaleResolver();
+		resolver.setCookieDomain("localeCookie");
+		resolver.setCookieMaxAge(60 * 60);
+		return resolver;
 	}
 }

@@ -39,7 +39,7 @@ import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.PublicPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
 import info.ajanovski.eprms.tap.pages.Index;
-import info.ajanovski.eprms.tap.util.ModelConstants;
+import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 public class AccessController implements ComponentRequestFilter {
@@ -65,7 +65,7 @@ public class AccessController implements ComponentRequestFilter {
 		boolean hasAccessAnnotation = false;
 		logger.debug("check access for {}", pageName);
 		if (pageName.equals("") || pageName.equals("/")) {
-			pageName = ModelConstants.PageIndex;
+			pageName = AppConstants.PageIndex;
 		}
 
 		Component page = null;

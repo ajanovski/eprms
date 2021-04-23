@@ -22,8 +22,8 @@ package info.ajanovski.eprms.tap.services;
 
 import java.util.List;
 
-import info.ajanovski.eprms.tap.entities.Person;
-import info.ajanovski.eprms.tap.entities.PersonRole;
+import info.ajanovski.eprms.model.entities.Person;
+import info.ajanovski.eprms.model.entities.PersonRole;
 
 public interface PersonManager {
 

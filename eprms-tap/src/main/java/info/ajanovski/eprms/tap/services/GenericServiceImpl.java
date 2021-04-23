@@ -24,7 +24,7 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import info.ajanovski.eprms.tap.services.data.GenericDao;
+import info.ajanovski.eprms.tap.data.GenericDao;
 
 public class GenericServiceImpl implements GenericService {
 

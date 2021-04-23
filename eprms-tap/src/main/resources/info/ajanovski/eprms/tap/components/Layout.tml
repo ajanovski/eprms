@@ -3,7 +3,9 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
 <head>
 <meta charset="utf-8" />
+
 <title>${title}</title>
+
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" content="${message:system-description}" />
@@ -13,6 +15,7 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 </head>
+
 <body style="padding-top: 4.5em;">
 	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
 		style="background-color: #03030f;">
@@ -22,6 +25,7 @@
 			aria-expanded="false" aria-label="Toggle navigation">
 			<span class="navbar-toggler-icon"></span>
 		</button>
+
 		<div class="collapse navbar-collapse" id="mainMenu">
 			<ul class="navbar-nav mr-auto">
 				<li t:type="loop" t:source="studentPageNames" t:value="pageName"
@@ -40,6 +44,7 @@
 						</div></li>
 				</t:if>
 			</ul>
+			
 			<ul class="navbar-nav navbar-right">
 				<li class="nav-item"><a class="nav-link" href=""
 					t:type="actionlink" t:id="localeToggle">${message:lang-label}
@@ -60,13 +65,18 @@
 			</ul>
 		</div>
 	</nav>
+
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12">
 				<t:alerts />
 			</div>
 		</div>
+
+		<!-- content -->
 		<t:body />
+		<!-- /content -->
+
 		<hr />
 		<footer>
 			<p>

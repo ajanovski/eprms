@@ -27,8 +27,9 @@ import org.apache.tapestry5.http.services.RequestGlobals;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 
-import info.ajanovski.eprms.tap.entities.Person;
-import info.ajanovski.eprms.tap.entities.PersonRole;
+import info.ajanovski.eprms.model.entities.Person;
+import info.ajanovski.eprms.model.entities.PersonRole;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.services.PersonManager;
 
 public class UserInfo {

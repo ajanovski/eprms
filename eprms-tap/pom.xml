@@ -32,7 +32,10 @@
 	</developers>
 
 	<properties>
+		<maven.compiler.source>15</maven.compiler.source>
+		<maven.compiler.target>15</maven.compiler.target>
 		<java.version>15</java.version>
+
 		<tapestry-version>5.7.1</tapestry-version>
 		<tapestry-testify-version>1.0.4</tapestry-testify-version>
 		<tapestry-xpath-version>1.0.1</tapestry-xpath-version>
@@ -48,6 +51,7 @@
 
 		<postgresql-version>42.2.19</postgresql-version>
 		<cas-client-version>3.6.2</cas-client-version>
+
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 	</properties>
@@ -60,6 +64,12 @@
 	</repositories>
 
 	<dependencies>
+		<dependency>
+			<groupId>info.ajanovski.eprms</groupId>
+			<artifactId>model</artifactId>
+			<version>0.0.1-SNAPSHOT</version>
+		</dependency>
+
 		<!-- Spring -->
 		<dependency>
 			<groupId>org.springframework.boot</groupId>

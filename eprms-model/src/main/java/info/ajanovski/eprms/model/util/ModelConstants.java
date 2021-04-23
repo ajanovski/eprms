@@ -18,29 +18,17 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.services;
+package info.ajanovski.eprms.model.util;
 
-import java.util.List;
+public class ModelConstants {
 
-import info.ajanovski.eprms.model.entities.Database;
-import info.ajanovski.eprms.model.entities.Repository;
+	public static final String BooleanTRUEasCHAR = "T";
+	public static final String BooleanFALSEasCHAR = "F";
 
-public interface ResourceManager {
+	public static final String EmailUnknown = "EMAIL@UNKNOWN";
 
-	public List<Repository> getRepositoriesByPerson(long personId);
-
-	public List<Repository> getRepositoriesByTeam(long personId);
-
-	public List<Repository> getRepositoriesByProject(long personId);
-
-	public List<Repository> getActiveRepositoriesByPerson(long personId);
-
-	public List<Repository> getActiveRepositoriesByTeam(long personId);
-
-	public List<Repository> getActiveRepositoriesByProject(long personId);
-
-	public List<Database> getDatabasesByProject(long personId);
-
-	public List<Database> getActiveDatabasesByProject(long personId);
+	public static final String RoleAdministrator = "ADMINISTRATOR";
+	public static final String RoleInstructor = "INSTRUCTOR";
+	public static final String RoleStudent = "STUDENT";
 
 }

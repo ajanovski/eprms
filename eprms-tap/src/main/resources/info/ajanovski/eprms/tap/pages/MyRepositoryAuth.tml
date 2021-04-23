@@ -5,7 +5,7 @@
 
 <p>Please enter your new password for repository authentication.</p>
 
-<t:form t:id="AuthForm">
+<form t:type="form" t:id="AuthForm">
 
 	<div class="form-group">
 		<t:label t:for="password" />
@@ -19,6 +19,5 @@
 
 	<t:submit t:value="OK" />
 
-</t:form>
-
+</form>
 </html>

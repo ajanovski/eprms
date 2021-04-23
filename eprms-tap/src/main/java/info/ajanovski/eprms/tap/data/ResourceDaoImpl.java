@@ -16,66 +16,73 @@
  *     
  * You should have received a copy of the GNU General Public License
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
+ * 
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.services;
+package info.ajanovski.eprms.tap.data;
 
+import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.hibernate.Session;
 
 import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.model.entities.Repository;
-import info.ajanovski.eprms.tap.data.ResourceDao;
 
-public class ResourceManagerImpl implements ResourceManager {
+public class ResourceDaoImpl implements ResourceDao {
 
 	@Inject
-	private ResourceDao repositoryDao;
+	private Session session;
 
 	@Override
 	public List<Repository> getRepositoriesByPerson(long personId) {
-		return repositoryDao.getRepositoriesByPerson(personId);
+		try {
+			return session.createQuery("from Repository r where r.person.personId=:personId")
+					.setLong("personId", personId).list();
+		} catch (Exception e) {
+			return new ArrayList<Repository>();
+		}
 	}
 
 	@Override
 	public List<Repository> getRepositoriesByTeam(long personId) {
-		return repositoryDao.getRepositoriesByTeam(personId);
+		try {
+			return session.createQuery("""
+					select r from Repository r join r.team t, TeamMember tm join tm.person p
+					where tm.team.teamId=t.teamId and r.person.personId=:personId
+					""").setLong("personId", personId).list();
+		} catch (Exception e) {
+			return new ArrayList<Repository>();
+		}
 	}
 
 	@Override
 	public List<Repository> getRepositoriesByProject(long personId) {
-		return repositoryDao.getRepositoriesByProject(personId);
-	}
-
-	@Override
-	public List<Repository> getActiveRepositoriesByPerson(long personId) {
-		return getRepositoriesByPerson(personId).stream().filter(p -> p.getDateCreated() != null)
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<Repository> getActiveRepositoriesByTeam(long personId) {
-		return getRepositoriesByTeam(personId).stream().filter(p -> p.getDateCreated() != null)
-				.collect(Collectors.toList());
-	}
-
-	@Override
-	public List<Repository> getActiveRepositoriesByProject(long personId) {
-		return getRepositoriesByProject(personId).stream().filter(p -> p.getDateCreated() != null)
-				.collect(Collectors.toList());
+		try {
+			return session.createQuery("""
+					select r from Repository r join r.project pr,
+					Responsibility res join res.team t, TeamMember tm join tm.person p
+					where pr.projectId=res.project.projectId and tm.team.teamId=t.teamId and
+					tm.person.personId=:personId
+					""").setLong("personId", personId).list();
+		} catch (Exception e) {
+			return new ArrayList<Repository>();
+		}
 	}
 
 	@Override
 	public List<Database> getDatabasesByProject(long personId) {
-		return repositoryDao.getDatabasesByProject(personId);
-	}
+		try {
+			return session.createQuery("""
+					select d from Database d join d.project pr,
+					Responsibility res join res.team t, TeamMember tm join tm.person p
+					where pr.projectId=res.project.projectId and tm.team.teamId=t.teamId and
+					tm.person.personId=:personId
+					""").setLong("personId", personId).list();
+		} catch (Exception e) {
+			return new ArrayList<Database>();
+		}
 
-	@Override
-	public List<Database> getActiveDatabasesByProject(long personId) {
-		return getDatabasesByProject(personId).stream().filter(p -> p.getDateCreated() != null)
-				.collect(Collectors.toList());
 	}
-
 }

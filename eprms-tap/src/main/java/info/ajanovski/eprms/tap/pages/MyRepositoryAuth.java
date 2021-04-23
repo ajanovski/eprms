@@ -33,10 +33,10 @@ import org.apache.tapestry5.corelib.components.PasswordField;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
-import info.ajanovski.eprms.tap.entities.Person;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.util.UserInfo;
 

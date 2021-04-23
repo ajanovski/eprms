@@ -24,9 +24,9 @@ import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import info.ajanovski.eprms.tap.entities.Person;
-import info.ajanovski.eprms.tap.entities.PersonRole;
-import info.ajanovski.eprms.tap.services.data.PersonDao;
+import info.ajanovski.eprms.model.entities.Person;
+import info.ajanovski.eprms.model.entities.PersonRole;
+import info.ajanovski.eprms.tap.data.PersonDao;
 
 public class PersonManagerImpl implements PersonManager {
 

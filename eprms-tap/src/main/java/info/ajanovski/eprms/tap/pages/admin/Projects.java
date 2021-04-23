@@ -31,15 +31,15 @@ import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 
+import info.ajanovski.eprms.model.entities.Database;
+import info.ajanovski.eprms.model.entities.Person;
+import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.Repository;
+import info.ajanovski.eprms.model.entities.Responsibility;
+import info.ajanovski.eprms.model.entities.Team;
+import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
-import info.ajanovski.eprms.tap.entities.Database;
-import info.ajanovski.eprms.tap.entities.Person;
-import info.ajanovski.eprms.tap.entities.Project;
-import info.ajanovski.eprms.tap.entities.Repository;
-import info.ajanovski.eprms.tap.entities.Responsibility;
-import info.ajanovski.eprms.tap.entities.Team;
-import info.ajanovski.eprms.tap.entities.TeamMember;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
