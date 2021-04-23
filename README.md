@@ -8,9 +8,15 @@ The project is still under construction.
 
 Project lead: [Vangel V. Ajanovski](https://ajanovski.info)
 
+## eprms-model
+
+Contains the JPA entities and model-related classes
+
 ## eprms-tap
 
 The first implementation of the EPRMS was developed using the Tapestry 5 web application framework.
+
+
 
 Partially working instance can be compiled from source for testing purposes.
 
