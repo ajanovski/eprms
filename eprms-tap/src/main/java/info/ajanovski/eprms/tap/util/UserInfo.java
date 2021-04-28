@@ -63,13 +63,12 @@ public class UserInfo {
 
 	private void setupUser() throws Exception {
 		if (userName != null) {
-			logger.info("Logged in user: " + userName);
+			logger.info("Logged in user: {}", userName);
 			userRoles = new ArrayList<UserRole>();
 			Person p = pm.getPersonByUsername(userName);
 			if (p == null) {
 				personId = null;
 				userRoles.clear();
-				// throw new NoSuchUserException();
 			} else {
 				this.personId = Long.valueOf(p.getPersonId());
 				if (personId != null) {

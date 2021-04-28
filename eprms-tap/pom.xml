@@ -36,7 +36,7 @@
 		<maven.compiler.target>15</maven.compiler.target>
 		<java.version>15</java.version>
 
-		<tapestry-version>5.7.1</tapestry-version>
+		<tapestry-version>5.7.2</tapestry-version>
 		<tapestry-testify-version>1.0.4</tapestry-testify-version>
 		<tapestry-xpath-version>1.0.1</tapestry-xpath-version>
 		<jackson-version>2.12.1</jackson-version>
