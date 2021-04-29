@@ -1,0 +1,42 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout.html}" lang="en"
+	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title th:text="#{app-title-short}"></title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<h1>[[#{MyRepositories-pagelink}]]</h1>
+
+		<h2>[[#{Personal-label}]]</h2>
+		<table class="table table-sm">
+			<tr th:each="repository: ${personalRepositories}">
+				<td>[[${repository.title}]]</td>
+				<td>[[${repository.url}]]</td>
+				<td>[[${repository.dateCreated}]]</td>
+			</tr>
+		</table>
+
+		<h2>[[#{project-label}]]</h2>
+		<table class="table table-sm">
+			<tr th:each="repository: ${projectRepositories}">
+				<td>[[${repository.title}]]</td>
+				<td>[[${repository.url}]]</td>
+				<td>[[${repository.dateCreated}]]</td>
+			</tr>
+		</table>
+
+		<h2>[[#{team-label}]]</h2>
+		<table class="table table-sm">
+			<tr th:each="repository: ${teamRepositories}">
+				<td>[[${repository.title}]]</td>
+				<td>[[${repository.url}]]</td>
+				<td>[[${repository.dateCreated}]]</td>
+			</tr>
+		</table>
+	</div>
+</body>
+</html>

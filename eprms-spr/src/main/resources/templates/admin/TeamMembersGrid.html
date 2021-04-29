@@ -1,0 +1,41 @@
+<!DOCTYPE HTML>
+<html xmlns:th="http://www.thymeleaf.org">
+<body>
+	<div th:fragment="titleandgrid(team)">
+
+		<h5 class="card-title">[[#{Team-label}]] - [[${team.name}]]</h5>
+
+		<table class="table table-sm">
+			<thead>
+				<tr>
+					<th scope="col">position</th>
+					<th scope="col">last name</th>
+					<th scope="col">first name</th>
+					<th scope="col">user name</th>
+					<th scope="col">role</th>
+					<th scope="col">actions</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="teamMember: ${team.teamMembers}">
+					<td scope="row">[[${teamMember.positionNumber}]]</td>
+					<td>[[${teamMember.person.lastName}]]</td>
+					<td>[[${teamMember.person.firstName}]]</td>
+					<td>[[${teamMember.person.userName}]]</td>
+					<td>[[${teamMember.role}]]</td>
+					<td><p>
+							<a
+								th:href="@{/admin/Projects.deleteTeamMember(teamMemberId=${teamMember.teamMemberId})}"
+								id="deleteTeamMember" role="button"
+								onclick="return confirm('Are you sure you want to delete this item?');"
+								class="btn btn-danger btn-sm "><img t:type="SVGIcon"
+								t:path="scalable/actions/list-remove.svg" />
+								[[#{remove-label}]]</a>
+						</p></td>
+				</tr>
+			</tbody>
+		</table>
+
+	</div>
+</body>
+</html>

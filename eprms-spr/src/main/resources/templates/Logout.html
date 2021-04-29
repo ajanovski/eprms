@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layoutGuest.html}" lang="en"
+	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title th:text="#{app-title-short}"></title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<h1>[[#{logout-page}]]</h1>
+
+		<h2>[[#{application-logout}]]</h2>
+
+		<p>[[#{logout-info-application}]]</p>
+
+		<h2>[[#{logout-page}]]</h2>
+		<p>
+			<b>[[#{logout-info-total}]]</b>
+		</p>
+		<p>
+			[[#{logout-desc-total}]]<br /> <a
+				th:href="@{${casServer}(service=${logoutRedirectToServer})}"
+				class="btn btn-primary">[[#{logout-desc-total-title}]]</a> <br />
+			[[#{logout-desc-total-cont}]]
+		</p>
+
+	</div>
+</body>
+</html>

@@ -1,0 +1,84 @@
+/*******************************************************************************
+ * Copyright (C) 2021 Vangel V. Ajanovski
+ *     
+ * This file is part of the EPRMS - Educational Project and Resource 
+ * Management System (hereinafter: EPRMS).
+ *     
+ * EPRMS is free software: you can redistribute it and/or modify
+ * it under the terms of the GNU General Public License as published by
+ * the Free Software Foundation, either version 3 of the License, or
+ * (at your option) any later version.
+ *     
+ * EPRMS is distributed in the hope that it will be useful,
+ * but WITHOUT ANY WARRANTY; without even the implied warranty of
+ * MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+ * GNU General Public License for more details.
+ *     
+ * You should have received a copy of the GNU General Public License
+ * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
+ ******************************************************************************/
+
+package info.ajanovski.eprms.spr.services;
+
+import java.util.List;
+
+import javax.inject.Inject;
+
+import org.springframework.stereotype.Service;
+
+import info.ajanovski.eprms.spr.data.GenericDao;
+
+@Service
+public class GenericServiceImpl implements GenericService {
+
+	@Inject
+	private GenericDao genericDao;
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getByPK(Class<T> classToLoad, long id) {
+		return (T) genericDao.getByPK(classToLoad, id);
+	}
+
+	@Override
+	public void deleteByPK(Class<?> classToDelete, long id) {
+		genericDao.deleteByPK(classToDelete, id);
+	}
+
+	@Override
+	public void delete(Object object) {
+		genericDao.delete(object);
+	}
+
+	@Override
+	public void saveOrUpdate(Object object) {
+		genericDao.saveOrUpdate(object);
+	}
+
+	@Override
+	public Object save(Object object) {
+		return genericDao.save(object);
+	}
+
+	@Override
+	public List<?> getQueryResult(String guery) {
+		return genericDao.getQueryResult(guery);
+	}
+
+	@Override
+	public List<?> getAll(Class<?> classToLoad) {
+		return genericDao.getAll(classToLoad);
+	}
+
+	@SuppressWarnings("unchecked")
+	@Override
+	public <T> T getByCode(Class<T> classToLoad, String code) {
+		return (T) genericDao.getByCode(classToLoad, code);
+	}
+
+	@Override
+	public List<?> getByTitleSubstring(Class<?> classToSearch, String searchSubString) {
+		return genericDao.getByTitleSubstring(classToSearch, searchSubString);
+	}
+
+}

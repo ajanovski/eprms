@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.ultraq.net.nz/thymeleaf"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<meta charset="utf-8" />
+
+<title layout:title-pattern="$LAYOUT_TITLE $CONTENT_TITLE"></title>
+
+<meta name="viewport"
+	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+<meta name="description" th:content="#{system-description}" />
+<meta name="author" th:content="#{main-developer-name}" />
+<link rel="shortcut icon" href="/favicon.ico" />
+<meta http-equiv="Expires" content="Mon, 26 Jul 1997 05:00:00 GMT" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+<base href="/" />
+<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<link rel="stylesheet" type="text/css"
+	href="/webjars/bootstrap/css/bootstrap.min.css" />
+<!--  >link rel="stylesheet" type="text/css"
+	href="/mybootstrap/css/bootstrap-theme.css" /-->
+<script type="text/javascript"
+	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
+<link rel="stylesheet" href="site-overrides.css"></link>
+</head>
+
+<body style="padding-top: 4.5em;">
+
+	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
+		style="background-color: #03030f;">
+		<a class="navbar-brand" href="Index" th:text="#{app-title-short}"></a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#mainMenu" aria-controls="mainMenu"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="mainMenu">
+			<ul class="navbar-nav mr-auto">
+
+			</ul>
+
+			<ul class="navbar-nav navbar-right">
+				<li class="nav-item"><a class="nav-link" href=""
+					id="localeToggle">[[#{lang-label}]] [[${displayLanguage}]]</a></li>
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<p t:alerts />
+			</div>
+		</div>
+
+		<!-- content -->
+		<div layout:fragment="content"></div>
+		<!-- /content -->
+
+		<hr />
+		<footer>
+			<p>
+				Copyright &copy;<span th:text="#{copyrightYear}" /> <a
+					href="https://ajanovski.info" th:text="#{copyrightHolder} "> </a>
+			</p>
+		</footer>
+	</div>
+
+</body>
+</html>

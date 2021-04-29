@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout.html}" lang="en"
+	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title th:text="#{app-title-short}"></title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+		<h1>[[#{admin/Projects-pagelink}]]</h1>
+
+		<div class="row">
+			<div class="col-6">
+				<div class="card">
+					<div class="card-body">
+						<form id="selectProject" class="form-inline"
+							th:action="@{/admin/Projects.selectProject}" method="post">
+							<div class="form-group">
+								<label for="selectedProject">Select Project</label> <select
+									class="form-control" id="newSelectedProject"
+									name="newSelectedProject" onchange="this.form.submit(); ">
+									<option th:value="-1">/</option>
+									<option th:each="project: ${allprojects}"
+										th:value="${project.projectId}" th:text="${project.title}"
+										th:selected="${selectedProject != null && project.projectId==selectedProject.projectId}">Title</option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary">OK</button>
+						</form>
+					</div>
+				</div>
+			</div>
+
+			<div class="col-6">
+				<div class="card mb-3" th:if="${newProject}">
+					<div class="card-body">
+						<h3>[[#{Project-label}]]</h3>
+						<form id="NewProjectForm" th:object="${newProject}"
+							th:action="@{/admin/Projects.onSuccessFromNewProjectForm}"
+							method="post">
+							<div class="form-group">
+								<label for="title">title</label> <input id="title" name="title"
+									th:field="*{title}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="description">description</label> <input
+									id="description" name="description" th:field="*{description}"
+									class="form-control" />
+							</div>
+							<button type="submit" class="btn btn-primary">OK</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="card mb-3" th:if="${newTeam}">
+					<div class="card-body">
+						<h3>[[#{Team-label}]]</h3>
+						<form id="NewTeamForm" th:object="${newTeam}"
+							th:action="@{/admin/Projects.onSuccessFromNewTeamForm}"
+							method="post">
+							<input type="hidden" id="inProject" name="inProject"
+								th:value="${inProject}" />
+							<div class="form-group">
+								<label for="name">name</label> <input id="name" name="name"
+									th:field="*{name}" class="form-control" />
+							</div>
+							<button type="submit" class="btn btn-primary">OK</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="card mb-3" th:if="${newTm}">
+					<div class="card-body">
+						<h3>[[#{TeamMember-label}]]</h3>
+						<form class="form-horizontal" id="newTeamMemberForm"
+							th:object="${newTm}"
+							th:action="@{/admin/Projects.onSuccessFromNewTeamMemberForm}"
+							method="post">
+							<input type="hidden" id="team" name="team"
+								th:field="*{team.teamId}" />
+							<div class="form-group">
+								<label for="positionNumber">positionNumber</label> <input
+									id="positionNumber" name="positionNumber"
+									th:field="*{positionNumber}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="role">role</label> <input id="role" name="role"
+									th:field="*{role}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="selectedPerson">Select Person</label> <select
+									class="form-control" id="newSelectedPerson"
+									name="newSelectedPerson">
+									<option th:each="person: ${listPersons}"
+										th:value="${person.personId}">[[${person.userName}]]
+										[[${person.lastName}]] [[${person.firstName}]]</option>
+								</select>
+							</div>
+							<button type="submit" class="btn btn-primary">OK</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="card mb-3" th:if="${newDb}">
+					<div class="card-body">
+						<h3>[[#{Database-label}]]</h3>
+						<form class="form-horizontal" id="newDatabaseForm"
+							th:object="${newDb}"
+							th:action="@{/admin/Projects.onSuccessFromNewDatabaseForm}"
+							method="post">
+							<input type="hidden" id="inProject" name="inProject"
+								th:value="${inProject}" />
+							<div class="form-group">
+								<label for="name">name</label> <input id="name" name="name"
+									th:field="*{name}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="type">type</label> <input id="type" name="type"
+									th:field="*{type}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="server">server</label> <input id="server"
+									name="server" th:field="*{server}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="port">port</label> <input id="port" name="port"
+									th:field="*{port}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="owner">owner</label> <input id="owner" name="owner"
+									th:field="*{owner}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="password">password</label> <input id="password"
+									name="password" th:field="*{password}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="tunnelServer">tunnelServer</label> <input
+									id="tunnelServer" name="tunnelServer"
+									th:field="*{tunnelServer}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="tunnelUser">tunnelUser</label> <input
+									id="tunnelUser" name="tunnelUser" th:field="*{tunnelUser}"
+									class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="tunnelPassword">tunnelPassword</label> <input
+									id="tunnelPassword" name="tunnelPassword"
+									th:field="*{tunnelPassword}" class="form-control" />
+							</div>
+							<button type="submit" class="btn btn-primary">OK</button>
+						</form>
+					</div>
+				</div>
+
+				<div class="card mb-3" th:if="${newRp}">
+					<div class="card-body">
+						<h3>[[#{Repository-label}]]</h3>
+						<form class="form-horizontal" id="newRepositoryForm"
+							th:object="${newRp}"
+							th:action="@{/admin/Projects.onSuccessFromNewRepositoryForm}"
+							method="post">
+							<input type="hidden" id="inProject" name="inProject"
+								th:value="${inProject}" />
+							<div class="form-group">
+								<label for="title">title</label> <input id="title" name="title"
+									th:field="*{title}" class="form-control" />
+							</div>
+							<div class="form-group">
+								<label for="url">url</label> <input id="url" name="url"
+									th:field="*{url}" class="form-control" />
+							</div>
+							<button type="submit" class="btn btn-primary">OK</button>
+						</form>
+					</div>
+				</div>
+
+				<div>
+					<a id="NewProject" class="btn btn-primary"
+						th:href="@{/admin/Projects.newProject}"><img t:type="SVGIcon"
+						alt="+" t:path="scalable/actions/document-new.svg" />
+						[[#{new-label}]] [[#{Project-label}]]</a>
+				</div>
+			</div>
+		</div>
+
+		<div id="projectZone">
+			<div class="card mt-3" th:each="project: ${listProjects}">
+				<div class="card-header">
+					<h3>[[${project.title}]]</h3>
+				</div>
+				<div class="card-body">
+					<div class="row">
+						<div class="col-4">
+							<p class="" th:each="repository: ${project.repositories}">
+								<b>[[#{repository-label}]]</b><br />[[${repository.url}]]
+							</p>
+							<p>
+								<a
+									th:href="@{/admin/Projects.newRepository(inProject=${project.projectId})}"
+									class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
+									alt="+" t:path="scalable/actions/document-new.svg" />
+									[[#{repository-label}]]
+								</a>
+							</p>
+
+							<p class="" th:each="database: ${project.databases}">
+								<b>[[#{database-label}]]</b><br />[[${database.name}]]
+							</p>
+							<p>
+								<a id="NewDatabase" class="btn btn-sm btn-secondary"
+									th:href="@{/admin/Projects.newDatabase(inProject=${project.projectId})}">
+									<img t:type="SVGIcon" alt="+"
+									t:path="scalable/actions/document-new.svg" />
+									[[#{database-label}]]
+								</a>
+							</p>
+
+						</div>
+						<div class="col-8">
+							<div class="card mb-3 p-3"
+								th:each="responsibility: ${project.responsibilities}">
+								<div
+									th:replace="admin/TeamMembersGrid :: titleandgrid(${responsibility.team})"></div>
+								<div th:fragment="content"></div>
+								<p>
+									<a
+										th:href="@{/admin/Projects.addTeamMember(inTeam=${responsibility.team.teamId})}"
+										id="addTeamMember" role="button"
+										class="btn btn-sm btn-primary "><img t:type="SVGIcon"
+										alt="+" t:path="scalable/actions/document-new.svg" />
+										[[#{add-label}]] [[#{TeamMember-label}]]</a>
+								</p>
+							</div>
+							<a id="NewTeam"
+								th:href="@{/admin/Projects.newTeam(inProject=${project.projectId})}"
+								class="btn btn-secondary"><img t:type="SVGIcon" alt="+"
+								t:path="scalable/actions/document-new.svg" /> [[#{Team-label}]]</a>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+</body>
+</html>

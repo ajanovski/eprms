@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html layout:decorate="~{layout.html}" lang="en"
+	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<head>
+<title th:text="#{app-title-short}"></title>
+</head>
+<body>
+
+	<div layout:fragment="content">
+
+		<h1>[[#{admin/ManageDatabases-pagelink}]]</h1>
+
+
+		<div class="row">
+			<div class="col-3">
+				<a href="/admin/ManageDatabases.toggle" class="btn btn-primary">Show
+					databases for creation: [[${isOnlyShowNotCreated}]]</a>
+			</div>
+			
+			<div class="col-9">
+				<div class="card-body" th:if="${editDatabase}">
+					<h3>[[#{database-label}]]</h3>
+					<form class="form-horizontal"
+						th:action="@{/admin/ManageDatabases.saveDatabaseForm}"
+						th:object="${editDatabase}" method="post">
+						<input type="hidden" th:field="*{databaseId}" />
+						<div class="form-group">
+							<label for="name" class="control-label">name</label> <input
+								type="text" id="name" name="name" th:field="*{name}"
+								class="form-control" />
+						</div>
+						<div class="form-group">
+							<label for="owner" class="control-label">owner</label> <input
+								type="text" id="owner" name="owner" th:field="*{owner}"
+								class="form-control" />
+						</div>
+						<button type="submit" value="" id="Save" class="btn btn-default">OK</button>
+					</form>
+				</div>
+			</div>
+		</div>
+
+		<div th:if="${isOnlyShowNotCreated}">
+			<code>
+				<p th:each="database: ${databases}">
+					./create_database.sh "[[${database.name}]]" "[[${database.owner}]]"
+					"[[${database.password}]]"<br />
+				</p>
+			</code>
+		</div>
+		<div th:unless="${isOnlyShowNotCreated}">
+			<table class="table table-sm">
+				<thead>
+					<tr>
+						<th>type</th>
+						<th>server</th>
+						<th>port</th>
+						<th>name</th>
+						<th>owner</th>
+						<th>password</th>
+						<th>tunnelUser</th>
+						<th>tunnelPassword</th>
+						<th>tunnelServer</th>
+						<th>tunnelServer</th>
+						<th>Action</th>
+					</tr>
+				</thead>
+				<tr th:each="database: ${databases}">
+					<td>[[${database.type}]]</td>
+					<td>[[${database.server}]]</td>
+					<td>[[${database.port}]]</td>
+					<td>[[${database.name}]]</td>
+					<td>[[${database.owner}]]</td>
+					<td>[[${database.password}]]</td>
+					<td>[[${database.tunnelUser}]]</td>
+					<td>[[${database.tunnelPassword}]]</td>
+					<td>[[${database.tunnelServer}]]</td>
+					<td>[[${database.dateCreated}]]</td>
+					<td><a role="button" class="btn btn-sm btn-secondary"
+						th:href="@{/admin/ManageDatabases.edit(databaseId=${database.databaseId})}"
+						t:mixins="confirm">[[#{edit-label}]]</a> <a
+						th:href="@{/admin/ManageDatabases.delete(databaseId=${database.databaseId})}"
+						class="btn btn-sm btn-danger" t:mixins="confirm">[[#{remove-label}]]</a></td>
+				</tr>
+			</table>
+		</div>
+
+	</div>
+
+
+</body>
+</html>
