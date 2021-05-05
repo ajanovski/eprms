@@ -13,7 +13,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>spr</artifactId>
-	<version>0.0.1-SNAPSHOT</version>
+	<version>0.0.2-SNAPSHOT</version>
 	<name>EPRMS - Educational Project and Resource Management System</name>
 
 	<packaging>war</packaging>
@@ -47,7 +47,7 @@
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>model</artifactId>
-			<version>0.0.1-SNAPSHOT</version>
+			<version>0.0.2-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -72,10 +72,9 @@
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-devtools</artifactId>
-			<scope>runtime</scope>
 			<optional>true</optional>
 		</dependency>
-
+		
 		<dependency>
 			<groupId>org.springframework.boot</groupId>
 			<artifactId>spring-boot-starter-tomcat</artifactId>
@@ -96,7 +95,7 @@
 		<dependency>
 			<groupId>org.postgresql</groupId>
 			<artifactId>postgresql</artifactId>
-			</dependency>
+		</dependency>
 
 		<!-- other -->
 		<dependency>
@@ -221,5 +220,7 @@
 				</configuration>
 			</plugin>
 		</plugins>
+		
 	</build>
+	
 </project>
