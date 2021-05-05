@@ -1,0 +1,33 @@
+<html t:type="layout" title="message:admin/ProjectActivities-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<a t:type="backlink" t:page="admin/manageprojects" />
+
+<h1>${message:admin/ProjectActivities-pagelink}</h1>
+
+<h2>Project: ${selectedProject.title}</h2>
+
+<div t:type="if" t:test="newActivity">
+	<form t:type="beaneditform" id="newActivityForm" t:id="newActivityForm"
+		t:object="newActivity" t:exclude="activityId" t:add="activityType"
+		t:submitLabel="OK">
+		<p:activityType>
+			<div class="form-group">
+				<label t:type="label" t:for="selectActivityType"></label> <select
+					t:id="selectActivityType" t:type="select" t:model="listTypes"
+					t:value="newActivity.activityType"></select>
+			</div>
+		</p:activityType>
+	</form>
+</div>
+
+<div t:type="zone" id="zoneActivities" t:id="zoneActivities">
+	<table class="table table-sm" t:type="grid" t:source="allActivities">
+	</table>
+</div>
+<p>
+	<a class="btn btn-primary" t:type="actionlink" t:id="newActivity"><img
+		t:type="SVGIcon" t:path="plus-square" /> ${message:newActivity-label}</a>
+</p>
+</html>

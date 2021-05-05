@@ -4,12 +4,14 @@
 
 <h1>${message:admin/ManageRepositories-pagelink}</h1>
 
-<a t:type="actionlink" t:id="toggle" class="btn btn-primary">Show repositories for creation: ${isOnlyShowNotCreated}</a>
+<a t:type="actionlink" t:id="toggle" class="btn btn-primary">Show
+	repositories for creation: ${isOnlyShowNotCreated}</a>
 
 <div t:type="if" t:test="isOnlyShowNotCreated">
 	<code>
-		<t:loop t:source="repositories" t:value="repository">./create_repository.sh "${repository.title}"
-			"${repository.url}"<br/></t:loop>
+		<t:loop t:source="repositories" t:value="repository">./create_repository.sh "${repository.type}" "${repository.title}" 
+			"${repository.url}"<br />
+		</t:loop>
 	</code>
 	<p:else>
 		<table class="table table-sm" t:type="grid" t:source="repositories"></table>

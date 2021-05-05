@@ -20,6 +20,67 @@
 
 package info.ajanovski.eprms.tap.services;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+import javax.inject.Inject;
+
+import info.ajanovski.eprms.model.entities.Course;
+import info.ajanovski.eprms.model.entities.CourseProject;
+import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.tap.data.ProjectDao;
+
 public class ProjectManagerImpl implements ProjectManager {
+
+	@Inject
+	private ProjectDao projectDao;
+
+	@Inject
+	private GenericService genericService;
+
+	@Override
+	public List<Project> getAllProjectsOrderByTitle() {
+		return projectDao.getAllProjectsOrderByTitle();
+	}
+
+	@Override
+	public List<CourseProject> getProjectCourses(Project p) {
+		return projectDao.getProjectCourses(p);
+	}
+
+	@Override
+	public void addCoursesToProject(List<Course> inCourses, Project p) {
+		List<CourseProject> projectCourses = projectDao.getProjectCourses(p);
+		List<Course> coursesFromProjectCourses = projectCourses.stream().map(cp -> cp.getCourse())
+				.collect(Collectors.toList());
+		for (Course c : inCourses) {
+			if (!coursesFromProjectCourses.contains(c)) {
+				CourseProject cp = new CourseProject();
+				cp.setCourse(c);
+				cp.setProject(p);
+				genericService.save(cp);
+			}
+		}
+		for (CourseProject cp : projectCourses) {
+			if (!inCourses.contains(cp.getCourse())) {
+				genericService.delete(cp);
+			}
+		}
+	}
+
+	@Override
+	public Float sumPoints(Project p) {
+		return projectDao.sumPoints(p);
+	}
+
+	@Override
+	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse) {
+		return projectDao.getCourseProjectsOrderByTitle(selectedCourse);
+	}
+
+	@Override
+	public List<Project> getProjectByPerson(Long personId) {
+		return projectDao.getProjectByPerson(personId);
+	}
 
 }

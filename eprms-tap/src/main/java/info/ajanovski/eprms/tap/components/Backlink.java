@@ -18,31 +18,20 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.pages.admin;
+package info.ajanovski.eprms.tap.components;
 
-import java.util.List;
-
+import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.ioc.annotations.Inject;
 
-import info.ajanovski.eprms.model.entities.Team;
-import info.ajanovski.eprms.tap.annotations.AdministratorPage;
-import info.ajanovski.eprms.tap.annotations.InstructorPage;
-import info.ajanovski.eprms.tap.services.GenericService;
-import info.ajanovski.eprms.tap.util.UserInfo;
+public class Backlink {
 
-@InstructorPage
-@AdministratorPage
-public class Teams {
-	@SessionState
 	@Property
-	private UserInfo userInfo;
+	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)
+	private String page;
 
-	@Inject
-	private GenericService genericService;
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.PROP)
+	private Object context;
 
-	public List<Team> getTeams() {
-		return (List<Team>) genericService.getAll(Team.class);
-	}
 }

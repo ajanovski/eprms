@@ -16,27 +16,33 @@
  *     
  * You should have received a copy of the GNU General Public License
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
- * 
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.data;
+package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.List;
 
-import info.ajanovski.eprms.model.entities.Course;
-import info.ajanovski.eprms.model.entities.CourseProject;
-import info.ajanovski.eprms.model.entities.Project;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
-public interface ProjectDao {
+import info.ajanovski.eprms.model.entities.Team;
+import info.ajanovski.eprms.tap.annotations.AdministratorPage;
+import info.ajanovski.eprms.tap.annotations.InstructorPage;
+import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.util.UserInfo;
 
-	public List<Project> getAllProjectsOrderByTitle();
+@InstructorPage
+@AdministratorPage
+public class ManageTeams {
+	@SessionState
+	@Property
+	private UserInfo userInfo;
 
-	public List<CourseProject> getProjectCourses(Project p);
+	@Inject
+	private GenericService genericService;
 
-	public Float sumPoints(Project p);
-
-	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse);
-
-	public List<Project> getProjectByPerson(Long personId);
-
+	public List<Team> getTeams() {
+		return (List<Team>) genericService.getAll(Team.class);
+	}
 }

@@ -46,6 +46,7 @@ import org.slf4j.Logger;
 
 import info.ajanovski.eprms.tap.data.GenericDao;
 import info.ajanovski.eprms.tap.data.PersonDao;
+import info.ajanovski.eprms.tap.data.ProjectDao;
 import info.ajanovski.eprms.tap.data.ResourceDao;
 import info.ajanovski.eprms.tap.util.AppConfig;
 
@@ -57,6 +58,8 @@ public class AppModule {
 		binder.bind(GenericService.class);
 		binder.bind(PersonDao.class);
 		binder.bind(PersonManager.class);
+		binder.bind(ProjectDao.class);
+		binder.bind(ProjectManager.class);
 		binder.bind(ResourceManager.class);
 		binder.bind(ResourceDao.class);
 	}
