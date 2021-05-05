@@ -27,7 +27,7 @@ import javax.persistence.*;
 /*
 */
 @Entity
-@Table(schema = "", name = "database")
+@Table (schema="", name="database")
 public class Database implements java.io.Serializable {
 	private long databaseId;
 	private String type;
@@ -39,8 +39,9 @@ public class Database implements java.io.Serializable {
 	private String tunnelPassword;
 	private String port;
 	private String tunnelServer;
-	private Project project;
 	private Date dateCreated;
+	private Project project;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -51,7 +52,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setDatabaseId(long databaseId) {
-		this.databaseId = databaseId;
+		this.databaseId=databaseId;
 	}
 
 	@Column(name = "type")
@@ -60,7 +61,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setType(String type) {
-		this.type = type;
+		this.type=type;
 	}
 
 	@Column(name = "server")
@@ -69,7 +70,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setServer(String server) {
-		this.server = server;
+		this.server=server;
 	}
 
 	@Column(name = "name")
@@ -78,7 +79,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setName(String name) {
-		this.name = name;
+		this.name=name;
 	}
 
 	@Column(name = "owner")
@@ -87,7 +88,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setOwner(String owner) {
-		this.owner = owner;
+		this.owner=owner;
 	}
 
 	@Column(name = "password")
@@ -96,7 +97,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setPassword(String password) {
-		this.password = password;
+		this.password=password;
 	}
 
 	@Column(name = "tunnel_user")
@@ -105,7 +106,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setTunnelUser(String tunnelUser) {
-		this.tunnelUser = tunnelUser;
+		this.tunnelUser=tunnelUser;
 	}
 
 	@Column(name = "tunnel_password")
@@ -114,7 +115,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setTunnelPassword(String tunnelPassword) {
-		this.tunnelPassword = tunnelPassword;
+		this.tunnelPassword=tunnelPassword;
 	}
 
 	@Column(name = "port")
@@ -123,7 +124,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setPort(String port) {
-		this.port = port;
+		this.port=port;
 	}
 
 	@Column(name = "tunnel_server")
@@ -132,7 +133,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setTunnelServer(String tunnelServer) {
-		this.tunnelServer = tunnelServer;
+		this.tunnelServer=tunnelServer;
 	}
 
 	@Column(name = "date_created")
@@ -140,8 +141,8 @@ public class Database implements java.io.Serializable {
 		return this.dateCreated;
 	}
 
-	public void setDateCreated(Date created) {
-		this.dateCreated = created;
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated=dateCreated;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -151,7 +152,7 @@ public class Database implements java.io.Serializable {
 	}
 
 	public void setProject(Project project) {
-		this.project = project;
+		this.project=project;
 	}
 
 }

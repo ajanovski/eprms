@@ -33,10 +33,12 @@ public class WorkReport implements java.io.Serializable {
 	private String title;
 	private String description;
 	private Float percentReported;
+	private Date submissionDate;
 	private Activity activity;
 	private Person person;
 	private WorkReport continuationOfWorkReport;
 	private Team team;
+	private List<WorkEvaluation> workEvaluations = new ArrayList<WorkEvaluation>();
 
 
 	@Id
@@ -78,6 +80,15 @@ public class WorkReport implements java.io.Serializable {
 		this.percentReported=percentReported;
 	}
 
+	@Column(name = "submission_date")
+	public Date getSubmissionDate() {
+		return this.submissionDate;
+	}
+
+	public void setSubmissionDate(Date submissionDate) {
+		this.submissionDate=submissionDate;
+	}
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "activity_id", nullable = false, foreignKey = @ForeignKey(name = "fk_work_report_activity"))
 	public Activity getActivity() {
@@ -116,6 +127,15 @@ public class WorkReport implements java.io.Serializable {
 
 	public void setTeam(Team team) {
 		this.team=team;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "workReport")
+	public List<WorkEvaluation> getWorkEvaluations() {
+		return this.workEvaluations;
+	}
+
+	public void setWorkEvaluations(List<WorkEvaluation> workEvaluations) {
+		this.workEvaluations=workEvaluations;
 	}
 
 }

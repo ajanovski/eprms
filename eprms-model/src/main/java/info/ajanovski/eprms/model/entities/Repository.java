@@ -27,7 +27,7 @@ import javax.persistence.*;
 /*
 */
 @Entity
-@Table(schema = "epm_main", name = "repository")
+@Table (schema="epm_main", name="repository")
 public class Repository implements java.io.Serializable {
 	private long repositoryId;
 	private String title;
@@ -38,6 +38,7 @@ public class Repository implements java.io.Serializable {
 	private Team team;
 	private Project project;
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -47,7 +48,7 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setRepositoryId(long repositoryId) {
-		this.repositoryId = repositoryId;
+		this.repositoryId=repositoryId;
 	}
 
 	@Column(name = "title")
@@ -56,7 +57,7 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title=title;
 	}
 
 	@Column(name = "url")
@@ -65,7 +66,16 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setUrl(String url) {
-		this.url = url;
+		this.url=url;
+	}
+
+	@Column(name = "date_created")
+	public Date getDateCreated() {
+		return this.dateCreated;
+	}
+
+	public void setDateCreated(Date dateCreated) {
+		this.dateCreated=dateCreated;
 	}
 
 	@Column(name = "type")
@@ -74,16 +84,7 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setType(String type) {
-		this.type = type;
-	}
-
-	@Column(name = "date_created")
-	public Date getDateCreated() {
-		return this.dateCreated;
-	}
-
-	public void setDateCreated(Date created) {
-		this.dateCreated = created;
+		this.type=type;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -93,7 +94,7 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setPerson(Person person) {
-		this.person = person;
+		this.person=person;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -103,7 +104,7 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setTeam(Team team) {
-		this.team = team;
+		this.team=team;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -113,7 +114,7 @@ public class Repository implements java.io.Serializable {
 	}
 
 	public void setProject(Project project) {
-		this.project = project;
+		this.project=project;
 	}
 
 }

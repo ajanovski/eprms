@@ -34,7 +34,9 @@ public class WorkEvaluation implements java.io.Serializable {
 	private String description;
 	private Float percentEvaluated;
 	private Float points;
+	private Date evaluationDate;
 	private WorkReport workReport;
+	private Person person;
 
 
 	@Id
@@ -85,6 +87,14 @@ public class WorkEvaluation implements java.io.Serializable {
 		this.points=points;
 	}
 
+	@Column(name = "evaluation_date")
+	public Date getEvaluationDate() {
+		return this.evaluationDate;
+	}
+
+	public void setEvaluationDate(Date evaluationDate) {
+		this.evaluationDate=evaluationDate;
+	}
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "work_report_id", nullable = false, foreignKey = @ForeignKey(name = "fk_work_evaluation_work_report"))
 	public WorkReport getWorkReport() {
@@ -93,6 +103,16 @@ public class WorkEvaluation implements java.io.Serializable {
 
 	public void setWorkReport(WorkReport workReport) {
 		this.workReport=workReport;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "person_id", nullable = true, foreignKey = @ForeignKey(name = "fk_work_evaluation_person"))
+	public Person getPerson() {
+		return this.person;
+	}
+
+	public void setPerson(Person person) {
+		this.person=person;
 	}
 
 }

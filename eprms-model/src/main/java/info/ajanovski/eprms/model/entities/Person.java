@@ -27,7 +27,7 @@ import javax.persistence.*;
 /*
 */
 @Entity
-@Table(schema = "epm_main", name = "person")
+@Table (schema="epm_main", name="person")
 public class Person implements java.io.Serializable {
 	private long personId;
 	private String firstName;
@@ -35,6 +35,7 @@ public class Person implements java.io.Serializable {
 	private String email;
 	private String userName;
 	private String authString;
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -45,7 +46,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	public void setPersonId(long personId) {
-		this.personId = personId;
+		this.personId=personId;
 	}
 
 	@Column(name = "first_name")
@@ -54,7 +55,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	public void setFirstName(String firstName) {
-		this.firstName = firstName;
+		this.firstName=firstName;
 	}
 
 	@Column(name = "last_name")
@@ -63,7 +64,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	public void setLastName(String lastName) {
-		this.lastName = lastName;
+		this.lastName=lastName;
 	}
 
 	@Column(name = "email")
@@ -72,7 +73,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	public void setEmail(String email) {
-		this.email = email;
+		this.email=email;
 	}
 
 	@Column(name = "user_name")
@@ -81,7 +82,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	public void setUserName(String userName) {
-		this.userName = userName;
+		this.userName=userName;
 	}
 
 	@Column(name = "auth_string")
@@ -90,7 +91,7 @@ public class Person implements java.io.Serializable {
 	}
 
 	public void setAuthString(String authString) {
-		this.authString = authString;
+		this.authString=authString;
 	}
 
 }

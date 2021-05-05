@@ -27,15 +27,16 @@ import javax.persistence.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="activity")
+@Table(schema = "epm_main", name = "activity")
 public class Activity implements java.io.Serializable {
 	private long activityId;
 	private String title;
 	private String description;
-	private Activity parentActivity;
-	private ActivityType activityType;
+	private Activity superActivity;
 	private Project project;
-
+	private List<WorkReport> workReports = new ArrayList<WorkReport>();
+	private ActivityType activityType;
+	private List<Activity> subActivities = new ArrayList<Activity>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +47,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setActivityId(long activityId) {
-		this.activityId=activityId;
+		this.activityId = activityId;
 	}
 
 	@Column(name = "title")
@@ -55,7 +56,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setTitle(String title) {
-		this.title=title;
+		this.title = title;
 	}
 
 	@Column(name = "description")
@@ -64,27 +65,17 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setDescription(String description) {
-		this.description=description;
+		this.description = description;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "parent_activity_id", nullable = false, foreignKey = @ForeignKey(name = "fk_activity_activity"))
-	public Activity getParentActivity() {
-		return this.parentActivity;
+	@JoinColumn(name = "parent_activity_id", nullable = true, foreignKey = @ForeignKey(name = "fk_activity_activity"))
+	public Activity getSuperActivity() {
+		return this.superActivity;
 	}
 
-	public void setParentActivity(Activity parentActivity) {
-		this.parentActivity=parentActivity;
-	}
-
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "activity_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_activity_activity_type"))
-	public ActivityType getActivityType() {
-		return this.activityType;
-	}
-
-	public void setActivityType(ActivityType activityType) {
-		this.activityType=activityType;
+	public void setSuperActivity(Activity superActivity) {
+		this.superActivity=superActivity;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -94,7 +85,35 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setProject(Project project) {
-		this.project=project;
+		this.project = project;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
+	public List<WorkReport> getWorkReports() {
+		return this.workReports;
+	}
+
+	public void setWorkReports(List<WorkReport> workReports) {
+		this.workReports=workReports;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "activity_type_id", nullable = false, foreignKey = @ForeignKey(name = "fk_activity_activity_type"))
+	public ActivityType getActivityType() {
+		return this.activityType;
+	}
+
+	public void setActivityType(ActivityType activityType) {
+		this.activityType = activityType;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "superActivity")
+	public List<Activity> getSubActivities() {
+		return this.subActivities;
+	}
+
+	public void setSubActivities(List<Activity> subActivities) {
+		this.subActivities=subActivities;
 	}
 
 }

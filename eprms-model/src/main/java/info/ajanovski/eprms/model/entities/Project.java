@@ -32,10 +32,13 @@ public class Project implements java.io.Serializable {
 	private long projectId;
 	private String title;
 	private String description;
+	private Date startDate;
+	private Date finishDate;
 	private List<Responsibility> responsibilities = new ArrayList<Responsibility>();
 	private List<Repository> repositories = new ArrayList<Repository>();
 	private List<Database> databases = new ArrayList<Database>();
 	private List<Activity> activities = new ArrayList<Activity>();
+	private List<CourseProject> courseProjects = new ArrayList<CourseProject>();
 
 
 	@Id
@@ -66,6 +69,24 @@ public class Project implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description=description;
+	}
+
+	@Column(name = "start_date")
+	public Date getStartDate() {
+		return this.startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate=startDate;
+	}
+
+	@Column(name = "finish_date")
+	public Date getFinishDate() {
+		return this.finishDate;
+	}
+
+	public void setFinishDate(Date finishDate) {
+		this.finishDate=finishDate;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
@@ -102,6 +123,15 @@ public class Project implements java.io.Serializable {
 
 	public void setActivities(List<Activity> activities) {
 		this.activities=activities;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
+	public List<CourseProject> getCourseProjects() {
+		return this.courseProjects;
+	}
+
+	public void setCourseProjects(List<CourseProject> courseProjects) {
+		this.courseProjects=courseProjects;
 	}
 
 }
