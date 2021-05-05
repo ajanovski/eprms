@@ -8,7 +8,7 @@ The project is still under construction.
 
 Project lead: [Vangel V. Ajanovski](https://ajanovski.info)
 
-## eprms-spri
+## eprms-spr
 
 The second implementation of the EPRMS was developed using the Spring MVC web application framework.
 

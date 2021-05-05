@@ -16,7 +16,7 @@ Contains the JPA entities and model-related classes
 
 The first implementation of the EPRMS was developed using the Tapestry 5 web application framework.
 
+## eprms-spr 
 
-
-Partially working instance can be compiled from source for testing purposes.
+The second implementation of the EPRMS was developed using the Spring MVC web application framework.
 
