@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.ultraq.net.nz/thymeleaf"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html>
 <head>
 <meta charset="utf-8" />
 
-<title layout:title-pattern="$LAYOUT_TITLE $CONTENT_TITLE"></title>
+<title data-layout-title-pattern="$LAYOUT_TITLE $CONTENT_TITLE"></title>
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" th:content="#{system-description}" />
-<meta name="author" th:content="#{main-developer-name}" />
+<meta name="description" data-th-content="#{system-description}" />
+<meta name="author" data-th-content="#{main-developer-name}" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <meta http-equiv="Expires" content="Mon, 26 Jul 1997 05:00:00 GMT" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -29,7 +28,7 @@
 
 	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
 		style="background-color: #03030f;">
-		<a class="navbar-brand" href="Index" th:text="#{app-title-short}"></a>
+		<a class="navbar-brand" href="Index" data-th-text="#{app-title-short}"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#mainMenu" aria-controls="mainMenu"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -56,14 +55,15 @@
 		</div>
 
 		<!-- content -->
-		<div layout:fragment="content"></div>
+		<div data-layout-fragment="content"></div>
 		<!-- /content -->
 
 		<hr />
 		<footer>
 			<p>
-				Copyright &copy;<span th:text="#{copyrightYear}" /> <a
-					href="https://ajanovski.info" th:text="#{copyrightHolder} "> </a>
+				Copyright &copy;<span data-th-text="#{copyrightYear}"></span> <a
+					data-th-href="#{main-developer-url}" data-th-text="#{copyrightHolder} ">
+				</a>
 			</p>
 		</footer>
 	</div>

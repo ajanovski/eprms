@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+
+<html>
+<body>
+	<svg class="icon" data-th-fragment="svgicon(path)"
+		data-th-with="width=${width} ?: '16px', height=${height} ?: '16px'"
+		data-th-width="${width}" data-th-height="${height}">
+			  <use data-th-xlink:href="@{'/images/feather-sprite.svg#' + ${path}}" />
+		</svg>
+</body>
+</html>

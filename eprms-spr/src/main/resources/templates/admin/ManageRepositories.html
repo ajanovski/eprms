@@ -1,13 +1,11 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout.html}" lang="en"
-	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html data-layout-decorate="~{fragments/layout.html}" lang="en">
 <head>
-<title th:text="#{app-title-short}"></title>
+<title data-th-text="#{app-title-short}"></title>
 </head>
 <body>
 
-	<div layout:fragment="content">
+	<div data-layout-fragment="content">
 
 
 		<h1>[[#{admin/ManageRepositories-pagelink}]]</h1>
@@ -17,15 +15,15 @@
 				repositories for creation: [[${isOnlyShowNotCreated}]]</a>
 		</div>
 
-		<div th:if="${isOnlyShowNotCreated}">
+		<div data-th-if="${isOnlyShowNotCreated}">
 			<code>
-				<p th:each="repositoty: ${repositories}">
-					./create_repository.sh "${repository.title}" "${repository.url}"</br>
-				</p>
+				<span data-th-each="repositoty: ${repositories}"
+					data-th-remove="tag"> ./create_repository.sh
+					"${repository.title}" "${repository.url}"<br />
+				</span>
 			</code>
 		</div>
-		<table class="table table-sm" t:type="grid" t:source="repositories"></table>
-		<div th:unless="${isOnlyShowNotCreated}">
+		<div data-th-unless="${isOnlyShowNotCreated}">
 			<table class="table table-sm">
 				<thead>
 					<tr>
@@ -35,15 +33,17 @@
 						<th>Action</th>
 					</tr>
 				</thead>
-				<tr th:each="repository: ${repositories}">
+				<tr data-th-each="repository: ${repositories}">
 					<td>[[${repository.title}]]</td>
 					<td>[[${repository.url}]]</td>
 					<td>[[${repository.dateCreated}]]</td>
 					<td><a role="button" class="btn btn-sm btn-secondary"
-						th:href="@{/admin/Managerepositories.edit(repositoryId=${repository.repositoryId})}"
-						t:mixins="confirm">[[#{edit-label}]]</a> <a
-						th:href="@{/admin/Managerepositories.delete(repositoryId=${repository.repositoryId})}"
-						class="btn btn-sm btn-danger" t:mixins="confirm">[[#{remove-label}]]</a></td>
+						data-th-href="@{/admin/Managerepositories.edit(repositoryId=${repository.repositoryId})}"><img
+							data-th-replace="fragments/SVGIcon :: svgicon(path='edit')" />[[#{edit-label}]]</a>
+						<a
+						data-th-href="@{/admin/Managerepositories.delete(repositoryId=${repository.repositoryId})}"
+						class="btn btn-sm btn-danger"><img
+							data-th-replace="fragments/SVGIcon :: svgicon(path='trash')" />[[#{remove-label}]]</a></td>
 				</tr>
 			</table>
 		</div>

@@ -1,15 +1,14 @@
 <!DOCTYPE html>
-<html lang="en" xmlns:th="http://www.ultraq.net.nz/thymeleaf"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html lang="en">
 <head>
 <meta charset="utf-8" />
 
-<title layout:title-pattern="$LAYOUT_TITLE $CONTENT_TITLE"></title>
+<title data-layout-title-pattern="$LAYOUT_TITLE $CONTENT_TITLE"></title>
 
 <meta name="viewport"
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
-<meta name="description" th:content="#{system-description}" />
-<meta name="author" th:content="#{main-developer-name}" />
+<meta name="description" data-th-content="#{system-description}" />
+<meta name="author" data-th-content="#{main-developer-name}" />
 <link rel="shortcut icon" href="/favicon.ico" />
 <meta http-equiv="Expires" content="Mon, 26 Jul 1997 05:00:00 GMT" />
 <meta http-equiv="Pragma" content="no-cache" />
@@ -29,7 +28,7 @@
 
 	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
 		style="background-color: #03030f;">
-		<a class="navbar-brand" href="Index" th:text="#{app-title-short}"></a>
+		<a class="navbar-brand" href="Index" data-th-text="#{app-title-short}"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#mainMenu" aria-controls="mainMenu"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -38,18 +37,19 @@
 
 		<div class="collapse navbar-collapse" id="mainMenu">
 			<ul class="navbar-nav mr-auto">
-				<li th:if="${userInfo}" th:each="pageName: ${studentPageNames}"
-					class="nav-item"><a th:href="${pageName}"
-					th:text="${pageName}" class="nav-link"
-					th:appendclass="${classForPageName}"></a></li>
+				<li data-th-if="${userInfo}"
+					data-th-each="pageName: ${studentPageNames}" class="nav-item"><a
+					data-th-href="${pageName}" data-th-text="${pageName}"
+					class="nav-link" data-th-appendclass="${classForPageName}"></a></li>
 
-				<li class="nav-item dropdown" th:if="${userInfo.administrator}"><a
+				<li class="nav-item dropdown" data-th-if="${userInfo.administrator}"><a
 					class="nav-link dropdown-toggle" href="#" id="mainMenuAdmin"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false">[[#{admin-label}]]</a>
 					<div class="dropdown-menu" aria-labelledby="mainMenuAdmin">
-						<a th:each="pageName: ${adminPageNames}" class="dropdown-item"
-							th:appendclass="${classForPageName}" th:href="${pageName}">[[${pageName}]]</a>
+						<a data-th-each="pageName: ${adminPageNames}"
+							class="dropdown-item" data-th-appendclass="${classForPageName}"
+							data-th-href="${pageName}">[[${pageName}]]</a>
 					</div></li>
 			</ul>
 
@@ -59,13 +59,15 @@
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="mainMenuUserProfile"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"><img
-						src="images/tango-icon-theme/org/freedesktop/tango/scalable/apps/system-users.svg"
-						style="width: 16;" /> [[${userName}]]</a>
+					aria-expanded="false"> <img
+						data-th-replace="fragments/SVGIcon :: svgicon(path='user')" />
+						[[${userName}]]
+				</a>
 					<div class="dropdown-menu" aria-labelledby="mainMenuUserProfile">
-						<a th:if="${userInfo}" th:href="@{Logout}" class="dropdown-item"><img
-							src="images/tango-icon-theme/org/freedesktop/tango/scalable/actions/system-log-out.svg"
-							style="width: 16;" /> [[#{Logout-label}]]</a>
+						<a data-th-if="${userInfo}" data-th-href="@{Logout}"
+							class="dropdown-item"><img
+							data-th-replace="fragments/SVGIcon :: svgicon(path='user')" />
+							[[#{Logout-label}]]</a>
 					</div></li>
 			</ul>
 		</div>
@@ -79,14 +81,15 @@
 		</div>
 
 		<!-- content -->
-		<div layout:fragment="content"></div>
+		<div data-layout-fragment="content"></div>
 		<!-- /content -->
 
 		<hr />
 		<footer>
 			<p>
-				Copyright &copy;<span th:text="#{copyrightYear}" /> <a
-					href="https://ajanovski.info" th:text="#{copyrightHolder} "> </a>
+				Copyright &copy;<span data-th-text="#{copyrightYear}"></span> <a
+					data-th-href="#{main-developer-url}" data-th-text="#{copyrightHolder} ">
+				</a>
 			</p>
 		</footer>
 	</div>

@@ -1,19 +1,17 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout.html}" lang="en"
-	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html data-layout-decorate="~{fragments/layout.html}" lang="en">
 <head>
-<title th:text="#{app-title-short}"></title>
+<title data-th-text="#{app-title-short}"></title>
 </head>
 <body>
 
-	<div layout:fragment="content">
+	<div data-layout-fragment="content">
 
 		<h1>[[#{MyRepositories-pagelink}]]</h1>
 
 		<h2>[[#{Personal-label}]]</h2>
 		<table class="table table-sm">
-			<tr th:each="repository: ${personalRepositories}">
+			<tr data-th-each="repository: ${personalRepositories}">
 				<td>[[${repository.title}]]</td>
 				<td>[[${repository.url}]]</td>
 				<td>[[${repository.dateCreated}]]</td>
@@ -22,7 +20,7 @@
 
 		<h2>[[#{project-label}]]</h2>
 		<table class="table table-sm">
-			<tr th:each="repository: ${projectRepositories}">
+			<tr data-th-each="repository: ${projectRepositories}">
 				<td>[[${repository.title}]]</td>
 				<td>[[${repository.url}]]</td>
 				<td>[[${repository.dateCreated}]]</td>
@@ -31,7 +29,7 @@
 
 		<h2>[[#{team-label}]]</h2>
 		<table class="table table-sm">
-			<tr th:each="repository: ${teamRepositories}">
+			<tr data-th-each="repository: ${teamRepositories}">
 				<td>[[${repository.title}]]</td>
 				<td>[[${repository.url}]]</td>
 				<td>[[${repository.dateCreated}]]</td>

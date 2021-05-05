@@ -1,17 +1,15 @@
 <!DOCTYPE html>
-<html layout:decorate="~{layout.html}" lang="en"
-	xmlns:th="http://www.ultraq.net.nz/thymeleaf"
-	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+<html data-layout-decorate="~{fragments/layout.html}" lang="en">
 <head>
-<title th:text="#{app-title-short}"></title>
+<title data-th-text="#{app-title-short}"></title>
 </head>
 <body>
 
-	<div layout:fragment="content">
+	<div data-layout-fragment="content">
 
 		<h1>[[#{MyDatabases-pagelink}]]</h1>
 
-		<div class="card mb-3" th:each="database: ${projectDatabases}">
+		<div class="card mb-3" data-th-each="database: ${projectDatabases}">
 			<div class="card-body">
 				<div class="card-title">
 					<h2>Project: [[${database.project.title}]]</h2>

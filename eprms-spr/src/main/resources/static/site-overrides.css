@@ -58,9 +58,6 @@ p.comment {
 	padding-left:0.5rem;
 }
 
-
-
-
 @keyframes slidein {
   from { background: white; }
   50% { background: #ffffa0; }
@@ -69,4 +66,12 @@ p.comment {
 
 .pagination li {
 	margin-left:0.5em;
+}
+
+svg {
+	fill: transparent;
+	stroke: currentColor;
+	stroke-width: 0.1em;
+	stroke-linecap: round;
+	stroke-linejoin: round;
 }
