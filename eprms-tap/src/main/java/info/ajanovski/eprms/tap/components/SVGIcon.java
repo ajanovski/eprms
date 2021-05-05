@@ -62,8 +62,8 @@ public class SVGIcon {
 			height = width;
 		}
 		if (width == null && height == null) {
-			height = "1.5em";
-			width = "1.5em";
+			height = "1.2em";
+			width = "1.2em";
 		}
 	}
 }

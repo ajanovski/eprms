@@ -20,6 +20,24 @@
 
 package info.ajanovski.eprms.tap.services;
 
+import java.util.List;
+
+import info.ajanovski.eprms.model.entities.Course;
+import info.ajanovski.eprms.model.entities.CourseProject;
+import info.ajanovski.eprms.model.entities.Project;
+
 public interface ProjectManager {
-	
+
+	public List<Project> getAllProjectsOrderByTitle();
+
+	public List<CourseProject> getProjectCourses(Project p);
+
+	public void addCoursesToProject(List<Course> inCourses, Project p);
+
+	public Float sumPoints(Project p);
+
+	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse);
+
+	public List<Project> getProjectByPerson(Long personId);
+
 }

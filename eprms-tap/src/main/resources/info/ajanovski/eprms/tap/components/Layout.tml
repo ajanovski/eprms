@@ -44,7 +44,7 @@
 						</div></li>
 				</t:if>
 			</ul>
-			
+
 			<ul class="navbar-nav navbar-right">
 				<li class="nav-item"><a class="nav-link" href=""
 					t:type="actionlink" t:id="localeToggle">${message:lang-label}
@@ -52,13 +52,12 @@
 				<li class="nav-item dropdown"><a
 					class="nav-link dropdown-toggle" href="#" id="mainMenuUserProfile"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
-					aria-expanded="false"><t:SVGIcon
-							t:path="scalable/apps/system-users.svg" /> ${userInfo.userName}</a>
+					aria-expanded="false"><t:SVGIcon t:path="user" />
+						${userInfo.userName}</a>
 					<div class="dropdown-menu" aria-labelledby="mainMenuUserProfile">
 						<t:if t:test="userInfo">
 							<a href="" t:type="pagelink" t:page="logout"
-								class="dropdown-item"><img t:type="SVGIcon"
-								t:path="scalable/actions/system-log-out.svg" />
+								class="dropdown-item"><img t:type="SVGIcon" t:path="log-out" />
 								${message:Logout-label}</a>
 						</t:if>
 					</div></li>

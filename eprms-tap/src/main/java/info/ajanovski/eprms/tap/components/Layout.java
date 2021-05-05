@@ -40,8 +40,7 @@ import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
-@Import(stylesheet = { 
-		"site-overrides.css" }, module = { "bootstrap/dropdown", "bootstrap/collapse" })
+@Import(stylesheet = { "site-overrides.css" }, module = { "bootstrap/dropdown", "bootstrap/collapse" })
 public class Layout {
 
 	@Inject
@@ -81,12 +80,13 @@ public class Layout {
 	private UserInfo userInfo;
 
 	public String[] getStudentPageNames() {
-		return new String[] { "Index", "MyDatabases", "MyRepositories", "MyRepositoryAuth" };
+		return new String[] { "Index", "MyProjectReports", "MyDatabases", "MyRepositories", "MyRepositoryAuth" };
 	}
 
 	public String[] getAdminPageNames() {
 		if (userInfo.isAdministrator()) {
-			return new String[] { "admin/Projects", "admin/Teams", "admin/ManageDatabases", "admin/ManageRepositories" };
+			return new String[] { "admin/OverallCourseReport", "admin/ManageProjects", "admin/ManageTeams",
+					"admin/ManageDatabases", "admin/ManageRepositories" };
 		} else {
 			return null;
 		}

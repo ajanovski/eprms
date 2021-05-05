@@ -1,7 +1,10 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 
-<img
-	src="${imageUrl}" style="width: ${width}; height: ${height}; vertical-align: middle;" alt="${title}" title="${title}" />
-	
+<svg xmlns="http://www.w3.org/2000/svg"
+	xmlns:xlink="http://www.w3.org/1999/xlink" version="1.1"
+	width="${width}" height="${height}">
+  <use xlink:href="${context:images/feather-sprite.svg}#${path}" />
+</svg>
+
 </html>

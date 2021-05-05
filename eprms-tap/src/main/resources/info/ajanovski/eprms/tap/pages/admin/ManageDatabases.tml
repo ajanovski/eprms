@@ -31,9 +31,11 @@
 			t:row="database">
 			<p:databaseIdCell>
 				<a t:type="actionlink" t:id="edit" t:context="database"
-					class="btn btn-sm btn-secondary" t:mixins="confirm">${message:edit-label}</a>
+					class="btn btn-sm btn-secondary" t:mixins="confirm"><img t:type="SVGIcon"
+						t:path="edit" /> ${message:edit-label}</a>
 				<a t:type="actionlink" t:id="delete" t:context="database"
-					class="btn btn-sm btn-danger" t:mixins="confirm">${message:remove-label}</a>
+					class="btn btn-sm btn-danger" t:mixins="confirm"><img t:type="SVGIcon"
+						t:path="trash" /> ${message:remove-label}</a>
 			</p:databaseIdCell>
 		</table>
 	</p:else>

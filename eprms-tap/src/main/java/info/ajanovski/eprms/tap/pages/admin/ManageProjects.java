@@ -22,15 +22,20 @@ package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import org.apache.tapestry5.SelectModel;
+import org.apache.tapestry5.ValueEncoder;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.commons.Messages;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 
+import info.ajanovski.eprms.model.entities.Activity;
+import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.Project;
@@ -41,20 +46,24 @@ import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.ProjectManager;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @InstructorPage
 @AdministratorPage
-public class Projects {
+public class ManageProjects {
 	@SessionState
 	@Property
 	private UserInfo userInfo;
 
 	@Inject
+	private ProjectManager projectManager;
+
+	@Inject
 	private GenericService genericService;
 
 	public List<Project> getAllProjects() {
-		return (List<Project>) genericService.getAll(Project.class);
+		return (List<Project>) projectManager.getAllProjectsOrderByTitle();
 	}
 
 	public List<Project> getProjects() {
@@ -119,6 +128,12 @@ public class Projects {
 		newProject = new Project();
 	}
 
+	public void onActionFromEditProject(Project p) {
+		newProject = p;
+		inCourses = projectManager.getProjectCourses(newProject).stream().map(cp -> cp.getCourse())
+				.collect(Collectors.toList());
+	}
+
 	public void onActionFromNewTeam(Project p) {
 		newTeam = new Team();
 		newResponsibility = new Responsibility();
@@ -136,6 +151,39 @@ public class Projects {
 		newRp.setProject(p);
 	}
 
+	public List<Course> getAllCourses() {
+		return (List<Course>) genericService.getAll(Course.class);
+	}
+
+	@Persist
+	@Property
+	private List<Course> inCourses;
+
+	@Inject
+	private Messages messages;
+
+	public SelectModel getCoursesModel() {
+		return selectModelFactory.create(getAllCourses(), "title");
+	}
+
+	public SelectModel getSelectedCoursesModel() {
+		return selectModelFactory.create(inCourses, "title");
+	}
+
+	public ValueEncoder<Course> getCourseEncoder() {
+		return new ValueEncoder<Course>() {
+			@Override
+			public String toClient(Course value) {
+				return String.valueOf(value.getCourseId());
+			}
+
+			@Override
+			public Course toValue(String id) {
+				return genericService.getByPK(Course.class, Long.parseLong(id));
+			}
+		};
+	}
+
 	@CommitAfter
 	public void onSuccessFromTeamMemberForm() {
 		genericService.save(newTm);
@@ -144,7 +192,8 @@ public class Projects {
 
 	@CommitAfter
 	public void onSuccessFromNewProjectForm() {
-		genericService.save(newProject);
+		genericService.saveOrUpdate(newProject);
+		projectManager.addCoursesToProject(inCourses, newProject);
 		selectedProject = newProject;
 		newProject = null;
 	}
@@ -185,6 +234,41 @@ public class Projects {
 
 	public SelectModel getProjectModel() {
 		return (SelectModel) selectModelFactory.create(getAllProjects(), "title");
+	}
+
+	@Property
+	private Course course;
+
+	public List<Course> getProjectCourses() {
+		return projectManager.getProjectCourses(project).stream().map(cp -> cp.getCourse())
+				.collect(Collectors.toList());
+	}
+
+	@Persist
+	@Property
+	private Project copyActivitiesFromProject;
+
+	public void onActionFromCopyActivities(Project p) {
+		copyActivitiesFromProject = p;
+	}
+
+	public void onActionFromResetClipboard() {
+		copyActivitiesFromProject = null;
+	}
+
+	@CommitAfter
+	public void onActionFromPasteActivities(Project pasteActivitiesToProject) {
+		for (Activity original : genericService.getByPK(Project.class, copyActivitiesFromProject.getProjectId())
+				.getActivities()) {
+			Activity copy = new Activity();
+			copy.setDescription(original.getDescription());
+			copy.setTitle(original.getTitle());
+			copy.setProject(pasteActivitiesToProject);
+			copy.setActivityType(original.getActivityType());
+			genericService.save(copy);
+		}
+		genericService.save(pasteActivitiesToProject);
+		copyActivitiesFromProject = null;
 	}
 
 }
