@@ -1,0 +1,23 @@
+@using Microsoft.AspNetCore.Authentication
+@model AuthenticationScheme[]
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="row">
+    <div class="span-12">
+        <h1>@ViewData["Title"]</h1>
+    <p class="lead text-left">Sign in using one of these external providers:</p>
+
+    <p>
+    @foreach (var scheme in Model.OrderBy(p => p.DisplayName))
+    {
+        <form action="/login" method="post">
+            <input type="hidden" name="Provider" value="@scheme.Name" />
+            <input type="hidden" name="ReturnUrl" value="@ViewBag.ReturnUrl" />
+            <button class="btn btn-primary mt-3" type="submit">@scheme.Name</button>
+        </form>
+    }
+    </p>
+    </div>
+</div>

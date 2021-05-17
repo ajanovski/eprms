@@ -1,0 +1,149 @@
+﻿@using Microsoft.AspNetCore.Mvc.Localization
+@using Microsoft.AspNetCore.Http
+@inject IHtmlLocalizer<SharedResource> Localizer
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+<meta charset="utf-8" />
+	
+	<title>@ViewData["Title"]</title>
+	
+	<meta name="viewport"
+		content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+	<meta name="description" content='@Localizer["system-description"]' />
+	<meta name="author" content='@Localizer["main-developer-name"]' />
+	<link rel="shortcut icon" href="~/favicon.ico" />
+	<meta http-equiv="Expires" content="Mon, 26 Jul 1997 05:00:00 GMT" />
+	<meta http-equiv="Pragma" content="no-cache" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<base href="/" />
+	<link rel="stylesheet" href="~/vendor.min.css" />
+	<link rel="stylesheet" href="~/css/site-overrides.css"></link>
+</head>
+
+<body style="padding-top: 4.5em;">
+
+	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
+		style="background-color: #03030f;">
+		<a class="navbar-brand" href='/'>@Localizer["app-title-short"]</a>
+		<button class="navbar-toggler" type="button" data-toggle="collapse"
+			data-target="#mainMenu" aria-controls="mainMenu"
+			aria-expanded="false" aria-label="Toggle navigation">
+			<span class="navbar-toggler-icon"></span>
+		</button>
+
+		<div class="collapse navbar-collapse" id="mainMenu">
+			<ul class="navbar-nav mr-auto">
+			@if(User.Identity.IsAuthenticated) {
+
+				<li class="nav-item"><a href="/MyDatabases" class="nav-link">MyDatabases</a></li>
+
+				<li	data-th-each="pageName: ${studentPageNames}" class="nav-item"><a
+					data-th-href="${pageName}" data-th-text="${pageName}"
+					class="nav-link" data-th-appendclass="${classForPageName}"></a></li>
+
+				@if(User.IsInRole("ADMINISTRATOR"))
+				{
+				<li class="nav-item dropdown" data-th-if="${userInfo.administrator}"><a
+					class="nav-link dropdown-toggle" href="#" id="mainMenuAdmin"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false">@Localizer["admin-label"]</a>
+					<div class="dropdown-menu" aria-labelledby="mainMenuAdmin">
+						<a data-th-each="pageName: ${adminPageNames}"
+							class="dropdown-item" data-th-appendclass="${classForPageName}"
+							href='@ViewData["pageName"]'>@ViewData["pageName"]</a>
+					</div></li>
+				}
+
+			}
+			</ul>
+
+			<ul class="navbar-nav navbar-right">
+				<li class="nav-item">@await Html.PartialAsync("_SelectLanguagePartial")</li>
+
+				<li class="nav-item dropdown authenticated"><a
+					class="nav-link dropdown-toggle" href="#" id="mainMenuUserProfile"
+					role="button" data-toggle="dropdown" aria-haspopup="true"
+					aria-expanded="false"> <img
+						data-th-replace="fragments/SVGIcon :: svgicon(path='user')" />
+						<span id="user"></span> 
+				</a>
+					<div class="dropdown-menu" aria-labelledby="mainMenuUserProfile">
+						@if(User.Identity.IsAuthenticated) {
+						<a href="/Logout"
+							class="dropdown-item"><img
+							data-th-replace="fragments/SVGIcon :: svgicon(path='user')" />
+							@Localizer["Logout-label"]</a>
+						}
+					</div></li>
+				<li class="nav-item unauthenticated"><a
+					class="nav-link" href='@Localizer["Login"]' id="login">@Localizer["login-label"]</a>
+					</li>
+
+			</ul>
+		</div>
+	</nav>
+
+	<div class="container-fluid">
+		<div class="row">
+			<div class="col-12">
+				<p class="talerts" />
+			</div>
+		</div>
+
+		<!-- content -->
+		<div class="container">@RenderBody()</div>
+		<!-- /content -->
+
+		<hr />
+		<footer>
+			<p>
+				Copyright &copy;<span>@Localizer["copyrightYear"]</span> <a
+					href='@Localizer["main-developer-url"]'>@Localizer["copyrightHolder"] </a>
+			</p>
+		</footer>
+	</div>
+
+
+	@RenderSection("Scripts", required: false)
+	<script src="~/vendor.min.js"></script>
+	<script type="text/javascript" src="~/js/site.js" asp-append-version="true"></script> 
+	<script type="text/javascript">
+		$.ajaxSetup({
+			beforeSend: function (xhr, settings) {
+				if (settings.type == 'POST' || settings.type == 'PUT'
+					|| settings.type == 'DELETE') {
+					if (!(/^http:.*/.test(settings.url) || /^https:.*/
+						.test(settings.url))) {
+						xhr.setRequestHeader("X-XSRF-TOKEN", Cookies
+							.get('XSRF-TOKEN'));
+					}
+				}
+			}
+		});
+		$.get("/user", function (data) {
+			console.log(data);
+			if (data.name != null) {
+				$(".unauthenticated").hide();
+				$(".authenticated").show();
+				$("#user").html(data.name);
+			} else {
+				$(".unauthenticated").show();
+				$(".authenticated").hide();
+			}
+		});
+		var logout = function () {
+			$.post("/logout", function () {
+				$("#user").html('');
+				$(".authenticated").hide();
+				$(".unauthenticated").show();
+			})
+			return true;
+		}
+	</script>
+</body>
+
+
+</html>

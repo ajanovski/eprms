@@ -1,0 +1,50 @@
+# This is where global application properties go.
+# You can also have individual message catalogs for each page and each
+# component that override these defaults.
+# The name of this file is based on the <filter-name> element in web.
+
+index-pagelink=Home
+myprojectreports-pagelink=My Project Reports
+myrepositories-pagelink=My Repositories
+myrepositoryauth-pagelink=Repository Auth
+mydatabases-pagelink=My Databases
+admin/ManageTeams-pagelink=Teams
+admin/ManageProjects-pagelink=Projects
+admin/ManageRepositories-pagelink=Manage Repositories
+admin/ManageDatabases-pagelink=Manage Databases
+admin/ProjectActivities-pagelink=Manage Project Activities
+admin/OverallCourseReport-pagelink=Overall Course Report
+
+admin-label=Admin
+app-title-short=EPRMS
+activity-label=Activity
+lang-label=Language
+team-label=Team
+teammember-label=Team member
+project-label=Project
+repository-label=Repository
+database-label=Database
+new-label=Create
+add-label=Add
+remove-label=Remove
+personal-label=Personal
+repositories-label=Repositories
+edit-label=Edit
+newActivity-label=New Activity
+activities-label=Activities
+copy-label=Copy
+paste-label=Paste
+reset-label=Reset
+report-label=Report
+description-label=Description
+percentReported-label=Reported % of total work in this activity
+evaluation-label=Evaluation
+percentEvaluated-label=Evaluated % of total work in this activity
+points-label=Points
+
+Logout-label=Logout
+logout-page=Logout
+
+copyrightYear=2021
+copyrightHolder=Vangel V. Ajanovski
+back-label=Back

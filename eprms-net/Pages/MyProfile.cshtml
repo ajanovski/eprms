@@ -1,0 +1,33 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<SharedResource> Localizer
+@namespace info.ajanovski.eprms.net.Pages
+@{
+    ViewData["Title"] = Localizer["greeting"];
+}
+
+
+		<div class="jumbotron text-center hoverable p-4">
+
+			<div class="row">
+
+				<div class="col-md-3 offset-md-1 mx-3 my-3">
+					<div class="view overlay">
+						<div class="mask rgba-white-slight">
+							<a> <img src="images/logo.png" class="img-fluid"
+								data-th-alt="#{greeting}" /></a>
+						</div>
+					</div>
+				</div>
+
+				<div class="col-md-8 text-md-left ml-3 mt-3">
+					<h4 class="h4 mb-4">[[#{greeting-title}]] [[${userInfo.userName}]]</h4>
+					<p class="font-weight-normal" data-th-text="#{greeting}"></p>
+					<a class="btn btn-success" data-th-href="#{greeting-url}"
+						data-th-text="#{greeting-url}"></a>
+				</div>
+
+			</div>
+
+		</div>
+

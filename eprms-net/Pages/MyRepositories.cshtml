@@ -1,0 +1,36 @@
+@page
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IHtmlLocalizer<SharedResource> Localizer
+@namespace info.ajanovski.eprms.net.Pages
+@{
+    ViewData["Title"] = Localizer["greeting"];
+}
+
+<h1>@Localizer["MyRepositories-pagelink"]</h1>
+
+<h2>[[#{Personal-label}]]</h2>
+<table class="table table-sm">
+	<tr data-th-each="repository: ${personalRepositories}">
+		<td>[[${repository.title}]]</td>
+		<td>[[${repository.url}]]</td>
+		<td>[[${repository.dateCreated}]]</td>
+	</tr>
+</table>
+
+<h2>@Localizer["project-label"]</h2>
+<table class="table table-sm">
+	<tr data-th-each="repository: ${projectRepositories}">
+		<td>[[${repository.title}]]</td>
+		<td>[[${repository.url}]]</td>
+		<td>[[${repository.dateCreated}]]</td>
+	</tr>
+</table>
+
+<h2>@Localizer["team-label"]</h2>
+<table class="table table-sm">
+	<tr data-th-each="repository: ${teamRepositories}">
+		<td>[[${repository.title}]]</td>
+		<td>[[${repository.url}]]</td>
+		<td>[[${repository.dateCreated}]]</td>
+	</tr>
+</table>
