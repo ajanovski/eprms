@@ -20,3 +20,7 @@ The first implementation of the EPRMS was developed using the Tapestry 5 web app
 
 The second implementation of the EPRMS was developed using the Spring MVC web application framework.
 
+## eprms-net
+
+The third implementation of the EPRMS was developed using the ASP.Net Core web application framework.
+
