@@ -20,52 +20,42 @@
 
 package info.ajanovski.eprms.spr.controllers;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
-import javax.servlet.http.HttpSession;
+import javax.servlet.http.HttpServletResponse;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.web.authentication.logout.CookieClearingLogoutHandler;
+import org.springframework.security.web.authentication.logout.SecurityContextLogoutHandler;
+import org.springframework.security.web.authentication.rememberme.AbstractRememberMeServices;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
 
-import info.ajanovski.eprms.spr.services.ModelConstructor;
-import info.ajanovski.eprms.spr.services.PersonManager;
 import info.ajanovski.eprms.spr.util.AppConfig;
 
 @Controller
-public class Logout {
-	private final Logger logger = LoggerFactory.getLogger(Logout.class);
+public class LoginLogout {
+	private final Logger logger = LoggerFactory.getLogger(LoginLogout.class);
 
-	@Inject
-	private ModelConstructor modelOps;
-
-	@Inject
-	public HttpServletRequest request;
-
-	@Inject
-	public PersonManager personManager;
-
-	@GetMapping(path = { "Logout" })
-	public String onActivate(Model model, HttpServletRequest request, HttpSession session) {
-		model = modelOps.addPublicModelAttribs("ERPMS - Logout", model);
-		model.addAttribute("casServer", request.getServletContext().getInitParameter("casServerLogoutUrl"));
-		model.addAttribute("appServer", request.getServletContext().getInitParameter("service"));
-		model.addAttribute("logoutRedirectToServer", AppConfig.getString("logout.redirectToServer"));
-
-		// Clear session
-		// Session session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
-			logger.debug("Session successfully invalidated!");
-		}
-
-		clearCookie();
-		return "Logout";
+	@GetMapping("Login")
+	public String login() {
+		logger.info("Login called");
+		return "redirect:/MyProfile";
 	}
 
-	private void clearCookie() {
+	@GetMapping(path = { "Logout" })
+	public String logout(HttpServletRequest request, HttpServletResponse response,
+			SecurityContextLogoutHandler logoutHandler, Model model) {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		logoutHandler.logout(request, response, auth);
+		new CookieClearingLogoutHandler(AbstractRememberMeServices.SPRING_SECURITY_REMEMBER_ME_COOKIE_KEY)
+				.logout(request, response, auth);
+		model.addAttribute("casLogoutLink",
+				AppConfig.getString("cas.server") + "/cas/logout?service=" + AppConfig.getString("app.server"));
+		return "Logout";
 	}
 
 }

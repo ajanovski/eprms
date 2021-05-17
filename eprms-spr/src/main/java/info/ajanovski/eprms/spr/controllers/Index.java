@@ -20,46 +20,18 @@
 
 package info.ajanovski.eprms.spr.controllers;
 
-import javax.inject.Inject;
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.SessionAttributes;
-
-import info.ajanovski.eprms.spr.services.ModelConstructor;
-import info.ajanovski.eprms.spr.services.PersonManager;
-import info.ajanovski.eprms.spr.util.UserInfo;
 
 @Controller
-@SessionAttributes("userInfo")
 public class Index {
 	private static final Logger logger = LoggerFactory.getLogger(Index.class);
 
-	@Inject
-	private ModelConstructor modelOps;
-
-	@Inject
-	public HttpServletRequest request;
-
-	@Inject
-	public PersonManager personManager;
-
-	@ModelAttribute("userInfo")
-	public UserInfo userInfo() {
-		return new UserInfo(request, personManager);
-	}
-
 	@GetMapping(path = { "Index", "/" })
-	public String Index(Model model, @ModelAttribute("userInfo") UserInfo userInfo) {
-		if (userInfo == null) {
-			userInfo = userInfo();
-		}
-		model = modelOps.addMainModelAttribs("ERPMS - Home Page", model, userInfo);
+	public String Index(Model model) {
 		return "Index";
 	}
 

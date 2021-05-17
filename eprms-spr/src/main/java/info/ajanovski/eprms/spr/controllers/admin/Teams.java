@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletRequest;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -41,6 +42,7 @@ import info.ajanovski.eprms.spr.util.UserInfo;
 
 @Controller
 @SessionAttributes("userInfo")
+@Secured("ROLE_ADMINISTRATOR")
 public class Teams {
 	private static final Logger logger = LoggerFactory.getLogger(Teams.class);
 
@@ -55,7 +57,7 @@ public class Teams {
 
 	@ModelAttribute("userInfo")
 	public UserInfo userInfo() {
-		return new UserInfo(request, personManager);
+		return new UserInfo(personManager);
 	}
 
 	@GetMapping(path = { "admin/Teams" })

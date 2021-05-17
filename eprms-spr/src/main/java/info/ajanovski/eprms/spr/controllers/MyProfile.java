@@ -20,8 +20,6 @@
 
 package info.ajanovski.eprms.spr.controllers;
 
-import java.util.List;
-
 import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 
@@ -33,16 +31,14 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.SessionAttributes;
 
-import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.spr.services.ModelConstructor;
 import info.ajanovski.eprms.spr.services.PersonManager;
-import info.ajanovski.eprms.spr.services.ResourceManager;
 import info.ajanovski.eprms.spr.util.UserInfo;
 
 @Controller
 @SessionAttributes("userInfo")
-public class MyDatabases {
-	private final Logger logger = LoggerFactory.getLogger(MyDatabases.class);
+public class MyProfile {
+	private final Logger logger = LoggerFactory.getLogger(LoginLogout.class);
 
 	@Inject
 	private ModelConstructor modelOps;
@@ -58,26 +54,10 @@ public class MyDatabases {
 		return new UserInfo(personManager);
 	}
 
-	@GetMapping(path = { "MyDatabases" })
-	public String MyDatabases(Model model, @ModelAttribute("userInfo") UserInfo userInfo) {
+	@GetMapping(path = { "MyProfile" })
+	public String Index(Model model, @ModelAttribute("userInfo") UserInfo userInfo) {
 		model = modelOps.addMainModelAttribs("EPM - MyDatabases", model, userInfo);
-		model.addAttribute("projectDatabases", getProjectDatabases(userInfo.getPersonId()));
-		return "MyDatabases";
-	}
-
-	public String getClassForPageName() {
-		return "active";
-	}
-
-	public String getPageNameTitle(String pageName) {
-		return pageName + "-pagelink";
-	}
-
-	@Inject
-	private ResourceManager resourceManager;
-
-	public List<Database> getProjectDatabases(long personId) {
-		return resourceManager.getActiveDatabasesByProject(personId);
+		return "MyProfile";
 	}
 
 }

@@ -27,12 +27,12 @@ import java.util.List;
 
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
+import javax.persistence.Query;
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Root;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.DataException;
-import org.hibernate.query.Query;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
@@ -45,10 +45,6 @@ public class GenericDaoImpl implements GenericDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
-	private Session getSession() {
-		return entityManager.unwrap(org.hibernate.Session.class);
-	}
-
 	@Override
 	public Object getByPK(Class<?> classToLoad, long id) {
 		return entityManager.find(classToLoad, id);
@@ -56,21 +52,21 @@ public class GenericDaoImpl implements GenericDao {
 
 	@Override
 	public void deleteByPK(Class<?> classToLoad, long id) {
-		getSession().delete(getByPK(classToLoad, id));
+		entityManager.remove(getByPK(classToLoad, id));
 	}
 
 	@Override
 	public void delete(Object object) {
-		getSession().delete(object);
+		entityManager.remove(object);
 	}
 
 	@Override
 	public List<Object> getQueryResult(String guery) {
 		try {
-			Query q = getSession().createQuery(guery);
+			Query q = entityManager.createQuery(guery);
 			List<Object> l = new ArrayList<Object>();
 
-			for (Iterator<?> it = q.iterate(); it.hasNext();) {
+			for (Iterator<?> it = q.getResultList().iterator(); it.hasNext();) {
 				Object[] row = (Object[]) it.next();
 				for (int i = 0; i < row.length; i++) {
 					l.add(row[i]);
@@ -82,8 +78,7 @@ public class GenericDaoImpl implements GenericDao {
 
 		} catch (DataException e) {
 			// Critical errors : database unreachable, etc.
-			logger.error(
-					"Exception - DataAccessException occurs : " + e.getMessage() + " on complete getQueryResult().");
+			logger.error("Exception - DataAccessException occurs : {} on complete getQueryResult().", e.getMessage());
 			return null;
 		}
 	}
@@ -107,9 +102,18 @@ public class GenericDaoImpl implements GenericDao {
 
 	@Override
 	public Object getByCode(Class<?> classToLoad, String code) {
-		List<?> l = getSession().createCriteria(classToLoad).add(Restrictions.eq("code", code)).list();
-		if (l.size() > 0) {
-			return l.get(0);
+		if (code != null) {
+			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+			CriteriaQuery criteriaQuery = cb.createQuery(classToLoad.getClass());
+			Root root = criteriaQuery.from(classToLoad.getClass());
+			criteriaQuery.select(root).where(cb.equal(root.get("code"), code));
+			Query query = entityManager.createQuery(criteriaQuery);
+			List results = query.getResultList();
+			if (results.size() > 0) {
+				return results.get(0);
+			} else {
+				return null;
+			}
 		} else {
 			return null;
 		}
@@ -118,8 +122,13 @@ public class GenericDaoImpl implements GenericDao {
 	@Override
 	public List<?> getByTitleSubstring(Class<?> classToSearch, String searchSubString) {
 		if (searchSubString != null) {
-			return (List<?>) getSession().createCriteria(classToSearch)
-					.add(Restrictions.ilike("title", searchSubString, MatchMode.ANYWHERE)).list();
+			CriteriaBuilder cb = entityManager.getCriteriaBuilder();
+			CriteriaQuery criteriaQuery = cb.createQuery(classToSearch.getClass());
+			Root root = criteriaQuery.from(classToSearch.getClass());
+			criteriaQuery.select(root).where(cb.like(root.get("title"), "%" + searchSubString + "%"));
+			Query query = entityManager.createQuery(criteriaQuery);
+			List results = query.getResultList();
+			return results;
 		} else {
 			return null;
 		}

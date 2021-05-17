@@ -23,10 +23,11 @@ package info.ajanovski.eprms.spr.util;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.servlet.http.HttpServletRequest;
-
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
@@ -42,28 +43,27 @@ public class UserInfo {
 	private Long personId;
 	private List<UserRole> userRoles;
 
-	HttpServletRequest request;
-	PersonManager pm;
+	private PersonManager pm;
 	private static final Logger logger = LoggerFactory.getLogger(UserInfo.class);
 
-	public UserInfo(HttpServletRequest request, PersonManager pm) {
-		if (request != null && pm != null) {
-			this.request = request;
+	public UserInfo(PersonManager pm) {
+		if (pm != null) {
 			this.pm = pm;
-			if (request.getRemoteUser() != null) {
-				this.userName = request.getRemoteUser();
+			Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+			if (auth.getPrincipal() != null) {
+				logger.info("Login by: {}", auth.getPrincipal());
+				userName = ((UserDetails) auth.getPrincipal()).getUsername();
 				this.setupUser();
 			} else {
-				this.userName = null;
+				userName = null;
 			}
 		} else {
-			this.userName = null;
+			userName = null;
 		}
 	}
 
 	private void setupUser() {
 		if (userName != null) {
-			logger.info("Logged in user: {}", userName);
 			userRoles = new ArrayList<UserRole>();
 			Person p = pm.getPersonByUsername(userName);
 			if (p == null) {

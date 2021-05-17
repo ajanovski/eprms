@@ -29,6 +29,7 @@ import javax.transaction.Transactional;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,6 +45,7 @@ import info.ajanovski.eprms.spr.util.UserInfo;
 
 @Controller
 @SessionAttributes({ "userInfo", "isOnlyShowNotCreated" })
+@Secured("ROLE_ADMINISTRATOR")
 public class ManageRepositories {
 	private static final Logger logger = LoggerFactory.getLogger(ManageRepositories.class);
 
@@ -58,8 +60,7 @@ public class ManageRepositories {
 
 	@ModelAttribute("userInfo")
 	public UserInfo userInfo() {
-		logger.info("general user info");
-		return new UserInfo(request, personManager);
+		return new UserInfo(personManager);
 	}
 
 	@ModelAttribute("isOnlyShowNotCreated")

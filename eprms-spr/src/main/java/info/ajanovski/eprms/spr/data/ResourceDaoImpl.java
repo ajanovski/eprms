@@ -27,7 +27,6 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.Session;
 import org.springframework.stereotype.Service;
 
 import info.ajanovski.eprms.model.entities.Database;
@@ -39,15 +38,11 @@ public class ResourceDaoImpl implements ResourceDao {
 	@PersistenceContext
 	EntityManager entityManager;
 
-	private Session getSession() {
-		return entityManager.unwrap(org.hibernate.Session.class);
-	}
-
 	@Override
 	public List<Repository> getRepositoriesByPerson(long personId) {
 		try {
-			return getSession().createQuery("from Repository r where r.person.personId=:personId")
-					.setLong("personId", personId).list();
+			return entityManager.createQuery("from Repository r where r.person.personId=:personId")
+					.setParameter("personId", personId).getResultList();
 		} catch (Exception e) {
 			return new ArrayList<Repository>();
 		}
@@ -56,10 +51,10 @@ public class ResourceDaoImpl implements ResourceDao {
 	@Override
 	public List<Repository> getRepositoriesByTeam(long personId) {
 		try {
-			return getSession().createQuery("""
+			return entityManager.createQuery("""
 					select r from Repository r join r.team t, TeamMember tm join tm.person p
 					where tm.team.teamId=t.teamId and r.person.personId=:personId
-					""").setParameter("personId", personId).list();
+					""").setParameter("personId", personId).getResultList();
 		} catch (Exception e) {
 			return new ArrayList<Repository>();
 		}
@@ -68,12 +63,12 @@ public class ResourceDaoImpl implements ResourceDao {
 	@Override
 	public List<Repository> getRepositoriesByProject(long personId) {
 		try {
-			return getSession().createQuery("""
+			return entityManager.createQuery("""
 					select r from Repository r join r.project pr,
 					Responsibility res join res.team t, TeamMember tm join tm.person p
 					where pr.projectId=res.project.projectId and tm.team.teamId=t.teamId and
 					tm.person.personId=:personId
-					""").setLong("personId", personId).list();
+					""").setParameter("personId", personId).getResultList();
 		} catch (Exception e) {
 			return new ArrayList<Repository>();
 		}
@@ -82,12 +77,12 @@ public class ResourceDaoImpl implements ResourceDao {
 	@Override
 	public List<Database> getDatabasesByProject(long personId) {
 		try {
-			return getSession().createQuery("""
+			return entityManager.createQuery("""
 					select d from Database d join d.project pr,
 					Responsibility res join res.team t, TeamMember tm join tm.person p
 					where pr.projectId=res.project.projectId and tm.team.teamId=t.teamId and
 					tm.person.personId=:personId
-					""").setLong("personId", personId).list();
+					""").setParameter("personId", personId).getResultList();
 		} catch (Exception e) {
 			return new ArrayList<Database>();
 		}

@@ -50,6 +50,15 @@ public class ModelConstructor {
 		return model;
 	}
 
+	public Model addMainModelNoUserAttribs(String title, Model model) {
+		model.addAttribute("title", title);
+		model.addAttribute("studentPageNames", studentPageNames);
+		model.addAttribute("adminPageNames", adminPageNames);
+		model.addAttribute("classForPageName", "nav-link");
+		model.addAttribute("displayLanguage", "en");
+		return model;
+	}
+
 	public Model addPublicModelAttribs(String title, Model model) {
 		model.addAttribute("title", title);
 		model.addAttribute("classForPageName", "nav-link");

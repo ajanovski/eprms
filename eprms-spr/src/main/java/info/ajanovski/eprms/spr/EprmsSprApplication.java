@@ -20,37 +20,20 @@
 
 package info.ajanovski.eprms.spr;
 
-import java.util.EnumSet;
-
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.SessionTrackingMode;
-
-import org.jasig.cas.client.authentication.AuthenticationFilter;
-import org.jasig.cas.client.session.SingleSignOutFilter;
-import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
-import org.jasig.cas.client.util.HttpServletRequestWrapperFilter;
-import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.boot.autoconfigure.domain.EntityScan;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
-import org.springframework.boot.web.server.ErrorPage;
-import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
-import org.springframework.http.HttpStatus;
-
-import info.ajanovski.eprms.spr.util.AppConfig;
-import info.ajanovski.eprms.spr.util.UTF8Filter;
-import info.ajanovski.eprms.spr.util.UserInfo;
+import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @SpringBootApplication
 @EntityScan(basePackages = "info.ajanovski.eprms.model.entities")
+@EnableTransactionManagement
 public class EprmsSprApplication {
+
+	private static final Logger logger = LoggerFactory.getLogger(EprmsSprApplication.class);
 
 	public static void main(String[] args) {
 		SpringApplication.run(EprmsSprApplication.class, args);
@@ -58,65 +41,12 @@ public class EprmsSprApplication {
 
 	@Bean(name = "studentPageNames")
 	public String[] getStudentPageNames() {
-		return new String[] { "Index", "MyDatabases", "MyRepositories", "MyRepositoryAuth" };
+		return new String[] { "MyDatabases", "MyRepositories", "MyRepositoryAuth", "admin/ManageDatabases" };
 	}
 
 	@Bean(name = "adminPageNames")
 	public String[] getAdminPageNames() {
 		return new String[] { "admin/Projects", "admin/Teams", "admin/ManageDatabases", "admin/ManageRepositories" };
-	}
-
-	private static final Logger logger = LoggerFactory.getLogger(UserInfo.class);
-
-	@Bean
-	public ServletContextInitializer initializer() {
-		return new ServletContextInitializer() {
-			@Override
-			public void onStartup(ServletContext servletContext) throws ServletException {
-
-				servletContext.setInitParameter("artifactParameterName", "ticket");
-
-				servletContext.setInitParameter("casServerLogoutUrl",
-						AppConfig.getString("cas.server") + "/cas/logout");
-
-				servletContext.setInitParameter("casServerLoginUrl", AppConfig.getString("cas.server") + "/cas/login");
-
-				servletContext.setInitParameter("casServerUrlPrefix", AppConfig.getString("cas.server") + "/cas");
-
-				servletContext.setInitParameter("service",
-						AppConfig.getString("app.server") + servletContext.getContextPath());
-
-				servletContext.addFilter("encodingFilter", UTF8Filter.class).addMappingForUrlPatterns(
-						EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false, "/*");
-
-				servletContext.addFilter("CAS Single Sign Out Filter", SingleSignOutFilter.class)
-						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
-								"/*");
-
-				servletContext.addFilter("CAS Authentication Filter", AuthenticationFilter.class)
-						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
-								"/*");
-
-				servletContext.addFilter("CAS Validation Filter", Cas20ProxyReceivingTicketValidationFilter.class)
-						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
-								"/*");
-
-				servletContext.addFilter("CAS HttpServletRequest Wrapper Filter", HttpServletRequestWrapperFilter.class)
-						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
-								"/*");
-
-				servletContext.addListener(SingleSignOutHttpSessionListener.class);
-
-				servletContext.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
-			}
-		};
-	}
-
-	@Bean
-	public ConfigurableServletWebServerFactory webServerFactory() {
-		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error404"));
-		return factory;
 	}
 
 }

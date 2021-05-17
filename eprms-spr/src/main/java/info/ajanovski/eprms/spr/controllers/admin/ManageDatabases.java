@@ -27,6 +27,7 @@ import javax.inject.Inject;
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 
+import org.springframework.security.access.annotation.Secured;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -43,6 +44,7 @@ import info.ajanovski.eprms.spr.util.UserInfo;
 
 @Controller
 @SessionAttributes({ "userInfo", "isOnlyShowNotCreated" })
+@Secured("ROLE_ADMINISTRATOR")
 public class ManageDatabases {
 
 	@Inject
@@ -56,7 +58,7 @@ public class ManageDatabases {
 
 	@ModelAttribute("userInfo")
 	public UserInfo userInfo() {
-		return new UserInfo(request, personManager);
+		return new UserInfo(personManager);
 	}
 
 	@ModelAttribute("isOnlyShowNotCreated")

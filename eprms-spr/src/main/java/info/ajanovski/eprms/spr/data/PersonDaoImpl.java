@@ -26,56 +26,60 @@ import java.util.List;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
-import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
-import org.hibernate.exception.DataException;
-import org.hibernate.query.Query;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Service;
 
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
-import info.ajanovski.eprms.spr.util.UsefulMethods;
+import info.ajanovski.eprms.model.entities.Role;
 
 @Service
 public class PersonDaoImpl implements PersonDao {
+	private final Logger logger = LoggerFactory.getLogger(PersonDaoImpl.class);
 
 	@PersistenceContext
 	EntityManager entityManager;
 
-	private Session getSession() {
-		return entityManager.unwrap(org.hibernate.Session.class);
-	}
-
 	@Override
 	public List<Person> getAllPersons() {
 		try {
-			return UsefulMethods.castList(Person.class,
-					getSession().createCriteria(Person.class).addOrder(Order.asc("lastName")).list());
-		} catch (DataException e) {
+			return (List<Person>) entityManager.createQuery("from Person order by lastName, firstName, userName")
+					.getResultList();
+		} catch (Exception e) {
 			return null;
 		}
 	}
 
 	@Override
 	public Person getPersonByUsername(String username) {
-		return (Person) getSession().createCriteria(Person.class).add(Restrictions.eq("userName", username))
-				.setReadOnly(true).setCacheable(true).uniqueResult();
+		try {
+			return (Person) entityManager.createQuery("from Person where userName=:userName")
+					.setParameter("userName", username).getSingleResult();
+		} catch (Exception e) {
+			logger.error("Person with userName:{} was not found.", username);
+			return null;
+		}
 	}
 
 	@Override
 	public List<Person> getPersonByFilter(String filter) {
 		String f = "%" + filter.toLowerCase() + "%";
-		Query q = getSession()
-				.createQuery("select p from Person p  where (lower(concat(userName,firstName,lastName)) like :filter)");
-		q.setParameter("filter", f);
-		return UsefulMethods.castList(Person.class, q.list());
+		return entityManager
+				.createQuery("select p from Person p  where (lower(concat(userName,firstName,lastName)) like :filter)")
+				.setParameter("filter", f).getResultList();
 	}
 
 	@Override
 	public List<PersonRole> getPersonRolesForPerson(long personId) {
-		return (List<PersonRole>) getSession().createCriteria(PersonRole.class, "pr")
-				.add(Restrictions.eq("pr.person.personId", personId)).list();
+		return entityManager.createQuery("select pr from PersonRole pr " + "join pr.role r " + "join pr.person p "
+				+ "where p.personId=:personId").setParameter("personId", personId).getResultList();
+	}
+
+	@Override
+	public List<Role> getRolesForPerson(long personId) {
+		return entityManager.createQuery("select pr.role from PersonRole pr where pr.person.personId=:personId")
+				.setParameter("personId", personId).getResultList();
 	}
 
 	@Override

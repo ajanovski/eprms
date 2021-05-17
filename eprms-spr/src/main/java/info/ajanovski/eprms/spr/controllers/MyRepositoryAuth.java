@@ -59,8 +59,7 @@ public class MyRepositoryAuth {
 
 	@ModelAttribute("userInfo")
 	public UserInfo userInfo() {
-		logger.info("setup session attribute userInfo");
-		return new UserInfo(request, personManager);
+		return new UserInfo(personManager);
 	}
 
 	@Inject

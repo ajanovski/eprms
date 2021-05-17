@@ -28,6 +28,7 @@ import org.springframework.stereotype.Service;
 
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
+import info.ajanovski.eprms.model.entities.Role;
 import info.ajanovski.eprms.spr.data.PersonDao;
 
 @Service
@@ -58,8 +59,14 @@ public class PersonManagerImpl implements PersonManager {
 		return personDao.getPersonByFilter(filter);
 	}
 
+	@Override
 	public List<PersonRole> getPersonRolesForPerson(long personId) {
 		return personDao.getPersonRolesForPerson(personId);
+	}
+
+	@Override
+	public List<Role> getRolesForPerson(long personId) {
+		return personDao.getRolesForPerson(personId);
 	}
 
 	@Override

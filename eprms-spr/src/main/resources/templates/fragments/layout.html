@@ -9,26 +9,28 @@
 	content="width=device-width, initial-scale=1, shrink-to-fit=no" />
 <meta name="description" data-th-content="#{system-description}" />
 <meta name="author" data-th-content="#{main-developer-name}" />
-<link rel="shortcut icon" href="/favicon.ico" />
+<link rel="shortcut icon" data-th-href="@{favicon.ico}" />
 <meta http-equiv="Expires" content="Mon, 26 Jul 1997 05:00:00 GMT" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-<base href="/" />
-<script type="text/javascript" src="/webjars/jquery/jquery.min.js"></script>
+<base data-th-href="@{/}" />
+<script type="text/javascript"
+	data-th-src="@{webjars/jquery/jquery.min.js}"></script>
 <link rel="stylesheet" type="text/css"
-	href="/webjars/bootstrap/css/bootstrap.min.css" />
+	data-th-href="@{webjars/bootstrap/css/bootstrap.min.css}" />
 <!--  >link rel="stylesheet" type="text/css"
 	href="/mybootstrap/css/bootstrap-theme.css" /-->
 <script type="text/javascript"
-	src="/webjars/bootstrap/js/bootstrap.min.js"></script>
-<link rel="stylesheet" href="site-overrides.css"></link>
+	data-th-src="@{webjars/bootstrap/js/bootstrap.min.js}"></script>
+<link rel="stylesheet" data-th-href="@{site-overrides.css}"></link>
 </head>
 
 <body style="padding-top: 4.5em;">
 
 	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
 		style="background-color: #03030f;">
-		<a class="navbar-brand" href="Index" data-th-text="#{app-title-short}"></a>
+		<a class="navbar-brand" data-th-href="@{MyProfile}"
+			data-th-text="#{app-title-short}"></a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#mainMenu" aria-controls="mainMenu"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -36,7 +38,7 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="mainMenu">
-			<ul class="navbar-nav mr-auto">
+			<ul class="navbar-nav mr-auto" data-th-if="${userInfo}">
 				<li data-th-if="${userInfo}"
 					data-th-each="pageName: ${studentPageNames}" class="nav-item"><a
 					data-th-href="${pageName}" data-th-text="${pageName}"
@@ -56,7 +58,7 @@
 			<ul class="navbar-nav navbar-right">
 				<li class="nav-item"><a class="nav-link" href=""
 					id="localeToggle">[[#{lang-label}]] [[${displayLanguage}]]</a></li>
-				<li class="nav-item dropdown"><a
+				<li class="nav-item dropdown" data-th-if="${userInfo}"><a
 					class="nav-link dropdown-toggle" href="#" id="mainMenuUserProfile"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false"> <img
@@ -69,6 +71,8 @@
 							data-th-replace="fragments/SVGIcon :: svgicon(path='user')" />
 							[[#{Logout-label}]]</a>
 					</div></li>
+				<li class="nav-item" data-th-unless="${userInfo}"><a
+					class="nav-link" data-th-href="@{Login}" id="login">[[#{login-label}]]</a></li>
 			</ul>
 		</div>
 	</nav>
@@ -76,7 +80,7 @@
 	<div class="container-fluid">
 		<div class="row">
 			<div class="col-12">
-				<p t:alerts />
+				<p class="talerts" />
 			</div>
 		</div>
 
@@ -88,8 +92,8 @@
 		<footer>
 			<p>
 				Copyright &copy;<span data-th-text="#{copyrightYear}"></span> <a
-					data-th-href="#{main-developer-url}" data-th-text="#{copyrightHolder} ">
-				</a>
+					data-th-href="#{main-developer-url}"
+					data-th-text="#{copyrightHolder} "> </a>
 			</p>
 		</footer>
 	</div>

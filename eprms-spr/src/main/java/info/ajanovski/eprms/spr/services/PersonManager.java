@@ -24,6 +24,7 @@ import java.util.List;
 
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
+import info.ajanovski.eprms.model.entities.Role;
 
 public interface PersonManager {
 
@@ -38,5 +39,7 @@ public interface PersonManager {
 	public List<Person> getPersonByFilter(String filter);
 
 	public List<PersonRole> getPersonRolesForPerson(long personId);
+
+	public List<Role> getRolesForPerson(long personId);
 
 }
