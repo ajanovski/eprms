@@ -1,14 +1,14 @@
-#eprms-tap build from source instructions
+# eprms-tap build from source instructions
 
-##Testing Database and Web App Server
+## Testing Database and Web App and Authentication Server
 
-For testing purposes, you can use Podman or Docker to run all the needed services in containers.
+For testing purposes, you can use Docker/Podman to run all the needed services in containers.
 
-###Database
+### Database
 
-The system is developed and tested against a PostgreSQL 12 started as Podman container, but in general it is database agnostic and uses only Hibernate APIs, so you can switch to another database.
+The system is developed and tested against a PostgreSQL 12 started as a Docker/Podman container, but in general it is database agnostic and uses only Hibernate APIs, so you can switch to another database.
 
-To start a containerized PostgreSQL instance follow the instructions:
+To start a containerized PostgreSQL instance that stores all it's data in a local folder follow the instructions to create the folder and map the container to use that folder:
 
 	$ mkdir DatabaseFolder
 	$ podman run \
@@ -46,9 +46,9 @@ Create a database user owner for the database, then the database and two needed 
 		alter schema epm_main owner to eprms_owner;
 		alter schema epm_util owner to eprms_owner;
 
-###Web Application Server
+### Web Application and Authentication Server
 
-For testing purposes it is recommended to use Apache Tomcat as a Java web application server, and you can also run in a separate container.
+For testing purposes it is recommended to use Apache Tomcat as a Java web application server, and you can also run it in a separate container.
 
 	$ mkdir WebAppsFolder
 	$ podman run \
@@ -65,13 +65,19 @@ The Tomcat container should be running at this moment, check:
 
 You can use the WebAppsFolder to place the packaged web application archives (WAR files). 
 
+The application uses Apereo CAS for authentication. Copy the provided *cas.war* to the *WebAppsFolder* to initiate a demo instance of Apereo CAS, where all usernames are valid and anyone can log in provided the password that is entered is the same as the username.
 
+Check if CAS is working:
 
-##Build the web application
+	http://localhost:8080/cas
+
+## Build the web application
 
 The application will be built from source using Maven.
 
-###Maven profile configuration
+### Maven profile configuration
+
+Some configuration parameters can be confidential or can differ from one envirement to another, so we are not providing them with the source. Instead a maven user profile should be configured outside the project, that will be used during the building of the project. Follow the instructions.
 
 For Maven to build the project you need to setup a maven profile in 
 
@@ -107,9 +113,11 @@ You can use the following example:
 		</properties>
 	</profile>
 	
-###Compile and package the source into a WAR
 
-Run the following command from the project source folder
+
+### Build the source and prepare the runtime into a standard Java WAR package
+
+Run the following commands from the project source folder
 
 	mvn -P development-eprms clean package
 
@@ -117,13 +125,15 @@ You will get an eprms.war package in the *target* folder
 
 Copy the built *eprms.war* to the *WebAppsFolder* created in the preceeding preparatory steps.
 
-Copy the provided *cas.war* to the same *WebAppsFolder*.
-
 After a short initializaion period you will be able to access the application at:
 
-	http://localhost:8080
+	http://localhost:8080/epm
 
-###Create Users and Roles
+Clicking on the login should redirect to the CAS system at:
+
+	http://localhost:8080/cas/...
+
+### Create Users and Roles
 
 On the first start of the application, empty database tables will be created.
 

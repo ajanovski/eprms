@@ -1,10 +1,10 @@
-#eprms-net build from source instructions
+# eprms-net build from source instructions
 
-##Testing Database and Authentication Server
+## Testing Database and Authentication Server
 
 For testing purposes, you can use Docker/Podman to run all the needed services in containers.
 
-###Database
+### Database
 
 The system is developed and tested against a PostgreSQL 12 started as a Docker/Podman container, but in general it is database agnostic and uses only Hibernate APIs, so you can switch to another database.
 
@@ -46,7 +46,7 @@ Create a database user owner for the database, then the database and two needed 
 		alter schema epm_main owner to eprms_owner;
 		alter schema epm_util owner to eprms_owner;
 
-###Web Authentication Server
+### Web Authentication Server
 
 For testing purposes it is recommended to use Apache Tomcat as a Java web application server, and you can also run it in a separate container.
 
@@ -73,12 +73,12 @@ Check if CAS is working:
 
 
 
-##Build the web application
+## Build the web application
 
 The application will be built from source using dotnet. 
 You will also need node.js and npm, to get the needed dependencies (Bootstrap, JQuery, ...)
 
-###.Net profile configuration
+### .Net profile configuration
 
 Some configuration parameters can be confidential or can differ from one envirement to another, so we are not providing them with the source. Instead a maven user profile should be configured outside the project, that will be used during the building of the project. Follow the instructions.
 
@@ -99,7 +99,7 @@ The application optionally uses OAuth2 and is prepared to use GitHub or ORCID as
 
 
 
-###Build the source and prepare the runtime
+### Build the source and prepare the runtime
 
 Run the following commands from the project source folder
 

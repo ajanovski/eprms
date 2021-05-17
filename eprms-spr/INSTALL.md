@@ -1,14 +1,14 @@
-#eprms-spr build from source instructions
+# eprms-spr build from source instructions
 
-##Testing Database and Web App Server
+## Testing Database and Web App Server
 
-For testing purposes, you can use Podman or Docker to run all the needed services in containers.
+For testing purposes, you can use Docker/Podman to run all the needed services in containers.
 
-###Database
+### Database
 
-The system is developed and tested against a PostgreSQL 12 started as Podman container, but in general it is database agnostic and uses only Hibernate APIs, so you can switch to another database.
+The system is developed and tested against a PostgreSQL 12 started as a Docker/Podman container, but in general it is database agnostic and uses only Hibernate APIs, so you can switch to another database.
 
-To start a containerized PostgreSQL instance follow the instructions:
+To start a containerized PostgreSQL instance that stores all it's data in a local folder follow the instructions to create the folder and map the container to use that folder:
 
 	$ mkdir DatabaseFolder
 	$ podman run \
@@ -46,7 +46,7 @@ Create a database user owner for the database, then the database and two needed 
 		alter schema epm_main owner to eprms_owner;
 		alter schema epm_util owner to eprms_owner;
 
-###Web Application Server
+### Web Application Server
 
 For testing purposes it is recommended to use Apache Tomcat as a Java web application server, and you can also run in a separate container.
 
@@ -67,11 +67,11 @@ You can use the WebAppsFolder to place the packaged web application archives (WA
 
 
 
-##Build the web application
+## Build the web application
 
 The application will be built from source using Maven.
 
-###Maven profile configuration
+### Maven profile configuration
 
 For Maven to build the project you need to setup a maven profile in 
 
@@ -107,7 +107,7 @@ You can use the following example:
 		</properties>
 	</profile>
 	
-###Compile and package the source into a WAR
+### Compile and package the source into a WAR package
 
 Run the following command from the project source folder
 
@@ -117,13 +117,17 @@ You will get an eprms.war package in the *target* folder
 
 Copy the built *eprms.war* to the *WebAppsFolder* created in the preceeding preparatory steps.
 
-Copy the provided *cas.war* to the same *WebAppsFolder*.
+The application uses Apereo CAS for authentication. You cn copy the provided *cas.war* to the same *WebAppsFolder* to initiate a demo instance of Apereo CAS, where all usernames are valid and can log in provided the password that is entered is the same as the username.
 
 After a short initializaion period you will be able to access the application at:
 
-	http://localhost:8080
+	http://localhost:8080/epm
 
-###Create Users and Roles
+Clicking on the login should redirect to the CAS system at:
+
+	http://localhost:8080/cas/...
+
+### Create Users and Roles
 
 On the first start of the application, empty database tables will be created.
 
