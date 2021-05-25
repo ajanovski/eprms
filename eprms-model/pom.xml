@@ -5,7 +5,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>model</artifactId>
-	<version>0.0.2-SNAPSHOT</version>
+	<version>0.0.3-SNAPSHOT</version>
 
 	<name>EPRMS - Educational Project and Resource Management System - Model</name>
 
@@ -28,9 +28,6 @@
 		<maven.compiler.source>15</maven.compiler.source>
 		<maven.compiler.target>15</maven.compiler.target>
 		<java.version>15</java.version>
-
-		<postgresql-version>42.2.19</postgresql-version>
-		<cas-client-version>3.6.2</cas-client-version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

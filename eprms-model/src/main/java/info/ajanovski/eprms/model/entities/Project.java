@@ -34,6 +34,8 @@ public class Project implements java.io.Serializable {
 	private String description;
 	private Date startDate;
 	private Date finishDate;
+	private String code;
+	private String status;
 	private List<Responsibility> responsibilities = new ArrayList<Responsibility>();
 	private List<Repository> repositories = new ArrayList<Repository>();
 	private List<Database> databases = new ArrayList<Database>();
@@ -87,6 +89,24 @@ public class Project implements java.io.Serializable {
 
 	public void setFinishDate(Date finishDate) {
 		this.finishDate=finishDate;
+	}
+
+	@Column(name = "code")
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code=code;
+	}
+
+	@Column(name = "status")
+	public String getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(String status) {
+		this.status=status;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")

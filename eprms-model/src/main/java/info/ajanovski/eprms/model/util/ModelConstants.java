@@ -31,4 +31,10 @@ public class ModelConstants {
 	public static final String RoleInstructor = "INSTRUCTOR";
 	public static final String RoleStudent = "STUDENT";
 
+	public static final String ProjectStatusProposed = "PROPOSED";
+	public static final String ProjectStatusStarted = "STARTED";
+	public static final String ProjectStatusActive = "ACTIVE";
+	public static final String ProjectStatusPaused = "PAUSED";
+	public static final String ProjectStatusFinished = "FINISHED";
+	public static final String ProjectStatusStopped = "STOPPED";
 }

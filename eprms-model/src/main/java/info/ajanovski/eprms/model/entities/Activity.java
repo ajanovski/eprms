@@ -32,6 +32,8 @@ public class Activity implements java.io.Serializable {
 	private long activityId;
 	private String title;
 	private String description;
+	private Date startDate;
+	private Date dueDate;
 	private Activity superActivity;
 	private Project project;
 	private List<WorkReport> workReports = new ArrayList<WorkReport>();
@@ -66,6 +68,24 @@ public class Activity implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description = description;
+	}
+
+	@Column(name = "start_date")
+	public Date getStartDate() {
+		return this.startDate;
+	}
+
+	public void setStartDate(Date startDate) {
+		this.startDate=startDate;
+	}
+
+	@Column(name = "due_date")
+	public Date getDueDate() {
+		return this.dueDate;
+	}
+
+	public void setDueDate(Date dueDate) {
+		this.dueDate=dueDate;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

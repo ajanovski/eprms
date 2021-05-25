@@ -106,7 +106,7 @@ public class WorkEvaluation implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "person_id", nullable = true, foreignKey = @ForeignKey(name = "fk_work_evaluation_person"))
+	@JoinColumn(name = "person_id", nullable = false, foreignKey = @ForeignKey(name = "fk_work_evaluation_person"))
 	public Person getPerson() {
 		return this.person;
 	}
