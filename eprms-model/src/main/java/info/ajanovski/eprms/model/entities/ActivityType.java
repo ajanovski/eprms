@@ -32,6 +32,9 @@ public class ActivityType implements java.io.Serializable {
 	private long activityTypeId;
 	private String title;
 	private String description;
+	private String code;
+	private ActivityType superActivityType;
+	private List<ActivityType> subActivityTypes = new ArrayList<ActivityType>();
 
 
 	@Id
@@ -62,6 +65,34 @@ public class ActivityType implements java.io.Serializable {
 
 	public void setDescription(String description) {
 		this.description=description;
+	}
+
+	@Column(name = "code", unique = true, nullable = false)
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code=code;
+	}
+
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "activity_type_id", nullable = true, foreignKey = @ForeignKey(name = "fk_activity_type_activity_type"))
+	public ActivityType getSuperActivityType() {
+		return this.superActivityType;
+	}
+
+	public void setSuperActivityType(ActivityType superActivityType) {
+		this.superActivityType=superActivityType;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "superActivityType")
+	public List<ActivityType> getSubActivityTypes() {
+		return this.subActivityTypes;
+	}
+
+	public void setSubActivityTypes(List<ActivityType> subActivityTypes) {
+		this.subActivityTypes=subActivityTypes;
 	}
 
 }

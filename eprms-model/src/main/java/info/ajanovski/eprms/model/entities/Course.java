@@ -31,6 +31,8 @@ import javax.persistence.*;
 public class Course implements java.io.Serializable {
 	private long courseId;
 	private String title;
+	private String code;
+	private List<CourseActivityType> courseActivityTypes = new ArrayList<CourseActivityType>();
 
 
 	@Id
@@ -52,6 +54,24 @@ public class Course implements java.io.Serializable {
 
 	public void setTitle(String title) {
 		this.title=title;
+	}
+
+	@Column(name = "code", unique = true, nullable = false)
+	public String getCode() {
+		return this.code;
+	}
+
+	public void setCode(String code) {
+		this.code=code;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+	public List<CourseActivityType> getCourseActivityTypes() {
+		return this.courseActivityTypes;
+	}
+
+	public void setCourseActivityTypes(List<CourseActivityType> courseActivityTypes) {
+		this.courseActivityTypes=courseActivityTypes;
 	}
 
 }
