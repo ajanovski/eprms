@@ -36,18 +36,22 @@ public class ProjectDaoImpl implements ProjectDao {
 	@Inject
 	private Session session;
 
+	private Session getEntityManager() {
+		return session.getSession();
+	}
+
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Project> getAllProjectsOrderByTitle() {
-		return session.createQuery("from Project order by title").list();
+		return getEntityManager().createQuery("from Project order by title").getResultList();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<CourseProject> getProjectCourses(Project p) {
 		if (p != null) {
-			return session.createQuery("from CourseProject cp where cp.project.projectId=:projectId")
-					.setParameter("projectId", p.getProjectId()).list();
+			return getEntityManager().createQuery("from CourseProject cp where cp.project.projectId=:projectId")
+					.setParameter("projectId", p.getProjectId()).getResultList();
 		} else {
 			return null;
 		}
@@ -57,7 +61,7 @@ public class ProjectDaoImpl implements ProjectDao {
 	@SuppressWarnings("unchecked")
 	public Float sumPoints(Project p) {
 		if (p != null) {
-			List<Float> lista = session.createQuery("""
+			List<Float> lista = getEntityManager().createQuery("""
 								select max(we.points) as maxpoints
 								from WorkEvaluation as we
 								join we.workReport as wr
@@ -65,7 +69,7 @@ public class ProjectDaoImpl implements ProjectDao {
 								join a.project as p
 								where p.projectId=:projectId
 								group by a
-					""").setParameter("projectId", p.getProjectId()).list();
+					""").setParameter("projectId", p.getProjectId()).getResultList();
 			Float output = 0.0f;
 			for (Float o : lista) {
 				if (o != null) {
@@ -82,14 +86,14 @@ public class ProjectDaoImpl implements ProjectDao {
 	@SuppressWarnings("unchecked")
 	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse) {
 		if (selectedCourse != null) {
-			return session.createQuery("""
+			return getEntityManager().createQuery("""
 					select p
 					from Project p
 					join p.courseProjects cp
 					join cp.course c
 					where c.courseId=:courseId
 					order by p.title
-					""").setParameter("courseId", selectedCourse.getCourseId()).list();
+					""").setParameter("courseId", selectedCourse.getCourseId()).getResultList();
 		} else {
 			return null;
 		}
@@ -99,7 +103,7 @@ public class ProjectDaoImpl implements ProjectDao {
 	@SuppressWarnings("unchecked")
 	public List<Project> getProjectByPerson(Long personId) {
 		if (personId != null) {
-			return session.createQuery("""
+			return getEntityManager().createQuery("""
 					select p
 					from Project p
 					join p.responsibilities r
@@ -108,7 +112,7 @@ public class ProjectDaoImpl implements ProjectDao {
 					join tm.person person
 					where person.personId=:personId
 					order by p.title
-					""").setParameter("personId", personId).list();
+					""").setParameter("personId", personId).getResultList();
 		} else {
 			return null;
 		}

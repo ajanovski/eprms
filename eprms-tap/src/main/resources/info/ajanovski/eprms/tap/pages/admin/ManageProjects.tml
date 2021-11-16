@@ -40,9 +40,17 @@
 						<div class="form-group">
 							<label t:type="label" t:for="inCourses"></label>
 							<div t:type="palette" t:id="inCourses" t:encoder="courseEncoder"
-								t:model="coursesModel" t:size="4"></div>
+								t:model="coursesModel" t:selected="inCourses" t:size="4"></div>
 						</div>
 					</p:courses>
+					<p:description>
+						<div class="form-group">
+							<label t:type="label" t:for="description"></label>
+							<textarea t:id="description" t:type="textarea"
+								t:value="newProject.description" t:mixins="webeditor"
+								t:WebEditor.areaType="" />
+						</div>
+					</p:description>
 				</form>
 			</div>
 		</div>
@@ -122,12 +130,15 @@
 				</a>
 				</span>
 			</p>
-			<h3>${project.title}</h3>
+
+			<h3>${project.title}
+				<small class="text-muted">Status: ${project.status}</small>
+			</h3>
 			<p t:type="if" t:test="projectCourses">
-				<button class="btn btn-sm" t:type="loop" t:source="projectCourses"
-					t:value="course">${course.title}</button>
+				<span t:type="loop" t:source="projectCourses" t:value="course">${courseTitle}</span>
 			</p>
 		</div>
+
 		<div class="card-body">
 			<div class="row">
 				<div class="col-4">
@@ -163,7 +174,18 @@
 								t:id="addTeamMember" role="button"
 								class="btn btn-sm btn-secondary "><img t:type="SVGIcon"
 								t:path="user-plus" /> ${message:add-label}
-								${message:TeamMember-label}</a>
+								${message:TeamMember-label}</a> <a t:type="actionlink"
+								t:context="responsibility.team" t:id="editTeam" role="button"
+								class="btn btn-sm btn-primary "><img t:type="SVGIcon"
+								t:path="edit" /> ${message:edit-label}
+								${message:team-label}</a>
+							<t:unless t:test="responsibility.team.teamMembers">
+								<a t:type="actionlink" t:context="responsibility"
+									t:id="deleteResponsibility" role="button"
+									class="btn btn-danger btn-sm "><img t:type="SVGIcon"
+									t:path="user-minus" /> ${message:remove-label}
+									${message:team-label}</a>
+							</t:unless>
 						</p>
 					</div>
 					<a t:type="actionlink" t:context="project" t:id="NewTeam"

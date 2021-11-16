@@ -77,8 +77,8 @@ public class TeamMembersGrid {
 		bm.add("userName", pcs.create(TeamMember.class, "person.userName"));
 		bm.add("lastName", pcs.create(TeamMember.class, "person.lastName"));
 		bm.add("firstName", pcs.create(TeamMember.class, "person.firstName"));
-		bm.reorder("positionNumber", "lastName", "role");
-		bm.add("actions",null);
+		bm.reorder("positionNumber", "role", "lastName", "firstName", "userName");
+		bm.add("actions", null);
 		return bm;
 	}
 

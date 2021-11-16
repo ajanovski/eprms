@@ -1,61 +1,96 @@
 <html t:type="layout" title="message:admin/OverallCourseReport-pagelink"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
+<style>
+.CREATED {
+	background-color: #ffc0c0ff !important;
+}
+</style>
+
 
 <h1>${message:admin/OverallCourseReport-pagelink}</h1>
 
-<div class="card">
-	<div class="card-body">
-		<form t:type="form" id="selectProject" class="form-inline">
-			<div class="form-group">
-				<label t:type="label" t:for="selectCourse"></label><select
-					t:id="selectCourse" t:type="select" t:model="coursesModel"
-					t:value="selectedCourse" onchange="this.form.submit(); "></select>
-			</div>
-			<t:submit t:value="OK" />
-		</form>
+<form t:type="form" id="selectProject" class="form-inline col-12 mb-3">
+	<div class="form-group">
+		<label t:type="label" t:for="selectCourse"></label><select
+			t:id="selectCourse" t:type="select" t:model="coursesModel"
+			t:value="selectedCourse" onchange="this.form.submit(); "></select>
+	</div>
+	<t:submit t:value="OK" />
+</form>
+
+
+<div t:type="zone" t:id="zNewWorkReportModal" id="zNewWorkReportModal">
+	<div t:type="if" t:test="newWorkReport">
+		<t:ModalBox t:id="newWorkReportModal">
+			<h2>${message:Report-label}</h2>
+			<form t:id="frmAddWorkReport" t:type="beaneditform"
+				t:object="newWorkReport" t:exclude="workReportId"></form>
+		</t:ModalBox>
 	</div>
 </div>
 
-
-
-<div t:type="if" t:test="newWorkReport">
-	<form t:id="frmAddWorkReport" t:type="beaneditform"
-		t:object="newWorkReport" t:exclude="workReportId"></form>
-</div>
-
-<div t:type="if" t:test="newWorkEvaluation">
-	<form t:id="frmAddWorkEvaluation" t:type="beaneditform"
-		t:object="newWorkEvaluation" t:exclude="workEvaluationId"></form>
-</div>
-
-<div class="d-flex flex-row mb-1" t:type="loop" t:source="allProjects"
-	t:value="project">
-	<div class="col-2 bg-dark text-light">${project.title}<br />
-		${projectTotal}
+<div t:type="zone" t:id="zNewWorkEvaluationModal"
+	id="zNewWorkEvaluationModal">
+	<div t:type="if" t:test="newWorkEvaluation">
+		<t:ModalBox t:id="newWorkEvaluationModal">
+			<h2>${message:Evaluation-label}</h2>
+			<form t:id="frmAddWorkEvaluation" t:type="beaneditform"
+				t:object="newWorkEvaluation" t:exclude="workEvaluationId">
+				<p:description>
+					<textarea t:type="textarea" t:value="newWorkEvaluation.description"
+						t:mixins="webeditor" t:WebEditor.areaType="" />
+				</p:description>
+			</form>
+		</t:ModalBox>
 	</div>
-	<div class="col-2 bg-light" t:type="loop" t:source="project.activities"
-		t:value="activity">${activity.title}
-		<div class="card p-1 font-small" t:type="loop"
-			t:source="activity.workReports" t:value="workReport">
-			<small>${workReport.title} ${workReport.description}</small>
-			<div class="card p-1 font-small bg-info text-light" t:type="loop"
-				t:source="workReport.workEvaluations" t:value="workEvaluation">
-				<small>${workEvaluation.title} ${workEvaluation.description}
-					${workEvaluation.points}<a href="" t:type="actionlink"
-					t:id="editWorkEvaluation" t:context="workEvaluation"><img
-						t:type="svgicon" t:path="edit" /></a>
-				</small>
-			</div>
-			<a href="" t:type="actionlink" t:id="addWorkEvaluation"
-				t:context="workReport"><img t:type="svgicon"
-				t:path="check-square" /></a>
+</div>
+
+<div t:type="if" t:test="selectedCourse">
+	<div class="d-flex flex-row mb-1">
+		<div class="col-2 p-1 bg-dark text-light">
+			<h3>${message:Project-label}</h3>
 		</div>
-		<p>
-			<a href="" t:type="actionlink" t:id="addWorkReport"
-				t:context="activity"><img t:type="svgicon" t:path="file-plus" /></a>
-		</p>
+		<div class="col-2 p-1 bg-light" t:type="loop"
+			t:source="selectedCourse.courseActivityTypes"
+			t:value="courseActivityType">
+			<small>${courseActivityType.activityType.title}</small>
+		</div>
+	</div>
+	<div class="d-flex flex-row mb-1" t:type="loop" t:source="allProjects"
+		t:value="project">
+		<div class="col-2 p-1 bg-dark text-light">
+			<p>${project.title}</p>
+			<p>${projectTotal}</p>
+		</div>
+		<div class="col-2 p-1 bg-light" t:type="loop"
+			t:source="selectedCourse.courseActivityTypes"
+			t:value="courseActivityType">
+			<div class="card p-1 font-small" t:type="loop"
+				t:source="activity?.workReports" t:value="workReport">
+				<small>${workReport.title}<br />${workReport.description}</small>
+				<div
+					class="card p-1 font-small bg-info text-light ${workEvaluation.status}"
+					t:type="loop" t:source="workReport.workEvaluations"
+					t:value="workEvaluation">
+					<small>${workEvaluation.title}<br /> <t:outputRaw
+							t:value="workEvaluation.description" /> ${workEvaluation.points}<a
+						href="" t:type="actionlink" t:id="editWorkEvaluation"
+						t:context="workEvaluation"><img t:type="svgicon" t:path="edit" /></a><a
+						href="" t:type="actionlink" t:id="toggleWorkEvaluationStatus"
+						t:context="workEvaluation"><img t:type="svgicon"
+							t:path="toggle-left" /></a>
+					</small>
+				</div>
+				<a href="" t:type="actionlink" t:id="addWorkEvaluation"
+					t:context="workReport"><img t:type="svgicon"
+					t:path="check-square" /></a>
+			</div>
+			<p>
+				<a href="" t:type="actionlink" t:id="addWorkReport"
+					t:context="activity"><img t:type="svgicon" t:path="file-plus" /></a>
+			</p>
+		</div>
 	</div>
 </div>
-
 </html>

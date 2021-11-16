@@ -1,7 +1,7 @@
 <html t:type="layout" title="Index | epm"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
 
-<h1>${message:MyRepositories-pagelink}</h1>
+<h1>${message:user/MyRepositories-pagelink}</h1>
 
 <h2>${message:Personal-label}</h2>
 <table class="table table-sm" t:type="grid" t:source="personalRepositories"

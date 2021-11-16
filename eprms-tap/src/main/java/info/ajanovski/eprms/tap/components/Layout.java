@@ -80,13 +80,15 @@ public class Layout {
 	private UserInfo userInfo;
 
 	public String[] getStudentPageNames() {
-		return new String[] { "Index", "MyProjectReports", "MyDatabases", "MyRepositories", "MyRepositoryAuth" };
+		return new String[] { "user/MyProfile", "user/MyProjectReports", "user/MyDatabases", "user/MyRepositories",
+				"user/MyRepositoryAuth" };
 	}
 
 	public String[] getAdminPageNames() {
 		if (userInfo.isAdministrator()) {
-			return new String[] { "admin/OverallCourseReport", "admin/ManageProjects", "admin/ManageTeams",
-					"admin/ManageDatabases", "admin/ManageRepositories" };
+			return new String[] { "admin/ProjectAutomation", "admin/OverallCourseReport", "admin/ManageActivityTypes",
+					"admin/ManageProjects", "admin/ManageTeams", "admin/ManageDatabases", "admin/ManageRepositories",
+					"admin/ManagePersons" };
 		} else {
 			return null;
 		}
@@ -110,24 +112,23 @@ public class Layout {
 	@Inject
 	private PersistentLocale persistentLocale;
 
-	void onActionFromLocaleToggle() {
-		if (persistentLocale.isSet()) {
-			if ("mk".equalsIgnoreCase(persistentLocale.get().getLanguage())) {
-				persistentLocale.set(new Locale("en"));
-			} else {
-				persistentLocale.set(new Locale("mk"));
-			}
-		} else {
+	void setupRender() {
+		if (persistentLocale.get() == null) {
 			persistentLocale.set(new Locale("mk"));
 		}
 	}
 
+	public Object onActionFromLocaleToggle() {
+		if ("en".equalsIgnoreCase(persistentLocale.get().getLanguage())) {
+			persistentLocale.set(new Locale("mk"));
+		} else {
+			persistentLocale.set(new Locale("en"));
+		}
+		return this;
+	}
+
 	public String getDisplayLanguage() {
-		Locale loc = persistentLocale.get();
-		if (loc == null)
-			return "";
-		else
-			return loc.getLanguage().toUpperCase();
+		return persistentLocale.get().toLanguageTag();
 	}
 
 }

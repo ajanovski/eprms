@@ -20,7 +20,9 @@
 
 package info.ajanovski.eprms.tap.services;
 
-import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.tapestry5.SymbolConstants;
@@ -28,32 +30,42 @@ import org.apache.tapestry5.commons.Configuration;
 import org.apache.tapestry5.commons.MappedConfiguration;
 import org.apache.tapestry5.commons.OrderedConfiguration;
 import org.apache.tapestry5.hibernate.HibernateEntityPackageManager;
-import org.apache.tapestry5.http.services.Request;
-import org.apache.tapestry5.http.services.RequestFilter;
-import org.apache.tapestry5.http.services.RequestHandler;
-import org.apache.tapestry5.http.services.Response;
+import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
+import org.apache.tapestry5.http.services.RequestGlobals;
+import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
 import org.apache.tapestry5.ioc.annotations.Contribute;
+import org.apache.tapestry5.ioc.annotations.Decorate;
 import org.apache.tapestry5.ioc.annotations.ImportModule;
-import org.apache.tapestry5.ioc.annotations.Local;
-import org.apache.tapestry5.ioc.services.ApplicationDefaults;
-import org.apache.tapestry5.ioc.services.SymbolProvider;
+import org.apache.tapestry5.ioc.annotations.Match;
+import org.apache.tapestry5.ioc.services.ThreadLocale;
 import org.apache.tapestry5.modules.Bootstrap4Module;
+import org.apache.tapestry5.services.ApplicationStateContribution;
+import org.apache.tapestry5.services.ApplicationStateCreator;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentSource;
+import org.apache.tapestry5.services.PersistentLocale;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 
+import info.ajanovski.eprms.model.entities.Person;
+import info.ajanovski.eprms.model.entities.PersonRole;
+import info.ajanovski.eprms.model.util.ModelConstants;
+import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.data.GenericDao;
 import info.ajanovski.eprms.tap.data.PersonDao;
 import info.ajanovski.eprms.tap.data.ProjectDao;
 import info.ajanovski.eprms.tap.data.ResourceDao;
 import info.ajanovski.eprms.tap.util.AppConfig;
+import info.ajanovski.eprms.tap.util.UserInfo;
+import info.ajanovski.eprms.tap.util.UserInfo.UserRole;
 
 @ImportModule(Bootstrap4Module.class)
 public class AppModule {
+
 	public static void bind(ServiceBinder binder) {
-		binder.bind(AccessController.class).withId("AccessController");
+		binder.bind(AccessControllerRequestFilter.class);
 		binder.bind(GenericDao.class);
 		binder.bind(GenericService.class);
 		binder.bind(PersonDao.class);
@@ -62,10 +74,12 @@ public class AppModule {
 		binder.bind(ProjectManager.class);
 		binder.bind(ResourceManager.class);
 		binder.bind(ResourceDao.class);
+		binder.bind(MessagingService.class);
+		binder.bind(TranslationService.class);
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
-		configuration.override(SymbolConstants.APPLICATION_VERSION, "0.0.1-SNAPSHOT");
+		configuration.override(SymbolConstants.APPLICATION_VERSION, "0.0.4-SNAPSHOT");
 		configuration.override(SymbolConstants.PRODUCTION_MODE, false);
 	}
 
@@ -75,11 +89,10 @@ public class AppModule {
 				AppConfig.getString("tapestry.hmac-passphrase") + UUID.randomUUID());
 		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
 		configuration.add(SymbolConstants.COMPRESS_WHITESPACE, false);
-	}
+		configuration.add(SymbolConstants.CHARSET, "UTF-8");
 
-	@Contribute(SymbolProvider.class)
-	@ApplicationDefaults
-	public static void setupEnvironment(MappedConfiguration<String, Object> configuration) {
+		configuration.add("tapestry.hibernate.early-startup", true);
+
 		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
 	}
 
@@ -88,34 +101,111 @@ public class AppModule {
 		configuration.add("info.ajanovski.eprms.model.entities");
 	}
 
-	public RequestFilter buildTimingFilter(final Logger log) {
-		return new RequestFilter() {
-			public boolean service(Request request, Response response, RequestHandler handler) throws IOException {
-				long startTime = System.currentTimeMillis();
+	@Match({ "*Service", "*Dao", "*Manager" })
+	public static void adviseEnableTransactions(HibernateTransactionAdvisor advisor, MethodAdviceReceiver receiver) {
+		advisor.addTransactionCommitAdvice(receiver);
+	}
+
+	@Decorate(serviceInterface = ThreadLocale.class)
+	public ThreadLocale decorateThreadLocale(final ThreadLocale threadLocale, final PersistentLocale persistentLocale) {
+		return new ThreadLocale() {
+			@Override
+			public void setLocale(Locale locale) {
+				threadLocale.setLocale(locale);
+			}
+
+			@Override
+			public Locale getLocale() {
+				if (!persistentLocale.isSet()) {
+					setLocale(new Locale("en"));
+					persistentLocale.set(new Locale("en"));
+				}
+				return threadLocale.getLocale();
+			}
+
+		};
+	}
+
+	public static final void contributeComponentRequestHandler(
+			OrderedConfiguration<ComponentRequestFilter> configuration,
+			ComponentRequestFilter accessControllerRequestFilter, ApplicationStateManager asm,
+			ComponentSource componentSource) {
+		configuration.add("AccessControllerRequestFilter", accessControllerRequestFilter, "before:*");
+	}
+
+	public void contributeApplicationStateManager(
+			MappedConfiguration<Class, ApplicationStateContribution> configuration, Session session,
+			PersonManager personManager, RequestGlobals requestGlobals, Logger logger) {
+		ApplicationStateCreator<UserInfo> userInfoCreator = new ApplicationStateCreator<UserInfo>() {
+			public UserInfo create() {
+				logger.debug("userInfoCreator.create entered");
+
+				UserInfo userInfo = new UserInfo();
+				userInfo.setUserRoles(null);
+				userInfo.setPersonId(null);
+				userInfo.setUserName(null);
+
 				try {
-					return handler.service(request, response);
-				} finally {
-					long elapsed = System.currentTimeMillis() - startTime;
-					log.debug("Request time: {} ms", elapsed);
+					String userName = requestGlobals.getHTTPServletRequest().getRemoteUser();
+					userInfo.setUserName(userName);
+					logger.info("Login by user: " + userName);
+
+					Person loggedInPerson = (Person) session.getSession()
+							.createQuery("from Person p where userName=:userName").setParameter("userName", userName)
+							.getSingleResult();
+
+					if (loggedInPerson == null) {
+						userInfo.setUserRoles(null);
+						userInfo.setPersonId(null);
+					} else {
+						logger.debug("Login personId: {}", loggedInPerson.getPersonId());
+
+						List<UserInfo.UserRole> userRoles = new ArrayList<UserRole>();
+
+						for (PersonRole pr : personManager.getPersonRolesForPerson(loggedInPerson.getPersonId())) {
+							if (pr.getRole().getName().equals(ModelConstants.RoleAdministrator)) {
+								userRoles.add(UserRole.ADMINISTRATOR);
+							} else if (pr.getRole().getName().equals(ModelConstants.RoleInstructor)) {
+								userRoles.add(UserRole.INSTRUCTOR);
+							} else if (pr.getRole().getName().equals(ModelConstants.RoleStudent)) {
+								userRoles.add(UserRole.STUDENT);
+							}
+						}
+
+						if (userRoles.size() == 0) {
+							logger.debug("Login user role is set to NONE");
+							userRoles.add(UserRole.NONE);
+						}
+
+						logger.debug("Login user has {} roles", userRoles.size());
+
+						userInfo.setUserName(userName);
+						userInfo.setPersonId(loggedInPerson.getPersonId());
+						userInfo.setUserRoles(userRoles);
+						logger.debug("userInfo is now initialized");
+
+					}
+
+					return userInfo;
+
+				} catch (Exception e) {
+					if (userInfo.getUserName() != null) {
+						logger.error("userName {} is not found", userInfo.getUserName());
+					} else {
+						logger.error("userName is empty");
+					}
+					// throw new NoSuchUserException();
+					return userInfo;
 				}
 			}
 		};
+		configuration.add(UserInfo.class, new ApplicationStateContribution("session", userInfoCreator));
 	}
 
 	public static void contributeClasspathAssetAliasManager(MappedConfiguration<String, String> configuration) {
 		configuration.add("fontsource-fira-sans", "META-INF/resources/webjars/fontsource-fira-sans/3.0.5");
-		configuration.add("tango-icon-theme", "org/freedesktop/tango");
-	}
-
-	@Contribute(RequestHandler.class)
-	public void addTimingFilter(OrderedConfiguration<RequestFilter> configuration, @Local RequestFilter filter) {
-		configuration.add("Timing", filter);
-	}
-
-	public static final void contributeComponentRequestHandler(
-			OrderedConfiguration<ComponentRequestFilter> configuration, ComponentRequestFilter accessController,
-			ApplicationStateManager asm, ComponentSource componentSource) {
-		configuration.add("AccessController", accessController, "before:*");
+		configuration.add("ck", "META-INF/modules/vendor");
+		// configuration.add("tango-icon-theme", "org/freedesktop/tango");
 	}
 
 	public Logger buildLogger(final Logger logger) {

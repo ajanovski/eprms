@@ -1,0 +1,54 @@
+<html t:type="layout" title="message:admin/ManageTeams-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/ManagePersons-pagelink}</h1>
+
+<p>
+	<span t:type="unless" t:test="personListToImport">
+		<a href="" t:type="actionlink" t:id="ImportPersons"
+			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
+			t:path="upload" /> ${message:import-label}</a>
+	</span>
+
+	<span t:type="unless" t:test="personToEdit">
+		<a href="" t:type="actionlink" t:id="NewPerson" t:context="person"
+			class="btn btn-sm btn-primary"><img t:type="SVGIcon" t:path="plus-square" />
+			${message:New-label}</a>
+	</span>
+</p>
+
+<div t:type="if" t:test="personListToImport"
+	class="card bg-light p-3 mb-3">
+	<form t:type="form" t:id="frmImport">
+		<div class="form-group">
+			<label t:type="label" t:for="personListToImport"></label><input
+				t:id="personListToImport" t:type="textarea"
+				t:object="personListToImport" />
+		</div>
+		<input t:type="submit" t:value="OK" />
+	</form>
+	<p class="bg-warning p-1 mt-3">${errors}</p>
+</div>
+
+<div t:type="if" t:test="personToEdit" class="card bg-light p-3 mb-3">
+	<form t:type="beaneditform" t:id="frmNewPerson" t:object="personToEdit"
+		t:exclude="personId" t:value="OK" t:cancel="true"></form>
+</div>
+
+<table class="table table-sm" t:type="grid" t:source="allPersons"
+	t:row="person" t:exclude="personId,authString" t:add="actions">
+	<p:actionsCell>
+		<a href="" t:type="actionlink" t:id="EditPerson" t:context="person"
+			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
+			t:path="edit" /> ${message:edit-label}</a>
+		<a href="" t:type="actionlink" t:id="TogglePersonStatus"
+			t:context="person" class="btn btn-sm btn-secondary"><img
+			t:type="SVGIcon" t:path="slash" /> ${message:toggle-status-label}</a>
+		<a href="" t:type="actionlink" t:id="DeletePerson" t:context="person"
+			class="btn btn-sm btn-secondary"><img t:type="SVGIcon"
+			t:path="trash" /> ${message:remove-label}</a>
+	</p:actionsCell>
+</table>
+
+</html>

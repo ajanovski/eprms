@@ -1,0 +1,55 @@
+<html t:type="layout" title="Index | epm"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+
+<h1>${message:user/MyDatabases-pagelink}</h1>
+
+<div class="card mb-3" t:type="loop" t:source="projectDatabases"
+	t:value="database">
+	<div class="card-body">
+		<div class="card-title">
+			<h2>Project: ${database.project.title}</h2>
+			<h3>Database: ${database.name}</h3>
+		</div>
+                <p>The professor recommends using the DBEAVER software (opensource and free), that he can support via a ready-m
+ade package (tested at the premises of the Faculty, available for Windows and Linux). You need to download the 7Z package, unpa
+ck it to a folder of your choice and start the script for starting DBEAVER, otherwise it will not work correctly. The package i
+ncludes an example connection configuration. The packages are available here: <a href="https://bazi.finki.ukim.mk/materijali/So
+ftware/">https://bazi.finki.ukim.mk/materijali/Software/</a></p>                                                               
+                <p>Note that the server will block your IP address immediately if you attempt a connection before setting up th
+e correct connection parameters. So, before attempting a connection make sure that you have setup SSH tunnel parameters (in the
+ respective configuration section) and database connection parameters (in the respective configuration section) in DBEAVER acco
+rding to the information below. Detailed instructions are included as a PDF file in the package.</p>                           
+		<table class="table table-sm">
+			<tr class="table-primary">
+				<td>SSH tunnel server:</td>
+				<td>${database.tunnelServer}</td>
+			</tr>
+			<tr class="table-primary">
+				<td>SSH tunnel user:</td>
+				<td>${database.tunnelUser}</td>
+			</tr>
+			<tr class="table-primary">
+				<td>SSH tunnel password:</td>
+				<td>${database.tunnelPassword}</td>
+			</tr>
+			<tr class="table-secondary">
+				<td>Database Server:</td>
+				<td>${database.server}</td>
+			</tr>
+			<tr class="table-secondary">
+				<td>Database Name:</td>
+				<td>${database.name}</td>
+			</tr>
+			<tr class="table-secondary">
+				<td>Database User:</td>
+				<td>${database.owner}</td>
+			</tr>
+			<tr class="table-secondary">
+				<td>Database Password:</td>
+				<td>${database.password}</td>
+			</tr>
+		</table>
+	</div>
+</div>
+
+</html>

@@ -53,7 +53,7 @@ public class WorkReport implements java.io.Serializable {
 		this.workReportId=workReportId;
 	}
 
-	@Column(name = "title")
+	@Column(name = "title", length = 4000)
 	public String getTitle() {
 		return this.title;
 	}
@@ -62,7 +62,7 @@ public class WorkReport implements java.io.Serializable {
 		this.title=title;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description", length = 1000000)
 	public String getDescription() {
 		return this.description;
 	}

@@ -1,4 +1,4 @@
-<html t:type="layout" title="${message:app-title-short}"
+<html t:type="Layout" title="${message:app-title-short}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
 
 <div class="jumbotron text-center hoverable p-4">

@@ -55,7 +55,7 @@ public class Project implements java.io.Serializable {
 		this.projectId=projectId;
 	}
 
-	@Column(name = "title", unique = true, nullable = false)
+	@Column(name = "title", unique = true, nullable = false, length = 4000)
 	public String getTitle() {
 		return this.title;
 	}
@@ -64,7 +64,7 @@ public class Project implements java.io.Serializable {
 		this.title=title;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description", length = 1000000)
 	public String getDescription() {
 		return this.description;
 	}

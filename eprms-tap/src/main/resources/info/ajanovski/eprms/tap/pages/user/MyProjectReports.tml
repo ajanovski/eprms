@@ -1,0 +1,97 @@
+<html t:type="layout" title="Index | epm"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<style>
+.bg-project:nth-child(even) {
+	background: #e0ffff;
+}
+
+.bg-project:nth-child(odd) {
+	background: #80ffff;
+}
+</style>
+
+<div t:type="zone" t:id="zModal" id="zModal">
+	<t:if t:test="newWorkReport">
+		<t:ModalBox t:id="assessmentModal">
+			<h3>${message:Report-label}</h3>
+			<form t:id="frmNewWorkReport" t:type="BeanEditForm"
+				t:object="newWorkReport" t:exclude="workReportId,submissionDate"
+				t:value="OK" t:cancel="true">
+				<p:description>
+					<div class="form-group">
+						<label t:type="label" t:for="description"></label>
+						<textarea t:id="description" t:type="textarea"
+							t:value="newWorkReport.description" t:mixins="webeditor"
+							t:WebEditor.areaType="" />
+					</div>
+				</p:description>
+			</form>
+		</t:ModalBox>
+	</t:if>
+</div>
+
+<h1>${message:user/MyProjectReports-pagelink}</h1>
+
+<div class="card mb-4 bg-project" t:type="loop" t:source="myProjects"
+	t:value="project">
+	<div class="card-header">
+		<h2>${project.title}
+			<a class="btn btn-default" data-toggle="collapse"
+				href="#collapse${project.projectId}" role="button"
+				aria-expanded="false" aria-controls="collapse${project.projectId}">
+				<svg t:type="svgicon" t:path="list" />
+			</a>
+		</h2>
+	</div>
+
+	<div class="card-body collapse" id="collapse${project.projectId}">
+		<div class="card mb-3 p-4" t:type="loop" t:source="projectActivities"
+			t:value="activity">
+			<h3>${activity.title}</h3>
+			<div class="card mb-3 p-3 bg-light" t:type="loop"
+				t:source="activity.workReports" t:value="workReport">
+				<div class="d-flex">
+					<div class="mr-auto p-2">
+						<h4>${message:report-label}</h4>
+					</div>
+					<div class="p-2">
+						<div t:type="unless" t:test="workReport.workEvaluations">
+							<a href="" class="btn btn-secondary" t:id="EditWorkReport"
+								t:type="actionlink" t:context="workReport"><svg
+									t:type="svgicon" t:path="edit" data-toggle="modal"
+									data-target="#newWorkReportModal" /> ${message:edit-label}</a> <a
+								href="" class="btn btn-danger" t:id="DeleteWorkReport"
+								t:type="actionlink" t:mixins="Confirm" t:context="workReport"><svg
+									t:type="svgicon" t:path="trash" /> ${message:remove-label}</a>
+						</div>
+					</div>
+				</div>
+				<div t:type="beandisplay" t:object="workReport"
+					t:exclude="workReportId" t:add="person">
+					<p:person>${workReport?.person?.lastName}</p:person>
+				</div>
+				<div class="card mb-3 p-3 bg-info text-white" t:type="loop"
+					t:source="workReport.workEvaluations" t:value="workEvaluation">
+					<h5>${message:evaluation-label}</h5>
+					<div t:type="if" t:test="evaluationPublished">
+						<div t:type="beandisplay" t:object="workEvaluation"
+							t:exclude="workEvaluationId,status">
+							<p:description>
+								<t:outputRaw t:value="workEvaluation.description" />
+							</p:description>
+						</div>
+						<p:else>${message:in-progress-label}</p:else>
+					</div>
+				</div>
+			</div>
+			<p>
+				<a href="" t:id="AddReport" t:type="actionlink" t:context="activity"
+					class="btn btn-small btn-primary"><svg t:type="svgicon"
+						t:path="plus" /> ${message:add-label} ${message:report-label}</a>
+			</p>
+		</div>
+	</div>
+</div>
+</html>

@@ -30,7 +30,7 @@ import javax.persistence.*;
 @Table (schema="epm_main", name="team_member")
 public class TeamMember implements java.io.Serializable {
 	private long teamMemberId;
-	private Long positionNumber;
+	private Integer positionNumber;
 	private String role;
 	private Person person;
 	private Team team;
@@ -49,11 +49,11 @@ public class TeamMember implements java.io.Serializable {
 	}
 
 	@Column(name = "position_number")
-	public Long getPositionNumber() {
+	public Integer getPositionNumber() {
 		return this.positionNumber;
 	}
 
-	public void setPositionNumber(Long positionNumber) {
+	public void setPositionNumber(Integer positionNumber) {
 		this.positionNumber=positionNumber;
 	}
 

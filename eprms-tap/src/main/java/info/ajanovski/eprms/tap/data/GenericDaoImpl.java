@@ -26,10 +26,7 @@ import java.util.Iterator;
 import java.util.List;
 
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.MatchMode;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.DataException;
 import org.slf4j.Logger;
 
@@ -37,6 +34,10 @@ public class GenericDaoImpl implements GenericDao {
 
 	@Inject
 	private Session session;
+
+	private Session getEntityManager() {
+		return session.getSession();
+	}
 
 	@Inject
 	private Logger logger;
@@ -59,10 +60,10 @@ public class GenericDaoImpl implements GenericDao {
 	@Override
 	public List<Object> getQueryResult(String guery) {
 		try {
-			Query q = session.createQuery(guery);
+			javax.persistence.Query q = getEntityManager().createQuery(guery);
 			List<Object> l = new ArrayList<Object>();
 
-			for (Iterator<?> it = q.iterate(); it.hasNext();) {
+			for (Iterator<?> it = q.getResultList().iterator(); it.hasNext();) {
 				Object[] row = (Object[]) it.next();
 				for (int i = 0; i < row.length; i++) {
 					l.add(row[i]);
@@ -93,12 +94,13 @@ public class GenericDaoImpl implements GenericDao {
 
 	@Override
 	public List<?> getAll(Class<?> classToLoad) {
-		return session.createCriteria(classToLoad).list();
+		return getEntityManager().createQuery("from " + classToLoad.getName()).getResultList();
 	}
 
 	@Override
 	public Object getByCode(Class<?> classToLoad, String code) {
-		List<?> l = session.createCriteria(classToLoad).add(Restrictions.eq("code", code)).list();
+		List<?> l = getEntityManager().createQuery("from " + classToLoad.getName() + "where code=:code")
+				.setParameter("code", code).getResultList();
 		if (l.size() > 0) {
 			return l.get(0);
 		} else {
@@ -109,8 +111,9 @@ public class GenericDaoImpl implements GenericDao {
 	@Override
 	public List<?> getByTitleSubstring(Class<?> classToSearch, String searchSubString) {
 		if (searchSubString != null) {
-			return (List<?>) session.createCriteria(classToSearch)
-					.add(Restrictions.ilike("title", searchSubString, MatchMode.ANYWHERE)).list();
+			return (List<?>) getEntityManager()
+					.createQuery("from " + classToSearch.getName() + "where title ilike :searchSubString")
+					.setParameter("searchSubString", searchSubString).getResultList();
 		} else {
 			return null;
 		}

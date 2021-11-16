@@ -18,47 +18,50 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.pages;
+package info.ajanovski.eprms.tap.pages.user;
 
-import java.util.List;
+import javax.inject.Inject;
 
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 
-import info.ajanovski.eprms.model.entities.Repository;
+import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
 import info.ajanovski.eprms.tap.services.GenericService;
-import info.ajanovski.eprms.tap.services.ResourceManager;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
 @InstructorPage
 @AdministratorPage
-public class MyRepositories {
+public class MyProfile {
 
-	@Property
 	@SessionState
+	@Property
 	private UserInfo userInfo;
 
 	@Inject
 	private GenericService genericService;
 
-	@Inject
-	private ResourceManager resourceManager;
-
-	public List<Repository> getPersonalRepositories() {
-		return resourceManager.getActiveRepositoriesByPerson(userInfo.getPersonId());
+	public Person getPerson() {
+		return genericService.getByPK(Person.class, userInfo.getPersonId());
 	}
 
-	public List<Repository> getTeamRepositories() {
-		return resourceManager.getActiveRepositoriesByTeam(userInfo.getPersonId());
+	@Persist
+	@Property
+	private Person editPerson;
+
+	public void onActionFromEditProfile() {
+		editPerson = getPerson();
 	}
 
-	public List<Repository> getProjectRepositories() {
-		return resourceManager.getActiveRepositoriesByProject(userInfo.getPersonId());
+	@CommitAfter
+	public void onSuccessFromFrmEditPerson() {
+		genericService.saveOrUpdate(editPerson);
+		editPerson=null;
 	}
 
 }

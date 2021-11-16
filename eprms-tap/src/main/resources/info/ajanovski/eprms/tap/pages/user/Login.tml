@@ -1,0 +1,26 @@
+<html t:type="Layout" title="${message:app-title-short}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+
+<div class="jumbotron text-center hoverable p-4">
+
+	<div class="row">
+
+		<div class="col-md-3 offset-md-1 mx-3 my-3">
+			<div class="view overlay">
+				<img src="${asset:context:images/logo.png}" class="img-fluid"
+					alt="${message:greeting}" /> <a>
+					<div class="mask rgba-white-slight"></div>
+				</a>
+			</div>
+		</div>
+
+		<div class="col-md-8 text-md-left ml-3 mt-3">
+			<h4 class="h4 mb-4">${message:greeting-title} ${userInfo?.userName}</h4>
+			<p class="font-weight-normal">${message:greeting}</p>
+			<a class="btn btn-success" href="${message:greeting-url}">${message:greeting-url}</a>
+		</div>
+
+	</div>
+
+</div>
+</html>

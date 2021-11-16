@@ -23,16 +23,16 @@ package info.ajanovski.eprms.tap.data;
 
 import java.util.List;
 
+import javax.persistence.Query;
+
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.hibernate.Query;
 import org.hibernate.Session;
-import org.hibernate.criterion.Order;
-import org.hibernate.criterion.Restrictions;
 import org.hibernate.exception.DataException;
 import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
+import info.ajanovski.eprms.model.entities.Role;
 import info.ajanovski.eprms.tap.util.UsefulMethods;
 
 public class PersonDaoImpl implements PersonDao {
@@ -42,11 +42,15 @@ public class PersonDaoImpl implements PersonDao {
 	@Inject
 	private Session session;
 
+	private Session getEntityManager() {
+		return session.getSession();
+	}
+
 	@Override
 	public List<Person> getAllPersons() {
 		try {
 			return UsefulMethods.castList(Person.class,
-					session.createCriteria(Person.class).addOrder(Order.asc("lastName")).list());
+					getEntityManager().createQuery("from Person order by lastName").getResultList());
 		} catch (DataException e) {
 			logger.error("Exception - DataAccessException occurs : {} on complete getAllPersons().", e.getMessage());
 			return null;
@@ -55,23 +59,24 @@ public class PersonDaoImpl implements PersonDao {
 
 	@Override
 	public Person getPersonByUsername(String username) {
-		return (Person) session.createCriteria(Person.class).add(Restrictions.eq("userName", username))
-				.setReadOnly(true).setCacheable(true).uniqueResult();
+		return (Person) getEntityManager().createQuery("from Person where userName=:username")
+				.setParameter("username", username).setReadOnly(true).setCacheable(true).uniqueResult();
 	}
 
 	@Override
 	public List<Person> getPersonByFilter(String filter) {
 		String f = "%" + filter.toLowerCase() + "%";
-		Query q = session
+		Query q = getEntityManager()
 				.createQuery("select p from Person p  where (lower(concat(userName,firstName,lastName)) like :filter)");
 		q.setParameter("filter", f);
-		return UsefulMethods.castList(Person.class, q.list());
+		return UsefulMethods.castList(Person.class, q.getResultList());
 	}
 
 	@Override
 	public List<PersonRole> getPersonRolesForPerson(long personId) {
-		return (List<PersonRole>) session.createCriteria(PersonRole.class, "pr")
-				.add(Restrictions.eq("pr.person.personId", personId)).list();
+		return (List<PersonRole>) getEntityManager()
+				.createQuery("from PersonRole pr where pr.person.personId=:personId").setParameter("personId", personId)
+				.getResultList();
 	}
 
 	@Override
@@ -82,6 +87,12 @@ public class PersonDaoImpl implements PersonDao {
 	@Override
 	public String getPersonFullNameWithId(Person person) {
 		return person.getLastName() + " " + person.getFirstName() + " [" + person.getUserName() + "]";
+	}
+
+	@Override
+	public List<Role> getRolesForPerson(long personId) {
+		return getEntityManager().createQuery("select pr.role from PersonRole pr where pr.person.personId=:personId")
+				.setParameter("personId", personId).getResultList();
 	}
 
 }

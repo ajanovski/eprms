@@ -1,4 +1,4 @@
-<html t:type="layout" title="Error404 Page Not Found | epm"
+<html t:type="PublicLayout" title="Error404 Page Not Found | epm"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 

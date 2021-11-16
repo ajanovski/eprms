@@ -18,41 +18,65 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.pages;
+package info.ajanovski.eprms.tap.pages.user;
 
-import java.util.List;
-
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.commons.Messages;
+import org.apache.tapestry5.http.services.Request;
+import org.apache.tapestry5.http.services.RequestGlobals;
+import org.apache.tapestry5.http.services.Session;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.Cookies;
+import org.slf4j.Logger;
 
-import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
-import info.ajanovski.eprms.tap.services.GenericService;
-import info.ajanovski.eprms.tap.services.ResourceManager;
+import info.ajanovski.eprms.tap.util.AppConfig;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
 @InstructorPage
 @AdministratorPage
-public class MyDatabases {
+public class Logout {
+	@Inject
+	private Logger logger;
+
+	@Inject
+	private Request request;
+
+	@Inject
+	private RequestGlobals requestGlobals;
+
+	@Inject
+	private Cookies cookies;
+
+	@Persist
 	@Property
-	@SessionState
 	private UserInfo userInfo;
 
-	@Inject
-	private GenericService genericService;
-
-	@Inject
-	private ResourceManager resourceManager;
-
 	@Property
-	private Database database;
+	private String casLogoutLink;
 
-	public List<Database> getProjectDatabases() {
-		return resourceManager.getActiveDatabasesByProject(userInfo.getPersonId());
+	@Inject
+	private Messages messages;
+
+	void onActivate() {
+		casLogoutLink = AppConfig.getString("cas.server") + "/cas/logout?service=" + AppConfig.getString("app.server");
+
+		// Clear session
+		Session session = request.getSession(false);
+		if (session != null) {
+			session.invalidate();
+			userInfo = null;
+			logger.debug("Session successfully invalidated!");
+		}
+
+		clearCookie();
+	}
+
+	private void clearCookie() {
 	}
 
 }

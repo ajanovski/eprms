@@ -27,10 +27,10 @@ import javax.persistence.*;
 /*
 */
 @Entity
-@Table (schema="", name="course_activity_type")
+@Table (schema="epm_main", name="course_activity_type")
 public class CourseActivityType implements java.io.Serializable {
 	private long courseActivityTypeId;
-	private int order;
+	private int positionNumber;
 	private ActivityType activityType;
 	private Course course;
 
@@ -47,13 +47,13 @@ public class CourseActivityType implements java.io.Serializable {
 		this.courseActivityTypeId=courseActivityTypeId;
 	}
 
-	@Column(name = "order", nullable = false)
-	public int getOrder() {
-		return this.order;
+	@Column(name = "position_number", nullable = false)
+	public int getPositionNumber() {
+		return this.positionNumber;
 	}
 
-	public void setOrder(int order) {
-		this.order=order;
+	public void setPositionNumber(int positionNumber) {
+		this.positionNumber=positionNumber;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

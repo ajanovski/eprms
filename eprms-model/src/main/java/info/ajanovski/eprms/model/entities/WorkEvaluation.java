@@ -24,6 +24,8 @@ package info.ajanovski.eprms.model.entities;
 import java.util.*;
 import javax.persistence.*;
 
+import info.ajanovski.eprms.model.util.ModelConstants;
+
 /*
 */
 @Entity
@@ -37,6 +39,7 @@ public class WorkEvaluation implements java.io.Serializable {
 	private Date evaluationDate;
 	private WorkReport workReport;
 	private Person person;
+	private String status = ModelConstants.EvaluationStatusCreated;
 
 
 	@Id
@@ -51,7 +54,7 @@ public class WorkEvaluation implements java.io.Serializable {
 		this.workEvaluationId=workEvaluationId;
 	}
 
-	@Column(name = "title")
+	@Column(name = "title", length = 4000)
 	public String getTitle() {
 		return this.title;
 	}
@@ -60,7 +63,7 @@ public class WorkEvaluation implements java.io.Serializable {
 		this.title=title;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description", length = 1000000)
 	public String getDescription() {
 		return this.description;
 	}
@@ -95,6 +98,16 @@ public class WorkEvaluation implements java.io.Serializable {
 	public void setEvaluationDate(Date evaluationDate) {
 		this.evaluationDate=evaluationDate;
 	}
+
+	@Column(name = "status", nullable = false, columnDefinition = "default 'CREATED'")
+	public String getStatus() {
+		return status;
+	}
+
+	public void setStatus(String status) {
+		this.status = status;
+	}
+	
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "work_report_id", nullable = false, foreignKey = @ForeignKey(name = "fk_work_evaluation_work_report"))
 	public WorkReport getWorkReport() {

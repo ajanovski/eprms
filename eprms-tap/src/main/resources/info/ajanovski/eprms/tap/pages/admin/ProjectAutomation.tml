@@ -1,0 +1,22 @@
+<html t:type="layout" title="message:admin/ProjectAutomation-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/ProjectAutomation-pagelink}</h1>
+
+<ul>
+	<li t:type="loop" t:source="projects" t:value="project">
+		# ${project.title}
+		<ul t:type="if" t:test="project.responsibilities">
+			<li t:type="loop" t:source="project.responsibilities"
+				t:value="responsibility">../create_trac_repo_with_db.sh
+				${responsibility?.team.name} <span t:type="loop"
+				t:source="responsibility?.team?.teamMembers" t:value="member">&nbsp;${member.person.userName}</span>
+			</li>
+		</ul>
+	</li>
+</ul>
+
+<p><a href="" t:type="actionlink" t:id="activateAllListed">Activate all listed</a></p>
+
+</html>

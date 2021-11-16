@@ -58,3 +58,12 @@ configuration:
       -
         name: info.ajanovski.eprms.tap
         level: info
+
+      -
+        name: org.springframework
+        level: info
+
+      -
+        name: org.hibernate
+        level: info
+

@@ -37,4 +37,7 @@ public class ModelConstants {
 	public static final String ProjectStatusPaused = "PAUSED";
 	public static final String ProjectStatusFinished = "FINISHED";
 	public static final String ProjectStatusStopped = "STOPPED";
+	
+	public static final String EvaluationStatusCreated = "CREATED";
+	public static final String EvaluationStatusPublished = "PUBLISHED";
 }

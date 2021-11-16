@@ -2,11 +2,11 @@
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 
-<a t:type="backlink" t:page="admin/manageprojects" />
+<a t:type="backlink" t:page="admin/manageprojects"></a>
 
 <h1>${message:admin/ProjectActivities-pagelink}</h1>
 
-<h2>Project: ${selectedProject.title}</h2>
+<h2>Project: ${selectedProject?.title}</h2>
 
 <div t:type="if" t:test="newActivity">
 	<form t:type="beaneditform" id="newActivityForm" t:id="newActivityForm"

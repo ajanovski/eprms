@@ -1,0 +1,40 @@
+<html t:type="layout" title="message:admin/ProjectActivities-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/ManageActivityTypes-pagelink}</h1>
+
+<p>
+	<span t:type="unless" t:test="newActivityType"><a
+		class="btn btn-primary" t:type="actionlink" t:id="newActivityType"><img
+			t:type="SVGIcon" t:path="plus-square" /> ${message:New-label}
+			${message:ActivityType-label}</a></span>
+</p>
+
+<div class="card" t:type="if" t:test="newActivityType">
+	<div class="card-body">
+		<form t:type="beaneditform" id="newActivityTypeForm"
+			t:id="newActivityTypeForm" t:object="newActivityType"
+			t:exclude="activityTypeId" t:add="superActivityType"
+			t:submitLabel="OK" t:cancel="true">
+			<p:superActivityType>
+				<div class="form-group">
+					<label t:type="label" t:for="superActivityType"></label> <select
+						t:id="superActivityType" t:type="select" t:model="listTypes"
+						t:value="newActivityType.superActivityType"></select>
+				</div>
+			</p:superActivityType>
+		</form>
+	</div>
+</div>
+
+<div t:type="zone" id="zoneActivityTypes" t:id="zoneActivityTypes">
+	<p class="m-0" style="margin-left:${hierarchicalDepth}em !important;" t:type="loop"
+		t:source="allActivityTypes" t:value="activityType">
+		${activityType.title} <a href="" t:type="ActionLink"
+			t:id="EditActivityType" id="EditActivityType"
+			t:context="activityType"><img t:type="SVGIcon" t:path="edit" /></a>
+	</p>
+</div>
+
+</html>

@@ -1,7 +1,7 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 
-<h5 class="card-title">${message:Team-label}: ${team.name}</h5>
+<h5 class="card-title">${message:Team-label}:${team.name}</h5>
 
 <table t:type="grid" class="table table-sm" t:source="teamMembers"
 	t:row="teamMember" t:model="beanModel">

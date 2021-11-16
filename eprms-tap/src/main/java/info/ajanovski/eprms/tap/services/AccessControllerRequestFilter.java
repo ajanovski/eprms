@@ -23,7 +23,6 @@ package info.ajanovski.eprms.tap.services;
 import java.io.IOException;
 
 import org.apache.tapestry5.http.services.Response;
-import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.runtime.Component;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ComponentEventRequestParameters;
@@ -42,28 +41,55 @@ import info.ajanovski.eprms.tap.pages.Index;
 import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
-public class AccessController implements ComponentRequestFilter {
+public class AccessControllerRequestFilter implements ComponentRequestFilter {
 
-	private ApplicationStateManager applicationStateManager;
+	private final ApplicationStateManager applicationStateManager;
 	private final ComponentSource componentSource;
+	private final Logger logger;
 
-	@Inject
-	private Logger logger;
-
-	@Inject
 	private Response response;
-
-	@Inject
 	private PageRenderLinkSource linkSource;
 
-	public AccessController(ApplicationStateManager asm, ComponentSource componentSource) {
+	public AccessControllerRequestFilter(final ApplicationStateManager asm, final ComponentSource componentSource,
+			final Logger logger) {
+		logger.info("AccessController ComponentRequestFilter constructor");
 		this.applicationStateManager = asm;
 		this.componentSource = componentSource;
+		this.logger = logger;
+	}
+
+	@Override
+	public void handleComponentEvent(ComponentEventRequestParameters parameters, ComponentRequestHandler handler)
+			throws IOException {
+		logger.debug("handleComponentEvent entered");
+		boolean accessOK = checkAccess(parameters.getActivePageName());
+		if (accessOK) {
+			logger.debug("handleComponentEvent access granted");
+			handler.handleComponentEvent(parameters);
+		} else {
+			logger.error("handleComponentEvent: ACCESS DENIED TO {} {} {}", parameters.getEventType(),
+					parameters.getNestedComponentId(), parameters.getContainingPageName());
+			response.sendRedirect(linkSource.createPageRenderLink(Index.class));
+		}
+	}
+
+	@Override
+	public void handlePageRender(PageRenderRequestParameters parameters, ComponentRequestHandler handler)
+			throws IOException {
+		logger.debug("handlePageRender entered");
+		boolean accessOK = checkAccess(parameters.getLogicalPageName());
+		if (accessOK) {
+			logger.debug("handlePageRender access denied");
+			handler.handlePageRender(parameters);
+		} else {
+			logger.error("handlePageRender: ACCESS DENIED TO {}", parameters.getLogicalPageName());
+			response.sendRedirect(linkSource.createPageRenderLink(Index.class));
+		}
 	}
 
 	public boolean checkAccess(String pageName) throws IOException {
 		boolean hasAccessAnnotation = false;
-		logger.debug("check access for {}", pageName);
+		logger.debug("checkAccess: page {}", pageName);
 		if (pageName.equals("") || pageName.equals("/")) {
 			pageName = AppConstants.PageIndex;
 		}
@@ -71,29 +97,31 @@ public class AccessController implements ComponentRequestFilter {
 		Component page = null;
 		page = componentSource.getPage(pageName);
 
-		boolean publicPage = page.getClass().getAnnotation(PublicPage.class) != null;
-		boolean studentPage = page.getClass().getAnnotation(StudentPage.class) != null;
-		boolean instructorPage = page.getClass().getAnnotation(InstructorPage.class) != null;
-		boolean adminPage = page.getClass().getAnnotation(AdministratorPage.class) != null;
+		boolean publicPage = page.getClass().isAnnotationPresent(PublicPage.class);
+		boolean studentPage = page.getClass().isAnnotationPresent(StudentPage.class);
+		boolean instructorPage = page.getClass().isAnnotationPresent(InstructorPage.class);
+		boolean adminPage = page.getClass().isAnnotationPresent(AdministratorPage.class);
 
 		hasAccessAnnotation = publicPage | studentPage | instructorPage | adminPage;
-		UserInfo userInfo = applicationStateManager.getIfExists(UserInfo.class);
+		logger.debug("checkAccess: page has access annotation: {}", hasAccessAnnotation);
 
 		boolean canAccess = false;
 		if (publicPage) {
-			logger.debug("Accessing a public page.");
+			logger.debug("checkAccess: Accessing a public page.");
 			canAccess = true;
 		} else {
+			logger.debug("checkAccess: Accessing a not for public page.");
+			UserInfo userInfo = applicationStateManager.getIfExists(UserInfo.class);
 			if (userInfo == null) {
-				logger.debug("UserInfo is null");
+				logger.debug("checkAccess: UserInfo is null");
 			} else {
-				logger.debug("userInfo is not null");
+				logger.debug("checkAccess: userInfo is not null");
 				if (studentPage) {
-					logger.debug("studentPage");
+					logger.debug("checkAccess: studentPage");
 					canAccess = canAccess || userInfo.isStudent();
 				}
 				if (adminPage) {
-					logger.debug("adminPage");
+					logger.debug("checkAccess: adminPage");
 					canAccess = canAccess || userInfo.isAdministrator();
 				}
 			}
@@ -104,36 +132,10 @@ public class AccessController implements ComponentRequestFilter {
 					canAccess, hasAccessAnnotation);
 			return true;
 		} else {
-			logger.debug("checkAccess: ACCESS DENIED to page:{} canaccess:{} hasaccessannotation:{} ", pageName,
+			logger.info("checkAccess: ACCESS DENIED to page:{} canaccess:{} hasaccessannotation:{} ", pageName,
 					canAccess, hasAccessAnnotation);
 			return false;
 		}
 	}
 
-	@Override
-	public void handleComponentEvent(ComponentEventRequestParameters parameters, ComponentRequestHandler handler)
-			throws IOException {
-		boolean accessOK = checkAccess(parameters.getContainingPageName());
-		if (accessOK) {
-			handler.handleComponentEvent(parameters);
-		} else {
-			logger.error("handleComponentEvent: ACCESS DENIED TO {} {} {}", parameters.getEventType(),
-					parameters.getNestedComponentId(), parameters.getContainingPageName());
-
-			response.sendRedirect(linkSource.createPageRenderLink(Index.class));
-		}
-	}
-
-	@Override
-	public void handlePageRender(PageRenderRequestParameters parameters, ComponentRequestHandler handler)
-			throws IOException {
-		boolean accessOK = checkAccess(parameters.getLogicalPageName());
-		if (accessOK) {
-			handler.handlePageRender(parameters);
-		} else {
-			logger.error("handlePageRender: ACCESS DENIED TO {}", parameters.getLogicalPageName());
-
-			response.sendRedirect(linkSource.createPageRenderLink(Index.class));
-		}
-	}
 }

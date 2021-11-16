@@ -18,75 +18,47 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.pages;
+package info.ajanovski.eprms.tap.pages.user;
 
-import org.apache.tapestry5.annotations.Persist;
+import java.util.List;
+
 import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.commons.Messages;
-import org.apache.tapestry5.http.services.Context;
-import org.apache.tapestry5.http.services.Request;
-import org.apache.tapestry5.http.services.RequestGlobals;
-import org.apache.tapestry5.http.services.Session;
+import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.ioc.annotations.Inject;
-import org.apache.tapestry5.services.Cookies;
-import org.slf4j.Logger;
 
+import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
-import info.ajanovski.eprms.tap.util.AppConfig;
+import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.ResourceManager;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
 @InstructorPage
 @AdministratorPage
-public class Logout {
-	@Inject
-	private Logger logger;
+public class MyRepositories {
 
-	@Inject
-	private Request request;
-
-	@Inject
-	private RequestGlobals requestGlobals;
-
-	@Inject
-	private Cookies cookies;
-
-	@Persist
 	@Property
+	@SessionState
 	private UserInfo userInfo;
 
 	@Inject
-	private Context ctx;
-
-	@Property
-	private String casServer;
-	@Property
-	private String appServer;
-	@Property
-	private String logoutRedirectToServer;
+	private GenericService genericService;
 
 	@Inject
-	private Messages messages;
+	private ResourceManager resourceManager;
 
-	void onActivate() {
-		casServer = ctx.getInitParameter("casServerLogoutUrl");
-		appServer = ctx.getInitParameter("service");
-		logoutRedirectToServer = AppConfig.getString("logout.redirectToServer");
-
-		// Clear session
-		Session session = request.getSession(false);
-		if (session != null) {
-			session.invalidate();
-			userInfo = null;
-			logger.debug("Session successfully invalidated!");
-		}
-
-		clearCookie();
+	public List<Repository> getPersonalRepositories() {
+		return resourceManager.getActiveRepositoriesByPerson(userInfo.getPersonId());
 	}
 
-	private void clearCookie() {
+	public List<Repository> getTeamRepositories() {
+		return resourceManager.getActiveRepositoriesByTeam(userInfo.getPersonId());
+	}
+
+	public List<Repository> getProjectRepositories() {
+		return resourceManager.getActiveRepositoriesByProject(userInfo.getPersonId());
 	}
 
 }

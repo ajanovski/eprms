@@ -32,6 +32,7 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.commons.Messages;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.apache.tapestry5.services.PersistentLocale;
 import org.apache.tapestry5.services.SelectModelFactory;
 
 import info.ajanovski.eprms.model.entities.Activity;
@@ -43,10 +44,13 @@ import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.model.entities.Responsibility;
 import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
+import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ProjectManager;
+import info.ajanovski.eprms.tap.services.TranslationService;
+import info.ajanovski.eprms.tap.util.AppConfig;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @InstructorPage
@@ -60,21 +64,22 @@ public class ManageProjects {
 	private ProjectManager projectManager;
 
 	@Inject
+	private MessagingService messagingService;
+
+	@Inject
 	private GenericService genericService;
 
-	public List<Project> getAllProjects() {
-		return (List<Project>) projectManager.getAllProjectsOrderByTitle();
-	}
+	@Inject
+	private SelectModelFactory selectModelFactory;
 
-	public List<Project> getProjects() {
-		if (selectedProject != null) {
-			List<Project> ls = new ArrayList<Project>();
-			ls.add(genericService.getByPK(Project.class, selectedProject.getProjectId()));
-			return ls;
-		} else {
-			return getAllProjects();
-		}
-	}
+	@Inject
+	private TranslationService translationService;
+
+	@Inject
+	private PersistentLocale persistentLocale;
+
+	@Inject
+	private Messages messages;
 
 	@Property
 	private Project project;
@@ -119,6 +124,31 @@ public class ManageProjects {
 	@Property
 	private Repository newRp;
 
+	@Persist
+	@Property
+	private List<Course> inCourses;
+
+	@Persist
+	@Property
+	private Project copyActivitiesFromProject;
+
+	void onActivate() {
+	}
+
+	public List<Project> getAllProjects() {
+		return (List<Project>) projectManager.getAllProjectsOrderByTitle();
+	}
+
+	public List<Project> getProjects() {
+		if (selectedProject != null) {
+			List<Project> ls = new ArrayList<Project>();
+			ls.add(genericService.getByPK(Project.class, selectedProject.getProjectId()));
+			return ls;
+		} else {
+			return getAllProjects();
+		}
+	}
+
 	public void onActionFromAddTeamMember(Team t) {
 		newTm = new TeamMember();
 		newTm.setTeam(t);
@@ -126,6 +156,7 @@ public class ManageProjects {
 
 	public void onActionFromNewProject() {
 		newProject = new Project();
+		inCourses = new ArrayList<Course>();
 	}
 
 	public void onActionFromEditProject(Project p) {
@@ -154,13 +185,6 @@ public class ManageProjects {
 	public List<Course> getAllCourses() {
 		return (List<Course>) genericService.getAll(Course.class);
 	}
-
-	@Persist
-	@Property
-	private List<Course> inCourses;
-
-	@Inject
-	private Messages messages;
 
 	public SelectModel getCoursesModel() {
 		return selectModelFactory.create(getAllCourses(), "title");
@@ -209,12 +233,16 @@ public class ManageProjects {
 	@CommitAfter
 	public void onSuccessFromNewDatabaseForm() {
 		genericService.save(newDb);
+		messagingService.setupMQHost(AppConfig.getString("MQHost"));
+		messagingService.sendDatabaseNotification(newDb);
 		newDb = null;
 	}
 
 	@CommitAfter
 	public void onSuccessFromNewRepositoryForm() {
 		genericService.save(newRp);
+		messagingService.setupMQHost(AppConfig.getString("MQHost"));
+		messagingService.sendRepositoryNotification(newRp);
 		newRp = null;
 	}
 
@@ -224,9 +252,6 @@ public class ManageProjects {
 	public List<Person> getPersons() {
 		return (List<Person>) genericService.getAll(Person.class);
 	}
-
-	@Inject
-	private SelectModelFactory selectModelFactory;
 
 	public SelectModel getPersonModel() {
 		return (SelectModel) selectModelFactory.create(getPersons(), "userName");
@@ -243,10 +268,6 @@ public class ManageProjects {
 		return projectManager.getProjectCourses(project).stream().map(cp -> cp.getCourse())
 				.collect(Collectors.toList());
 	}
-
-	@Persist
-	@Property
-	private Project copyActivitiesFromProject;
 
 	public void onActionFromCopyActivities(Project p) {
 		copyActivitiesFromProject = p;
@@ -271,4 +292,24 @@ public class ManageProjects {
 		copyActivitiesFromProject = null;
 	}
 
+	public String getCourseTitle() {
+		String trans = translationService.getTranslation(Course.class.getSimpleName(), "title", course.getCourseId(),
+				persistentLocale.get().getLanguage());
+		if (trans == null) {
+			return course.getTitle();
+		} else {
+			return trans;
+		}
+	}
+
+	@CommitAfter
+	void onActionFromDeleteResponsibility(Responsibility r) {
+		Team t = r.getTeam();
+		genericService.delete(r);
+		genericService.delete(t);
+	}
+
+	void onActionFromEditTeam(Team t) {
+		newTeam = t;
+	}
 }

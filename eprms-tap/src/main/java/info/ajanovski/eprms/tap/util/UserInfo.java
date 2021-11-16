@@ -20,20 +20,10 @@
 
 package info.ajanovski.eprms.tap.util;
 
-import java.util.ArrayList;
 import java.util.List;
 
-import org.apache.tapestry5.http.services.RequestGlobals;
-import org.apache.tapestry5.ioc.annotations.Inject;
-import org.slf4j.Logger;
-
-import info.ajanovski.eprms.model.entities.Person;
-import info.ajanovski.eprms.model.entities.PersonRole;
-import info.ajanovski.eprms.model.util.ModelConstants;
-import info.ajanovski.eprms.tap.services.PersonManager;
-
 public class UserInfo {
-	enum UserRole {
+	public enum UserRole {
 		NONE, STUDENT, INSTRUCTOR, ADMINISTRATOR
 	};
 
@@ -41,78 +31,65 @@ public class UserInfo {
 	private Long personId;
 	private List<UserRole> userRoles;
 
-	private PersonManager pm;
-	private Logger logger;
-
-	public UserInfo(@Inject RequestGlobals requestGlobals, @Inject Logger logger, @Inject PersonManager pm)
-			throws Exception {
-		this.pm = pm;
-		this.logger = logger;
-
-		if (requestGlobals != null) {
-			if (requestGlobals.getHTTPServletRequest().getRemoteUser() != null) {
-				this.userName = requestGlobals.getHTTPServletRequest().getRemoteUser();
-				this.setupUser();
-			} else {
-				this.userName = null;
-			}
-		} else {
-			this.userName = null;
-		}
-	}
-
-	private void setupUser() throws Exception {
-		if (userName != null) {
-			logger.info("Logged in user: {}", userName);
-			userRoles = new ArrayList<UserRole>();
-			Person p = pm.getPersonByUsername(userName);
-			if (p == null) {
-				personId = null;
-				userRoles.clear();
-			} else {
-				this.personId = Long.valueOf(p.getPersonId());
-				if (personId != null) {
-					for (PersonRole pr : pm.getPersonRolesForPerson(personId)) {
-						if (pr.getRole().getName().equals(ModelConstants.RoleAdministrator)) {
-							userRoles.add(UserRole.ADMINISTRATOR);
-						} else if (pr.getRole().getName().equals(ModelConstants.RoleInstructor)) {
-							userRoles.add(UserRole.INSTRUCTOR);
-						} else if (pr.getRole().getName().equals(ModelConstants.RoleStudent)) {
-							userRoles.add(UserRole.STUDENT);
-						}
-					}
-					if (userRoles.size() == 0) {
-						userRoles.add(UserRole.NONE);
-					}
-				}
-			}
-		}
-
-	}
-
 	public String getUserName() {
 		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
 	}
 
 	public Long getPersonId() {
 		return personId;
 	}
 
+	public void setPersonId(Long personId) {
+		this.personId = personId;
+	}
+
+	public List<UserRole> getUserRoles() {
+		return userRoles;
+	}
+
+	public void setUserRoles(List<UserRole> userRoles) {
+		this.userRoles = userRoles;
+	}
+
 	public boolean isNone() {
-		return userRoles.contains(UserRole.NONE);
+		if (userRoles != null) {
+			return userRoles.contains(UserRole.NONE);
+		} else {
+			return false;
+		}
 	}
 
 	public boolean isStudent() {
-		return userRoles.contains(UserRole.STUDENT);
+		if (userRoles != null) {
+			return userRoles.contains(UserRole.STUDENT);
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isInstructor() {
+		if (userRoles != null) {
+			return userRoles.contains(UserRole.INSTRUCTOR);
+		} else {
+			return false;
+		}
 	}
 
 	public boolean isAdministrator() {
-		return userRoles.contains(UserRole.ADMINISTRATOR);
+		if (userRoles != null) {
+			return userRoles.contains(UserRole.ADMINISTRATOR);
+		} else {
+			return false;
+		}
 	}
 
 	public void impersonate(String inUsername) throws Exception {
 		this.userName = inUsername;
-		this.setupUser();
+//		this.setupUser();
 	}
 
 }

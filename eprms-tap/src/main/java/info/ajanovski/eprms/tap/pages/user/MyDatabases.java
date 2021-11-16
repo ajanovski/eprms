@@ -18,33 +18,26 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.pages;
+package info.ajanovski.eprms.tap.pages.user;
 
-import java.security.MessageDigest;
-import java.util.Base64;
+import java.util.List;
 
-import javax.validation.constraints.NotNull;
-
-import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
-import org.apache.tapestry5.corelib.components.Form;
-import org.apache.tapestry5.corelib.components.PasswordField;
-import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import info.ajanovski.eprms.model.entities.Person;
+import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.ResourceManager;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
 @InstructorPage
 @AdministratorPage
-public class MyRepositoryAuth {
-
+public class MyDatabases {
 	@Property
 	@SessionState
 	private UserInfo userInfo;
@@ -52,40 +45,14 @@ public class MyRepositoryAuth {
 	@Inject
 	private GenericService genericService;
 
-	@Property
-	@NotNull
-	private String password;
+	@Inject
+	private ResourceManager resourceManager;
 
 	@Property
-	@NotNull
-	private String confirmPassword;
+	private Database database;
 
-	@InjectComponent("AuthForm")
-	private Form authForm;
-
-	@InjectComponent("confirmPassword")
-	private PasswordField pfConfirmPassword;
-
-	public void onValidateFromAuthForm() {
-		if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
-			authForm.recordError(pfConfirmPassword, "Enter two identical and non-empty passwords.");
-		}
-	}
-
-	@CommitAfter
-	public void onSuccessFromAuthForm() {
-		if (password != null && confirmPassword != null && password.equals(confirmPassword)) {
-			Person myself = genericService.getByPK(Person.class, userInfo.getPersonId());
-			try {
-				MessageDigest md = MessageDigest.getInstance("SHA-1");
-				md.reset();
-				md.update(password.getBytes("UTF-8"));
-				myself.setAuthString("{SHA}" + Base64.getEncoder().encodeToString(md.digest()));
-				genericService.save(myself);
-			} catch (Exception e) {
-				System.out.println(e);
-			}
-		}
+	public List<Database> getProjectDatabases() {
+		return resourceManager.getActiveDatabasesByProject(userInfo.getPersonId());
 	}
 
 }

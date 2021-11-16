@@ -17,9 +17,8 @@
 </head>
 
 <body style="padding-top: 4.5em;">
-	<nav class="navbar navbar-dark navbar-expand-lg bg-dark fixed-top"
-		style="background-color: #03030f;">
-		<a class="navbar-brand" t:type="pagelink" t:page="index">${message:app-title-short}</a>
+	<nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+		<a class="navbar-brand" t:type="pagelink" t:page="user/MyProfile">${message:app-title-short}</a>
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#mainMenu" aria-controls="mainMenu"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -27,7 +26,7 @@
 		</button>
 
 		<div class="collapse navbar-collapse" id="mainMenu">
-			<ul class="navbar-nav mr-auto">
+			<ul class="navbar-nav mr-auto" t:type="if" t:test="userInfo">
 				<li t:type="loop" t:source="studentPageNames" t:value="pageName"
 					class="nav-item"><a class="nav-link ${classForPageName}"
 					t:type="pagelink" t:page="prop:pageName">${pageNameTitle}</a></li>
@@ -46,17 +45,19 @@
 			</ul>
 
 			<ul class="navbar-nav navbar-right">
+
 				<li class="nav-item"><a class="nav-link" href=""
-					t:type="actionlink" t:id="localeToggle">${message:lang-label}
-						${displayLanguage}</a></li>
-				<li class="nav-item dropdown"><a
+					t:type="actionlink" t:id="localeToggle">${message:lang-label} <span
+						class="btn btn-primary pl-1 pr-1 pt-0 pb-0">${displayLanguage}</span></a></li>
+
+				<li class="nav-item dropdown" t:type="if" t:test="userInfo"><a
 					class="nav-link dropdown-toggle" href="#" id="mainMenuUserProfile"
 					role="button" data-toggle="dropdown" aria-haspopup="true"
 					aria-expanded="false"><t:SVGIcon t:path="user" />
 						${userInfo.userName}</a>
 					<div class="dropdown-menu" aria-labelledby="mainMenuUserProfile">
 						<t:if t:test="userInfo">
-							<a href="" t:type="pagelink" t:page="logout"
+							<a href="" t:type="pagelink" t:page="user/Logout"
 								class="dropdown-item"><img t:type="SVGIcon" t:path="log-out" />
 								${message:Logout-label}</a>
 						</t:if>

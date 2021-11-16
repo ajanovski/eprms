@@ -20,17 +20,9 @@
 
 package info.ajanovski.eprms.tap.pages;
 
-import org.apache.tapestry5.annotations.Property;
-import org.apache.tapestry5.annotations.SessionState;
-
 import info.ajanovski.eprms.tap.annotations.PublicPage;
-import info.ajanovski.eprms.tap.util.UserInfo;
 
 @PublicPage
 public class Index {
-
-	@SessionState
-	@Property
-	private UserInfo userInfo;
 
 }

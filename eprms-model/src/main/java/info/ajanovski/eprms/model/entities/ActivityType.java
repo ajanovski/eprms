@@ -49,7 +49,7 @@ public class ActivityType implements java.io.Serializable {
 		this.activityTypeId=activityTypeId;
 	}
 
-	@Column(name = "title")
+	@Column(name = "title", length = 4000)
 	public String getTitle() {
 		return this.title;
 	}
@@ -58,7 +58,7 @@ public class ActivityType implements java.io.Serializable {
 		this.title=title;
 	}
 
-	@Column(name = "description")
+	@Column(name = "description", length = 1000000)
 	public String getDescription() {
 		return this.description;
 	}
@@ -77,7 +77,7 @@ public class ActivityType implements java.io.Serializable {
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "activity_type_id", nullable = true, foreignKey = @ForeignKey(name = "fk_activity_type_activity_type"))
+	@JoinColumn(name = "super_activity_type_id", nullable = true, foreignKey = @ForeignKey(name = "fk_activity_type_activity_type"))
 	public ActivityType getSuperActivityType() {
 		return this.superActivityType;
 	}

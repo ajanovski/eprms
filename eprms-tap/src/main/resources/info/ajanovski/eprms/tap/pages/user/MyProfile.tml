@@ -1,0 +1,35 @@
+<html t:type="Layout" title="${message:app-title-short}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
+
+<div class="row">
+
+	<div class="col-md-4">
+		<img src="${asset:context:images/logo.png}" class="col-8 mb-3"
+			alt="${message:greeting}" /> <a>
+			<div class="mask rgba-white-slight"></div>
+		</a>
+		<p class="font-weight-normal">${message:greeting}</p>
+		<a href="${message:greeting-url}">${message:greeting-url}</a>
+	</div>
+
+	<div class="col-md-8">
+		<div class="card bg-light p-3">
+			<div t:type="unless" t:test="editPerson">
+				<h4 class="h4 mb-4">${message:greeting-title}
+					${userInfo?.userName}</h4>
+				<div t:type="beandisplay" t:object="person"
+					t:exclude="personId,authString"></div>
+				<a href="" t:type="actionlink" t:id="EditProfile"
+					class="btn btn-primary">${message:edit-label}</a>
+			</div>
+			<div t:type="if" t:test="editPerson">
+				<h4 class="h4 mb-4">${message:Edit-label}:${userInfo?.userName}</h4>
+				<div t:type="beaneditform" t:id="frmEditPerson"
+					t:object="editPerson" t:exclude="personId,userName,authString"></div>
+			</div>
+		</div>
+	</div>
+
+</div>
+
+</html>

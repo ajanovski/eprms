@@ -37,14 +37,10 @@ import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactor
 import org.springframework.boot.web.server.ErrorPage;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
 import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
-import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.support.ReloadableResourceBundleMessageSource;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.servlet.LocaleResolver;
-import org.springframework.web.servlet.i18n.CookieLocaleResolver;
 
 import info.ajanovski.eprms.tap.util.AppConfig;
 import info.ajanovski.eprms.tap.util.UTF8Filter;
@@ -62,18 +58,12 @@ public class AppConfiguration {
 				servletContext.setInitParameter("tapestry.development-modules",
 						"info.ajanovski.eprms.tap.services.DevelopmentModule");
 				servletContext.setInitParameter("tapestry.qa-modules", "info.ajanovski.eprms.tap.services.QaModule");
-				// servletContext.setInitParameter("tapestry.use-external-spring-context",
-				// "true");
 
 				servletContext.setInitParameter("artifactParameterName", "ticket");
-
 				servletContext.setInitParameter("casServerLogoutUrl",
 						AppConfig.getString("cas.server") + "/cas/logout");
-
 				servletContext.setInitParameter("casServerLoginUrl", AppConfig.getString("cas.server") + "/cas/login");
-
 				servletContext.setInitParameter("casServerUrlPrefix", AppConfig.getString("cas.server") + "/cas");
-
 				servletContext.setInitParameter("service",
 						AppConfig.getString("app.server") + servletContext.getContextPath());
 
@@ -83,15 +73,12 @@ public class AppConfiguration {
 				servletContext.addFilter("CAS Single Sign Out Filter", SingleSignOutFilter.class)
 						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
 								"/*");
-
 				servletContext.addFilter("CAS Authentication Filter", AuthenticationFilter.class)
 						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
 								"/*");
-
 				servletContext.addFilter("CAS Validation Filter", Cas20ProxyReceivingTicketValidationFilter.class)
 						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
 								"/*");
-
 				servletContext.addFilter("CAS HttpServletRequest Wrapper Filter", HttpServletRequestWrapperFilter.class)
 						.addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false,
 								"/*");
@@ -101,11 +88,6 @@ public class AppConfiguration {
 
 				servletContext.addListener(SingleSignOutHttpSessionListener.class);
 
-				servletContext.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
-
-				// servletContext.addFilter("app",
-				// TapestrySpringFilter.class).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST,
-				// DispatcherType.ERROR), false, "/*");
 				servletContext.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
 			}
 		};
@@ -118,19 +100,19 @@ public class AppConfiguration {
 		return factory;
 	}
 
-	@Bean(name = "messageSource")
-	public MessageSource getMessageResource() {
-		ReloadableResourceBundleMessageSource messageResource = new ReloadableResourceBundleMessageSource();
-		messageResource.setBasename("classpath:app");
-		messageResource.setDefaultEncoding("UTF-8");
-		return messageResource;
-	}
-
-	@Bean(name = "localeResolver")
-	public LocaleResolver getLocaleResolver() {
-		CookieLocaleResolver resolver = new CookieLocaleResolver();
-		resolver.setCookieDomain("localeCookie");
-		resolver.setCookieMaxAge(60 * 60);
-		return resolver;
-	}
+//	@Bean(name = "messageSource")
+//	public MessageSource getMessageResource() {
+//		ReloadableResourceBundleMessageSource messageResource = new ReloadableResourceBundleMessageSource();
+//		messageResource.setBasename("classpath:app");
+//		messageResource.setDefaultEncoding("UTF-8");
+//		return messageResource;
+//	}
+//
+//	@Bean(name = "localeResolver")
+//	public LocaleResolver getLocaleResolver() {
+//		CookieLocaleResolver resolver = new CookieLocaleResolver();
+//		resolver.setCookieDomain("localeCookie");
+//		resolver.setCookieMaxAge(60 * 60);
+//		return resolver;
+//	}
 }
