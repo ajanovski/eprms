@@ -1,0 +1,18 @@
+<html t:type="layout"
+	title="message:projectmanager/ProjectOverviewTickets-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:projectmanager/ProjectOverviewTickets-pagelink}</h1>
+
+<style>
+.text-muted {
+	font-size: 80%;
+}
+</style>
+
+<p>Last update: ${lastUpdate}</p>
+
+<t:outputraw t:value="tickets" />
+
+</html>

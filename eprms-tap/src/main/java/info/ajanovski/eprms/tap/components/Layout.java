@@ -84,12 +84,20 @@ public class Layout {
 				"user/MyRepositoryAuth" };
 	}
 
+	public String[] getProjectManagerPageNames() {
+		if (userInfo.isAdministrator()) {
+			return new String[] { "projectmanager/ProjectOverviewTickets", "projectmanager/ProjectOverviewTimeline",
+					"admin/ManageCourses", "admin/ManageProjects", "admin/ProjectAutomation",
+					"admin/OverallCourseReport", "admin/ManageActivityTypes", "admin/ManageTeams",
+					"admin/ManageDatabases", "admin/ManageRepositories", };
+		} else {
+			return null;
+		}
+	}
+
 	public String[] getAdminPageNames() {
 		if (userInfo.isAdministrator()) {
-			return new String[] { "admin/ManageCourses", "admin/ManageProjects", "admin/ProjectAutomation",
-					"admin/OverallCourseReport", "admin/ManageActivityTypes", "admin/ManageTeams",
-					"admin/ManageDatabases", "admin/ManageRepositories", "admin/ManagePersons", "admin/Translations",
-					"admin/SystemParameters" };
+			return new String[] { "admin/ManagePersons", "admin/Translations", "admin/SystemParameters" };
 		} else {
 			return null;
 		}

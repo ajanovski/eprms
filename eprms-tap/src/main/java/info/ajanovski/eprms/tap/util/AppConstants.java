@@ -38,4 +38,6 @@ public class AppConstants {
 			SystemParameterDBServerPort, SystemParameterDBCreationPrefix, SystemParameterDBCreationOwnerSuffix,
 			SystemParameterDBTunnelPrefix };
 
+	public final static String SystemParameterPMOverviewTicketsURL = "PM-Overview-Tickets-URL";
+	public final static String SystemParameterPMOverviewTimelineURL = "PM-Overview-Timeline-URL";
 }

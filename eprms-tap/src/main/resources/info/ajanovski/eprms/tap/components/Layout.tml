@@ -32,6 +32,18 @@
 					t:type="pagelink" t:page="prop:pageName">${pageNameTitle}</a></li>
 				<t:if t:test="userInfo.administrator">
 					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#" id="mainMenuProjectManager"
+						role="button" data-toggle="dropdown" aria-haspopup="true"
+						aria-expanded="false">${message:projectManager-label}</a>
+						<div class="dropdown-menu" aria-labelledby="mainMenuProjectManager">
+							<t:loop t:source="projectManagerPageNames" t:value="pageName">
+								<a class="dropdown-item ${classForPageName}" t:type="pagelink"
+									t:page="prop:pageName">${pageNameTitle}</a>
+							</t:loop>
+						</div></li>
+				</t:if>
+				<t:if t:test="userInfo.administrator">
+					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle" href="#" id="mainMenuAdmin"
 						role="button" data-toggle="dropdown" aria-haspopup="true"
 						aria-expanded="false">${message:admin-label}</a>
