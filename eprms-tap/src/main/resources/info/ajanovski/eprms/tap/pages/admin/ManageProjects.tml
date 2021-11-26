@@ -27,11 +27,11 @@
 			<div class="card-body">
 				<h3>${message:Course-label}</h3>
 				<form t:id="NewCourseForm" t:type="beaneditform"
-					t:object="newCourse" t:exclude="courseId" t:submitLabel="OK">
+					t:object="newCourse" t:exclude="courseId" t:submitLabel="message:submit-label">
 				</form>
 			</div>
 		</div>
-		<div>
+		<div t:type="unless" t:test="newCourse">
 			<a t:type="actionlink" t:id="NewCourse" class="btn btn-primary"><img
 				t:type="SVGIcon" t:path="plus-square" /> ${message:new-label}
 				${message:Course-label}</a>
