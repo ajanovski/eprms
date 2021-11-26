@@ -31,8 +31,11 @@ import org.apache.tapestry5.beanvalidator.BeanValidatorSource;
 import org.apache.tapestry5.commons.Configuration;
 import org.apache.tapestry5.commons.MappedConfiguration;
 import org.apache.tapestry5.commons.OrderedConfiguration;
+import org.apache.tapestry5.hibernate.HibernateConstants;
 import org.apache.tapestry5.hibernate.HibernateEntityPackageManager;
+import org.apache.tapestry5.hibernate.HibernateSymbols;
 import org.apache.tapestry5.hibernate.HibernateTransactionAdvisor;
+import org.apache.tapestry5.hibernate.web.HibernatePersistenceConstants;
 import org.apache.tapestry5.http.services.RequestGlobals;
 import org.apache.tapestry5.ioc.MethodAdviceReceiver;
 import org.apache.tapestry5.ioc.ServiceBinder;
@@ -59,6 +62,7 @@ import info.ajanovski.eprms.tap.data.GenericDao;
 import info.ajanovski.eprms.tap.data.PersonDao;
 import info.ajanovski.eprms.tap.data.ProjectDao;
 import info.ajanovski.eprms.tap.data.ResourceDao;
+import info.ajanovski.eprms.tap.data.TranslationDao;
 import info.ajanovski.eprms.tap.util.AppConfig;
 import info.ajanovski.eprms.tap.util.UserInfo;
 import info.ajanovski.eprms.tap.util.UserInfo.UserRole;
@@ -77,6 +81,7 @@ public class AppModule {
 		binder.bind(ResourceManager.class);
 		binder.bind(ResourceDao.class);
 		binder.bind(MessagingService.class);
+		binder.bind(TranslationDao.class);
 		binder.bind(TranslationService.class);
 		binder.bind(SystemConfigService.class);
 	}
@@ -87,14 +92,14 @@ public class AppModule {
 	}
 
 	public static void contributeApplicationDefaults(MappedConfiguration<String, Object> configuration) {
-		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "en,mk");
+		configuration.add(SymbolConstants.SUPPORTED_LOCALES, "mk,en");
 		configuration.add(SymbolConstants.HMAC_PASSPHRASE,
 				AppConfig.getString("tapestry.hmac-passphrase") + UUID.randomUUID());
 		configuration.add(SymbolConstants.ENABLE_HTML5_SUPPORT, true);
 		configuration.add(SymbolConstants.COMPRESS_WHITESPACE, false);
 		configuration.add(SymbolConstants.CHARSET, "UTF-8");
 
-		configuration.add("tapestry.hibernate.early-startup", true);
+		configuration.add(HibernateSymbols.EARLY_START_UP, true);
 
 		configuration.add(SymbolConstants.JAVASCRIPT_INFRASTRUCTURE_PROVIDER, "jquery");
 	}
