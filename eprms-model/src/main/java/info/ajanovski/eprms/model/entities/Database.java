@@ -23,6 +23,7 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /*
 */
@@ -46,6 +47,7 @@ public class Database implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "database_id", unique = true, nullable = false)
 	public long getDatabaseId() {
 		return this.databaseId;

@@ -99,7 +99,7 @@ public class GenericDaoImpl implements GenericDao {
 
 	@Override
 	public Object getByCode(Class<?> classToLoad, String code) {
-		List<?> l = getEntityManager().createQuery("from " + classToLoad.getName() + "where code=:code")
+		List<?> l = getEntityManager().createQuery("from " + classToLoad.getName() + " where code=:code")
 				.setParameter("code", code).getResultList();
 		if (l.size() > 0) {
 			return l.get(0);

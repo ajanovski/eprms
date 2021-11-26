@@ -32,12 +32,22 @@ public class ModelConstants {
 	public static final String RoleStudent = "STUDENT";
 
 	public static final String ProjectStatusProposed = "PROPOSED";
+	public static final String ProjectStatusCreation = "CREATION";
 	public static final String ProjectStatusStarted = "STARTED";
 	public static final String ProjectStatusActive = "ACTIVE";
 	public static final String ProjectStatusPaused = "PAUSED";
-	public static final String ProjectStatusFinished = "FINISHED";
 	public static final String ProjectStatusStopped = "STOPPED";
-	
+	public static final String ProjectStatusFinished = "FINISHED";
+	public static final String ProjectStatusFailed = "FAILED";
+
+	public static final String[] AllProjectStatuses = { ProjectStatusProposed, ProjectStatusCreation,
+			ProjectStatusStarted, ProjectStatusActive, ProjectStatusPaused, ProjectStatusStopped, ProjectStatusFinished,
+			ProjectStatusFailed };
+
 	public static final String EvaluationStatusCreated = "CREATED";
 	public static final String EvaluationStatusPublished = "PUBLISHED";
+
+	public static final String[] AllEvaluationStatuses = { EvaluationStatusCreated, EvaluationStatusPublished };
+
+	public static final String CourseUnknown = "CourseNA";
 }

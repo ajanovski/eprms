@@ -26,6 +26,8 @@ import java.util.Locale;
 import java.util.UUID;
 
 import org.apache.tapestry5.SymbolConstants;
+import org.apache.tapestry5.beanvalidator.BeanValidatorConfigurer;
+import org.apache.tapestry5.beanvalidator.BeanValidatorSource;
 import org.apache.tapestry5.commons.Configuration;
 import org.apache.tapestry5.commons.MappedConfiguration;
 import org.apache.tapestry5.commons.OrderedConfiguration;
@@ -76,6 +78,7 @@ public class AppModule {
 		binder.bind(ResourceDao.class);
 		binder.bind(MessagingService.class);
 		binder.bind(TranslationService.class);
+		binder.bind(SystemConfigService.class);
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
@@ -206,6 +209,15 @@ public class AppModule {
 		configuration.add("fontsource-fira-sans", "META-INF/resources/webjars/fontsource-fira-sans/3.0.5");
 		configuration.add("ck", "META-INF/modules/vendor");
 		// configuration.add("tango-icon-theme", "org/freedesktop/tango");
+	}
+
+	@Contribute(BeanValidatorSource.class)
+	public static void provideBeanValidatorConfigurer(OrderedConfiguration<BeanValidatorConfigurer> configuration) {
+		configuration.add("noXMLBeanValidatorConfigurer", new BeanValidatorConfigurer() {
+			public void configure(javax.validation.Configuration<?> configuration) {
+				configuration.ignoreXmlConfiguration();
+			}
+		});
 	}
 
 	public Logger buildLogger(final Logger logger) {

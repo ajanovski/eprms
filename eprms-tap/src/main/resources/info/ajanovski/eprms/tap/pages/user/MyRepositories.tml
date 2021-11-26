@@ -1,4 +1,4 @@
-<html t:type="layout" title="Index | epm"
+<html t:type="layout" title="${message:user/MyRepositories-pagelink}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
 
 <h1>${message:user/MyRepositories-pagelink}</h1>

@@ -23,8 +23,7 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
-
-import info.ajanovski.eprms.model.util.ModelConstants;
+import javax.validation.constraints.*;
 
 /*
 */
@@ -37,14 +36,15 @@ public class WorkEvaluation implements java.io.Serializable {
 	private Float percentEvaluated;
 	private Float points;
 	private Date evaluationDate;
+	private String status;
 	private WorkReport workReport;
 	private Person person;
-	private String status = ModelConstants.EvaluationStatusCreated;
 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "work_evaluation_id", unique = true, nullable = false)
 	public long getWorkEvaluationId() {
 		return this.workEvaluationId;
@@ -99,9 +99,10 @@ public class WorkEvaluation implements java.io.Serializable {
 		this.evaluationDate=evaluationDate;
 	}
 
-	@Column(name = "status", nullable = false, columnDefinition = "default 'CREATED'")
+	@NotNull
+	@Column(name = "status", nullable = false)
 	public String getStatus() {
-		return status;
+		return this.status;
 	}
 
 	public void setStatus(String status) {

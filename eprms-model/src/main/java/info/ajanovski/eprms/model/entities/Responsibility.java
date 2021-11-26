@@ -23,6 +23,7 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /*
 */
@@ -37,6 +38,7 @@ public class Responsibility implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "responsibility_id", unique = true, nullable = false)
 	public long getResponsibilityId() {
 		return this.responsibilityId;

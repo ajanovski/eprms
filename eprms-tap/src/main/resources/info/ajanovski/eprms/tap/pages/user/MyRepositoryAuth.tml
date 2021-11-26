@@ -1,4 +1,4 @@
-<html t:type="layout" title="Index | epm"
+<html t:type="layout" title="Repository Authentication"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
 
 <h1>Repository Authentication</h1>

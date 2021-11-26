@@ -23,6 +23,7 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /*
 */
@@ -40,6 +41,7 @@ public class ActivityType implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "activity_type_id", unique = true, nullable = false)
 	public long getActivityTypeId() {
 		return this.activityTypeId;
@@ -67,6 +69,7 @@ public class ActivityType implements java.io.Serializable {
 		this.description=description;
 	}
 
+	@NotNull
 	@Column(name = "code", unique = true, nullable = false)
 	public String getCode() {
 		return this.code;

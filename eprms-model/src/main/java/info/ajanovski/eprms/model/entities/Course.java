@@ -23,46 +23,50 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /*
 */
 @Entity
-@Table (schema="epm_main", name="course")
+@Table(schema = "epm_main", name = "course")
 public class Course implements java.io.Serializable {
 	private long courseId;
 	private String title;
 	private String code;
 	private List<CourseActivityType> courseActivityTypes = new ArrayList<CourseActivityType>();
-
+	private List<CourseProject> courseProjects = new ArrayList<CourseProject>();
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "course_id", unique = true, nullable = false)
 	public long getCourseId() {
 		return this.courseId;
 	}
 
 	public void setCourseId(long courseId) {
-		this.courseId=courseId;
+		this.courseId = courseId;
 	}
 
+	@NotNull
 	@Column(name = "title", unique = true, nullable = false)
 	public String getTitle() {
 		return this.title;
 	}
 
 	public void setTitle(String title) {
-		this.title=title;
+		this.title = title;
 	}
 
+	@NotNull
 	@Column(name = "code", unique = true, nullable = false)
 	public String getCode() {
 		return this.code;
 	}
 
 	public void setCode(String code) {
-		this.code=code;
+		this.code = code;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
@@ -71,7 +75,16 @@ public class Course implements java.io.Serializable {
 	}
 
 	public void setCourseActivityTypes(List<CourseActivityType> courseActivityTypes) {
-		this.courseActivityTypes=courseActivityTypes;
+		this.courseActivityTypes = courseActivityTypes;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+	public List<CourseProject> getCourseProjects() {
+		return this.courseProjects;
+	}
+
+	public void setCourseProjects(List<CourseProject> courseProjects) {
+		this.courseProjects=courseProjects;
 	}
 
 }

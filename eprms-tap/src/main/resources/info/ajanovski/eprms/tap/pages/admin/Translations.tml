@@ -1,0 +1,10 @@
+<html t:type="layout" title="message:admin/SystemParameters-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/SystemParameters-pagelink}</h1>
+
+<table class="table table-sm" t:type="grid" t:source="translations"
+	t:exclude="translationId"></table>
+
+</html>

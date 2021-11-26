@@ -12,6 +12,7 @@
 	--color-exception: #404040;
 }
 
+
 body,
 h1,
 h2,
@@ -81,4 +82,23 @@ svg {
 
 nav.navbar {
 	background-color: #050D58 !important;
+}
+
+.help-block {
+	background-color: #fff8f0;
+	padding: 0.1em 0.25em;
+	color: red;
+}
+
+.glyphicon-calendar {
+	background-color: var(--light);
+	color: var(--dark);
+}
+
+.glyphicon-calendar::before {
+  content: "📅";
+}
+
+.datefield-popup {
+	position:relative !important;
 }

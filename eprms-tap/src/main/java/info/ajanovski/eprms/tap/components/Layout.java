@@ -86,9 +86,10 @@ public class Layout {
 
 	public String[] getAdminPageNames() {
 		if (userInfo.isAdministrator()) {
-			return new String[] { "admin/ProjectAutomation", "admin/OverallCourseReport", "admin/ManageActivityTypes",
-					"admin/ManageProjects", "admin/ManageTeams", "admin/ManageDatabases", "admin/ManageRepositories",
-					"admin/ManagePersons" };
+			return new String[] { "admin/ManageCourses", "admin/ManageProjects", "admin/ProjectAutomation",
+					"admin/OverallCourseReport", "admin/ManageActivityTypes", "admin/ManageTeams",
+					"admin/ManageDatabases", "admin/ManageRepositories", "admin/ManagePersons", "admin/Translations",
+					"admin/SystemParameters" };
 		} else {
 			return null;
 		}

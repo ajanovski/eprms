@@ -39,5 +39,7 @@ public interface ProjectManager {
 	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse);
 
 	public List<Project> getProjectByPerson(Long personId);
+	
+	public void cycleStatus(Project p);
 
 }

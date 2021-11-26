@@ -23,6 +23,7 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /*
 */
@@ -44,6 +45,7 @@ public class WorkReport implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "work_report_id", unique = true, nullable = false)
 	public long getWorkReportId() {
 		return this.workReportId;

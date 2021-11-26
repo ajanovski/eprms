@@ -28,44 +28,55 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="course_project")
-public class CourseProject implements java.io.Serializable {
-	private long courseProjectId;
-	private Course course;
-	private Project project;
+@Table (schema="epm_util", name="system_parameters")
+public class SystemParameter implements java.io.Serializable {
+	private long systemParameterId;
+	private String code;
+	private String value;
+	private String type;
 
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
 	@NotNull
-	@Column(name = "course_project_id", unique = true, nullable = false)
-	public long getCourseProjectId() {
-		return this.courseProjectId;
+	@Column(name = "system_parameter_id", unique = true, nullable = false)
+	public long getSystemParameterId() {
+		return this.systemParameterId;
 	}
 
-	public void setCourseProjectId(long courseProjectId) {
-		this.courseProjectId=courseProjectId;
+	public void setSystemParameterId(long systemParameterId) {
+		this.systemParameterId=systemParameterId;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "course_id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_project_course"))
-	public Course getCourse() {
-		return this.course;
+	@NotNull
+	@Column(name = "code", unique = true, nullable = false)
+	public String getCode() {
+		return this.code;
 	}
 
-	public void setCourse(Course course) {
-		this.course=course;
+	public void setCode(String code) {
+		this.code=code;
 	}
 
-	@ManyToOne(fetch = FetchType.LAZY)
-	@JoinColumn(name = "project_id", nullable = false, foreignKey = @ForeignKey(name = "fk_course_project_Project"))
-	public Project getProject() {
-		return this.project;
+	@NotNull
+	@Column(name = "value", nullable = false)
+	public String getValue() {
+		return this.value;
 	}
 
-	public void setProject(Project project) {
-		this.project=project;
+	public void setValue(String value) {
+		this.value=value;
+	}
+
+	@NotNull
+	@Column(name = "type", nullable = false)
+	public String getType() {
+		return this.type;
+	}
+
+	public void setType(String type) {
+		this.type=type;
 	}
 
 }

@@ -20,6 +20,7 @@
 
 package info.ajanovski.eprms.tap.services;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -28,6 +29,7 @@ import javax.inject.Inject;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.data.ProjectDao;
 
 public class ProjectManagerImpl implements ProjectManager {
@@ -81,6 +83,24 @@ public class ProjectManagerImpl implements ProjectManager {
 	@Override
 	public List<Project> getProjectByPerson(Long personId) {
 		return projectDao.getProjectByPerson(personId);
+	}
+
+	@Override
+	public void cycleStatus(Project p) {
+		if (p.getStatus() != null) {
+			String s = p.getStatus();
+			int index = Arrays.asList(ModelConstants.AllProjectStatuses).indexOf(s);
+			if (index < 0) {
+				index = 0;
+			} else if (index > ModelConstants.AllProjectStatuses.length) {
+				index = 0;
+			} else {
+				index++;
+			}
+			p.setStatus(Arrays.asList(ModelConstants.AllProjectStatuses).get(index));
+		} else {
+			p.setStatus(ModelConstants.AllProjectStatuses[0]);
+		}
 	}
 
 }

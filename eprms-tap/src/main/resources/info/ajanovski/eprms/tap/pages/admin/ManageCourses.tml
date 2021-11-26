@@ -1,0 +1,28 @@
+<html t:type="layout" title="message:admin/ManageCourses-pagelink"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:admin/ManageCourses-pagelink}</h1>
+
+<div t:type="if" t:test="editCourse" class="card">
+	<div class="card-body">
+		<form t:type="beaneditform" t:id="frmEditCourse" t:object="editCourse"
+			t:exclude="courseId"></form>
+	</div>
+</div>
+
+<table class="table table-sm" t:type="grid" t:source="allCourses"
+	t:row="course" t:exclude="courseId" t:add="edit">
+	<p:editCell>
+		<a href="" t:type="actionlink" t:id="editCourse" t:context="course"
+			class="btn btn-sm btn-primary"><svg t:type="svgicon"
+				t:path="edit" />${message:edit-label}</a>
+		<t:if t:test="allowDeleteCourse">
+			<a href="" t:type="actionlink" t:id="deleteCourse" t:context="course"
+				class="btn btn-sm btn-danger"><svg t:type="svgicon"
+					t:path="minus" />${message:remove-label}</a>
+		</t:if>
+	</p:editCell>
+</table>
+
+</html>

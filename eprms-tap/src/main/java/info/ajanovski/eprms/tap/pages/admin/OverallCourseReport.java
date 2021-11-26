@@ -25,6 +25,7 @@ import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
+import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
@@ -66,10 +67,12 @@ public class OverallCourseReport {
 	public List<Project> getAllProjects() {
 		if (selectedCourse == null) {
 			return ((List<Project>) projectManager.getAllProjectsOrderByTitle()).stream()
-					.filter(c -> c.getStatus() != null && c.getStatus().equals("Active")).collect(Collectors.toList());
+					.filter(c -> c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive))
+					.collect(Collectors.toList());
 		} else {
 			return ((List<Project>) projectManager.getCourseProjectsOrderByTitle(selectedCourse)).stream()
-					.filter(c -> c.getStatus() != null && c.getStatus().equals("Active")).collect(Collectors.toList());
+					.filter(c -> c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive))
+					.collect(Collectors.toList());
 		}
 	}
 
@@ -80,6 +83,15 @@ public class OverallCourseReport {
 		return project.getActivities().stream().filter(a -> a.getActivityType()
 				.getActivityTypeId() == courseActivityType.getActivityType().getActivityTypeId()).findFirst()
 				.orElse(null);
+	}
+
+	public List<CourseActivityType> getSelectedCourseCourseActivityTypes() {
+		List<CourseActivityType> list = selectedCourse.getCourseActivityTypes();
+
+		CourseActivityTypeHierarchicalComparator comparator = new CourseActivityTypeHierarchicalComparator();
+		list.sort(comparator);
+
+		return list;
 	}
 
 	@Property
@@ -120,6 +132,7 @@ public class OverallCourseReport {
 		newWorkEvaluation = new WorkEvaluation();
 		newWorkEvaluation.setEvaluationDate(new Date());
 		newWorkEvaluation.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
+		newWorkEvaluation.setStatus(ModelConstants.EvaluationStatusCreated);
 		newWorkEvaluation.setWorkReport(wr);
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(zNewWorkEvaluationModal);

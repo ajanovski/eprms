@@ -5,14 +5,15 @@
 <h1>${message:admin/ManageProjects-pagelink}</h1>
 
 <div class="row">
+
 	<div class="col-6">
-		<div class="card">
+		<div class="card mb-3">
 			<div class="card-body">
-				<form t:type="form" id="selectProject" class="form-inline">
+				<form t:type="form" id="selectCourse" class="form-inline">
 					<div class="form-group">
-						<label t:type="label" t:for="selectProject"></label><select
-							t:id="selectProject" t:type="select" t:model="projectModel"
-							t:value="selectedProject" t:zone="projectZone"
+						<label t:type="label" t:for="selectCourse"></label><select
+							t:id="selectCourse" t:type="select" t:model="coursesModel"
+							t:value="selectedCourse" t:zone="courseZone"
 							onchange="this.form.submit(); "></select>
 					</div>
 					<t:submit t:value="OK" />
@@ -22,185 +23,246 @@
 	</div>
 
 	<div class="col-6">
-		<div t:type="if" t:test="copyActivitiesFromProject"
-			class="p-3 mb-2 bg-info text-white float-right">
-			${message:copy-label} ${message:activities-label}:
-			${copyActivitiesFromProject.title} <a class="btn btn-info"
-				t:type="actionLink" t:id="resetClipboard"><img t:type="SVGIcon"
-				t:path="delete" /> ${message:reset-label}</a>
-		</div>
-
-		<div class="card mb-3" t:type="if" t:test="newProject">
+		<div class="card mb-3" t:type="if" t:test="newCourse">
 			<div class="card-body">
-				<h3>${message:Project-label}</h3>
-				<form t:id="NewProjectForm" t:type="beaneditform"
-					t:object="newProject" t:exclude="projectId" t:add="courses"
-					t:submitLabel="OK">
-					<p:courses>
-						<div class="form-group">
-							<label t:type="label" t:for="inCourses"></label>
-							<div t:type="palette" t:id="inCourses" t:encoder="courseEncoder"
-								t:model="coursesModel" t:selected="inCourses" t:size="4"></div>
-						</div>
-					</p:courses>
-					<p:description>
-						<div class="form-group">
-							<label t:type="label" t:for="description"></label>
-							<textarea t:id="description" t:type="textarea"
-								t:value="newProject.description" t:mixins="webeditor"
-								t:WebEditor.areaType="" />
-						</div>
-					</p:description>
+				<h3>${message:Course-label}</h3>
+				<form t:id="NewCourseForm" t:type="beaneditform"
+					t:object="newCourse" t:exclude="courseId" t:submitLabel="OK">
 				</form>
 			</div>
 		</div>
-
-		<div class="card mb-3" t:type="if" t:test="newTeam">
-			<div class="card-body">
-				<h3>${message:Team-label}</h3>
-				<form t:id="NewTeamForm" t:type="beaneditform" t:object="newTeam"
-					t:exclude="teamId"></form>
-			</div>
-		</div>
-
-		<div class="card mb-3" t:type="if" t:test="newTm">
-			<div class="card-body">
-				<h3>${message:TeamMember-label}</h3>
-				<form class="form-horizontal" t:id="teamMemberForm"
-					t:type="beaneditform" t:object="newTm" t:exclude="teamMemberId"
-					t:add="person" t:reorder="person, positionNumber, role"
-					t:submitLabel="OK">
-					<p:person>
-						<label t:type="label" t:for="selectPerson"></label>
-						<select t:id="selectPerson" t:type="select" t:source="persons"
-							t:value="newTm.person" t:model="personModel"></select>
-					</p:person>
-				</form>
-			</div>
-		</div>
-
-		<div class="card mb-3" t:type="if" t:test="newDb">
-			<div class="card-body">
-				<h3>${message:Database-label}</h3>
-				<form class="form-horizontal" t:id="newDatabaseForm"
-					t:type="beaneditform" t:object="newDb"
-					t:exclude="databaseId,dateCreated" t:submitLabel="OK"></form>
-			</div>
-		</div>
-
-		<div class="card mb-3" t:type="if" t:test="newRp">
-			<div class="card-body">
-				<h3>${message:Repository-label}</h3>
-				<form class="form-horizontal" t:id="newRepositoryForm"
-					t:type="beaneditform" t:object="newRp"
-					t:exclude="repositoryId,dateCreated" t:submitLabel="OK"></form>
-			</div>
-		</div>
-
 		<div>
-			<a t:type="actionlink" t:id="NewProject" class="btn btn-primary"><img
+			<a t:type="actionlink" t:id="NewCourse" class="btn btn-primary"><img
 				t:type="SVGIcon" t:path="plus-square" /> ${message:new-label}
-				${message:Project-label}</a>
+				${message:Course-label}</a>
 		</div>
+
 	</div>
 </div>
 
-<div t:type="zone" t:id="projectZone">
-	<div class="card mt-3" t:type="loop" t:source="projects"
-		t:value="project">
-		<div class="card-header">
-			<p class="float-right">
-				<a t:type="actionLink" t:context="project" t:id="editProject"
-					class="btn btn-sm btn-primary"> <img t:type="SVGIcon"
-					t:path="edit" /> ${message:Edit-label} ${message:Project-label}
-				</a> <a t:type="pagelink" t:page="admin/ManageActivities"
-					t:context="project" t:id="projectActivities"
-					class="btn btn-sm btn-info"> <img t:type="SVGIcon"
-					t:path="list" /> ${message:Edit-label} ${message:Activities-label}
-				</a> <a t:type="actionlink" t:page="admin/ManageActivities"
-					t:context="project" t:id="copyActivities"
-					class="btn btn-sm btn-info"> <img t:type="SVGIcon"
-					t:path="copy" /> ${message:Copy-label} ${message:Activities-label}
-				</a> <span t:type="if" t:test="copyActivitiesFromProject"> <a
-					t:type="actionlink" t:page="admin/ManageActivities"
-					t:context="project" t:id="pasteActivities"
-					class="btn btn-sm btn-info"> <img t:type="SVGIcon"
-						t:path="clipboard" /> ${message:Paste-label}
-						${message:Activities-label}
-				</a>
-				</span>
-			</p>
+<div t:type="zone" t:id="courseZone">
 
-			<h3>${project.title}
-				<small class="text-muted">Status: ${project.status}</small>
-			</h3>
-			<p t:type="if" t:test="projectCourses">
-				<span t:type="loop" t:source="projectCourses" t:value="course">${courseTitle}</span>
-			</p>
+	<div class="row">
+
+		<div class="col-6" t:type="unless" t:test="newProject">
+			<div class="card">
+				<div class="card-body">
+					<form t:type="form" id="selectProject" class="form-inline">
+						<div class="form-group">
+							<label t:type="label" t:for="selectProject"></label><select
+								t:id="selectProject" t:type="select" t:model="projectModel"
+								t:value="selectedProject" t:zone="projectZone"
+								onchange="this.form.submit(); "></select>
+						</div>
+						<t:submit t:value="OK" />
+					</form>
+				</div>
+			</div>
 		</div>
 
-		<div class="card-body">
-			<div class="row">
-				<div class="col-4">
-					<p class="" t:type="loop" t:source="project.repositories"
-						t:value="repository">
-						<b>${message:repository-label}</b><br />${repository.url}
-					</p>
-					<p>
-						<a t:type="actionlink" t:context="project" t:id="NewRepository"
-							class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
-							t:path="plus-square" /> ${message:repository-label}
-						</a>
-					</p>
+		<div class="col-6">
 
-					<p class="" t:type="loop" t:source="project.databases"
-						t:value="database">
-						<b>${message:database-label}</b><br />${database.name}
-					</p>
-					<p>
-						<a t:type="actionlink" t:context="project" t:id="NewDatabase"
-							class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
-							t:path="plus-square" /> ${message:database-label}
-						</a>
-					</p>
+			<div t:type="if" t:test="copyActivitiesFromProject"
+				class="p-3 mb-2 bg-info text-white float-right">
+				${message:copy-label} ${message:activities-label}:
+				${copyActivitiesFromProject.title} <a class="btn btn-info"
+					t:type="actionLink" t:id="resetClipboard"><img t:type="SVGIcon"
+					t:path="delete" /> ${message:reset-label}</a>
+			</div>
 
+			<div class="card mb-3" t:type="if" t:test="newProject">
+				<div class="card-header">
+					<h3>${message:Project-label}</h3>
 				</div>
-				<div class="col-8">
-					<div class="card mb-3 p-3" t:type="loop"
-						t:source="project.responsibilities" t:value="responsibility">
-						<t:TeamMembersGrid t:team="responsibility.team" />
-						<p>
-							<a t:type="actionlink" t:context="responsibility.team"
-								t:id="addTeamMember" role="button"
-								class="btn btn-sm btn-secondary "><img t:type="SVGIcon"
-								t:path="user-plus" /> ${message:add-label}
-								${message:TeamMember-label}</a> <a t:type="actionlink"
-								t:context="responsibility.team" t:id="editTeam" role="button"
-								class="btn btn-sm btn-primary "><img t:type="SVGIcon"
-								t:path="edit" /> ${message:edit-label}
-								${message:team-label}</a>
-							<t:unless t:test="responsibility.team.teamMembers">
-								<a t:type="actionlink" t:context="responsibility"
-									t:id="deleteResponsibility" role="button"
-									class="btn btn-danger btn-sm "><img t:type="SVGIcon"
-									t:path="user-minus" /> ${message:remove-label}
-									${message:team-label}</a>
-							</t:unless>
-						</p>
-					</div>
-					<a t:type="actionlink" t:context="project" t:id="NewTeam"
-						class="btn btn-secondary"><img t:type="SVGIcon"
-						t:path="plus-square" /> ${message:Team-label}</a>
-					<div class="card mt-3  p-3" t:type="if" t:test="project.activities">
-						<h3 class="mt-3">${message:Activities-label}</h3>
-						<table class="table table-sm" t:type="grid"
-							t:source="project.activities"></table>
-					</div>
-				</div>
+				<div class="card-body">
+					<form t:id="NewProjectForm" t:type="beaneditform"
+						t:object="newProject" t:exclude="projectId" t:add="courses"
+						t:submitLabel="OK" class="form-horizontal">
+						<p:description>
+							<div class="form-group">
+								<label t:type="label" t:for="description"></label>
+								<textarea t:id="description" t:type="textarea"
+									t:value="newProject.description" t:mixins="webeditor"
+									t:WebEditor.areaType="" />
+							</div>
+						</p:description>
+						<p:status>
+							<div class="form-group">
+								<label t:type="label" t:for="status"></label> <select
+									t:id="status" t:type="select" t:model="modelProjectStatuses"
+									t:value="newProject.status" />
+							</div>
+						</p:status>
+						<p:courses>
+							<div class="form-group col-12">
+								<label t:type="label" t:for="inCourses"></label>
+								<div t:type="palette" t:id="inCourses" t:encoder="courseEncoder"
+									t:model="coursesModel" t:selected="inCourses" t:size="4"></div>
+							</div>
+						</p:courses>
 
+					</form>
+				</div>
+			</div>
+
+			<div class="card mb-3" t:type="if" t:test="newTeam">
+				<div class="card-body">
+					<h3>${message:Team-label}</h3>
+					<form t:id="NewTeamForm" t:type="beaneditform" t:object="newTeam"
+						t:exclude="teamId"></form>
+				</div>
+			</div>
+
+			<div class="card mb-3" t:type="if" t:test="newTm">
+				<div class="card-body">
+					<h3>${message:TeamMember-label}</h3>
+					<form class="form-horizontal" t:id="teamMemberForm"
+						t:type="beaneditform" t:object="newTm" t:exclude="teamMemberId"
+						t:add="person" t:reorder="person, positionNumber, role"
+						t:submitLabel="OK">
+						<p:person>
+							<label t:type="label" t:for="selectPerson"></label>
+							<select t:id="selectPerson" t:type="select" t:source="persons"
+								t:value="newTm.person" t:model="personModel"></select>
+						</p:person>
+					</form>
+				</div>
+			</div>
+
+			<div class="card mb-3" t:type="if" t:test="newDb">
+				<div class="card-body">
+					<h3>${message:Database-label}</h3>
+					<form class="form-horizontal" t:id="newDatabaseForm"
+						t:type="beaneditform" t:object="newDb"
+						t:exclude="databaseId,dateCreated" t:submitLabel="OK"></form>
+				</div>
+			</div>
+
+			<div class="card mb-3" t:type="if" t:test="newRp">
+				<div class="card-body">
+					<h3>${message:Repository-label}</h3>
+					<form class="form-horizontal" t:id="newRepositoryForm"
+						t:type="beaneditform" t:object="newRp"
+						t:exclude="repositoryId,dateCreated" t:submitLabel="OK"></form>
+				</div>
+			</div>
+
+			<div>
+				<a t:type="actionlink" t:id="NewProject" class="btn btn-primary"><img
+					t:type="SVGIcon" t:path="plus-square" /> ${message:new-label}
+					${message:Project-label}</a>
 			</div>
 		</div>
 	</div>
+
+	<div t:type="zone" t:id="projectZone">
+
+		<div class="card mt-3" t:type="loop" t:source="projects"
+			t:value="project">
+
+			<div class="card-header">
+				<p class="float-right">
+					<a t:type="actionLink" t:context="project" t:id="editProject"
+						class="btn btn-sm btn-primary"> <img t:type="SVGIcon"
+						t:path="edit" /> ${message:Edit-label} ${message:Project-label}
+					</a> <a t:type="pagelink" t:page="admin/ManageActivities"
+						t:context="project" t:id="projectActivities"
+						class="btn btn-sm btn-info"> <img t:type="SVGIcon"
+						t:path="list" /> ${message:Edit-label}
+						${message:Activities-label}
+					</a> <a t:type="actionlink" t:page="admin/ManageActivities"
+						t:context="project" t:id="copyActivities"
+						class="btn btn-sm btn-info"> <img t:type="SVGIcon"
+						t:path="copy" /> ${message:Copy-label}
+						${message:Activities-label}
+					</a> <span t:type="if" t:test="copyActivitiesFromProject"> <a
+						t:type="actionlink" t:page="admin/ManageActivities"
+						t:context="project" t:id="pasteActivities"
+						class="btn btn-sm btn-info"> <img t:type="SVGIcon"
+							t:path="clipboard" /> ${message:Paste-label}
+							${message:Activities-label}
+					</a>
+					</span>
+				</p>
+
+				<h3>${project.title}
+					<small class="text-muted">Status: ${project.status} <a
+						t:type="actionlink" t:context="project" t:id="changeStatus"
+						class="btn btn-sm btn-efault"> <img t:type="SVGIcon"
+							t:path="repeat" /></a></small>
+				</h3>
+				<p t:type="if" t:test="projectCourses">
+					<span t:type="loop" t:source="projectCourses" t:value="course">${courseTitle}</span>
+				</p>
+			</div>
+
+			<div class="card-body">
+				<div class="row">
+					<div class="col-4">
+						<p class="" t:type="loop" t:source="project.repositories"
+							t:value="repository">
+							<b>${message:repository-label}</b><br />${repository.url}
+						</p>
+						<p>
+							<a t:type="actionlink" t:context="project" t:id="NewRepository"
+								class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
+								t:path="plus-square" /> ${message:repository-label}
+							</a>
+						</p>
+						<p class="" t:type="loop" t:source="project.databases"
+							t:value="database">
+							<b>${message:database-label}</b><br />${database.name}
+						</p>
+						<p>
+							<a t:type="actionlink" t:context="project" t:id="NewDatabase"
+								class="btn btn-sm btn-secondary"> <img t:type="SVGIcon"
+								t:path="plus-square" /> ${message:database-label}
+							</a>
+						</p>
+					</div>
+
+					<div class="col-8">
+						<div class="card mb-3 p-3" t:type="loop"
+							t:source="project.responsibilities" t:value="responsibility">
+							<t:TeamMembersGrid t:team="responsibility.team" />
+							<p>
+								<a t:type="actionlink" t:context="responsibility.team"
+									t:id="addTeamMember" role="button"
+									class="btn btn-sm btn-secondary "><img t:type="SVGIcon"
+									t:path="user-plus" /> ${message:add-label}
+									${message:TeamMember-label}</a> <a t:type="actionlink"
+									t:context="responsibility.team" t:id="editTeam" role="button"
+									class="btn btn-sm btn-primary "><img t:type="SVGIcon"
+									t:path="edit" /> ${message:edit-label} ${message:team-label}</a>
+								<t:unless t:test="responsibility.team.teamMembers">
+									<a t:type="actionlink" t:context="responsibility"
+										t:id="deleteResponsibility" role="button"
+										class="btn btn-danger btn-sm "><img t:type="SVGIcon"
+										t:path="user-minus" /> ${message:remove-label}
+										${message:team-label}</a>
+								</t:unless>
+							</p>
+						</div>
+						<p>
+							<a t:type="actionlink" t:context="project" t:id="NewTeam"
+								class="btn btn-secondary"><img t:type="SVGIcon"
+								t:path="plus-square" /> ${message:Team-label}</a>
+						</p>
+						<div class="card mt-3 p-3" t:type="if" t:test="project.activities">
+							<h3 class="mt-3">${message:Activities-label}</h3>
+							<table class="table table-sm" t:type="grid"
+								t:source="project.activities"
+								t:exclude="description,dueDate,startDate"></table>
+						</div>
+					</div>
+
+				</div>
+			</div>
+
+		</div>
+
+	</div>
+
 </div>
 
 </html>

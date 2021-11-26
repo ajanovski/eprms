@@ -47,10 +47,6 @@ public class SVGIcon {
 	@Inject
 	private AssetSource assetSource;
 
-	public String getImageURL() {
-		return assetSource.getClasspathAsset("org/freedesktop/tango/" + path).toClientURL();
-	}
-
 	public void setupRender() {
 		if (title == null) {
 			title = "";

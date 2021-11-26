@@ -5,7 +5,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>model</artifactId>
-	<version>0.0.4-SNAPSHOT</version>
+	<version>0.0.5-SNAPSHOT</version>
 
 	<name>EPRMS - Educational Project and Resource Management System - Model</name>
 
@@ -38,6 +38,11 @@
 			<groupId>javax.persistence</groupId>
 			<artifactId>javax.persistence-api</artifactId>
 			<version>2.2</version>
+		</dependency>
+		<dependency>
+			<groupId>org.hibernate</groupId>
+			<artifactId>hibernate-validator</artifactId>
+			<version>5.4.3.Final</version>
 		</dependency>
 	</dependencies>
 </project>

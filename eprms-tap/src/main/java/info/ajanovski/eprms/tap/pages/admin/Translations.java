@@ -18,24 +18,31 @@
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.util;
+package info.ajanovski.eprms.tap.pages.admin;
 
-public class AppConstants {
+import java.util.List;
 
-	/**
-	 * Pages
-	 */
-	public final static String PageIndex = "Index";
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
-	public static final String SystemParameterDBServerType = "DBServerType";
-	public static final String SystemParameterDBServerName = "DBServerName";
-	public static final String SystemParameterDBServerPort = "DBServerPort";
-	public final static String SystemParameterDBCreationPrefix = "DBCreationPrefix";
-	public final static String SystemParameterDBCreationOwnerSuffix = "DBCreationOwnerSuffix";
-	public static final String SystemParameterDBTunnelServerName = "DBTunnelServer";
-	public final static String SystemParameterDBTunnelPrefix = "DBTunnelPrefix";
-	public final static String[] AllSystemParameters = { SystemParameterDBServerType, SystemParameterDBServerName,
-			SystemParameterDBServerPort, SystemParameterDBCreationPrefix, SystemParameterDBCreationOwnerSuffix,
-			SystemParameterDBTunnelPrefix };
+import info.ajanovski.eprms.model.entities.Translation;
+import info.ajanovski.eprms.tap.annotations.AdministratorPage;
+import info.ajanovski.eprms.tap.annotations.InstructorPage;
+import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.util.UserInfo;
 
+@InstructorPage
+@AdministratorPage
+public class Translations {
+	@SessionState
+	@Property
+	private UserInfo userInfo;
+
+	@Inject
+	private GenericService genericService;
+
+	public List<Translation> getTranslations() {
+		return (List<Translation>) genericService.getAll(Translation.class);
+	}
 }

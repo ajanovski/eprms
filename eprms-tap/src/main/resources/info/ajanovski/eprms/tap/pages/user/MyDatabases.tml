@@ -1,4 +1,4 @@
-<html t:type="layout" title="Index | epm"
+<html t:type="layout" title="${message:user/MyDatabases-pagelink}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd">
 
 <h1>${message:user/MyDatabases-pagelink}</h1>
@@ -10,42 +10,61 @@
 			<h2>Project: ${database.project.title}</h2>
 			<h3>Database: ${database.name}</h3>
 		</div>
-                <p>The professor recommends using the DBEAVER software (opensource and free), that he can support via a ready-m
-ade package (tested at the premises of the Faculty, available for Windows and Linux). You need to download the 7Z package, unpa
-ck it to a folder of your choice and start the script for starting DBEAVER, otherwise it will not work correctly. The package i
-ncludes an example connection configuration. The packages are available here: <a href="https://bazi.finki.ukim.mk/materijali/So
-ftware/">https://bazi.finki.ukim.mk/materijali/Software/</a></p>                                                               
-                <p>Note that the server will block your IP address immediately if you attempt a connection before setting up th
-e correct connection parameters. So, before attempting a connection make sure that you have setup SSH tunnel parameters (in the
- respective configuration section) and database connection parameters (in the respective configuration section) in DBEAVER acco
-rding to the information below. Detailed instructions are included as a PDF file in the package.</p>                           
+		<p>
+			The professor recommends using the DBEAVER software (opensource and
+			free), that he can support via a ready-made package (tested at the
+			premises of the Faculty, available for Windows and Linux). You need
+			to download the 7Z package, unpack it to a folder of choice and start
+			the script START_DBEAVER, otherwise it will not work correctly. The
+			packages are available here: <a
+				href="https://bazi.finki.ukim.mk/materijali/Software/">https://bazi.finki.ukim.mk/materijali/Software/</a>
+		</p>
+		<p>The package includes a sample connection configuration, that
+			will be visible if correctly starting via the START_DBEAVER script,
+			and you will have to edit the connection line before attempting a
+			connection.</p>
+		<p>
+			<span class="bg-danger text-light">Note: do not double click
+				the connection line before you have configured it, as the server
+				will block your IP address immediately! </span>
+		</p>
+		<p>So, before attempting a connection make sure that you have
+			correctly configured the SSH tunnel parameters, by right-clicking the
+			connection configuration line and choosing the Edit option and use
+			the parameters shown below. You need to carefully configure two sets
+			of parameters in the DBEAVER connection configuration: SSH tunnel
+			parameters and database connection parameters. The two sets are in
+			two separate tabs of the connection configuration window, and you
+			need two separate passwords (for the tunnel and for the database).</p>
+		<p>Detailed instructions are included as a PDF file in the
+			software package.</p>
 		<table class="table table-sm">
 			<tr class="table-primary">
-				<td>SSH tunnel server:</td>
+				<td>SSH - Settings - Host/IP (Tunneling server)</td>
 				<td>${database.tunnelServer}</td>
 			</tr>
 			<tr class="table-primary">
-				<td>SSH tunnel user:</td>
+				<td>SSH - Settings - User Name:</td>
 				<td>${database.tunnelUser}</td>
 			</tr>
 			<tr class="table-primary">
-				<td>SSH tunnel password:</td>
+				<td>SSH - Settings - Password:</td>
 				<td>${database.tunnelPassword}</td>
 			</tr>
 			<tr class="table-secondary">
-				<td>Database Server:</td>
+				<td>Main - Server - Host (Database server)</td>
 				<td>${database.server}</td>
 			</tr>
 			<tr class="table-secondary">
-				<td>Database Name:</td>
+				<td>Main - Server - Database (Database Name):</td>
 				<td>${database.name}</td>
 			</tr>
 			<tr class="table-secondary">
-				<td>Database User:</td>
+				<td>Main - Authentication - Username (Database User):</td>
 				<td>${database.owner}</td>
 			</tr>
 			<tr class="table-secondary">
-				<td>Database Password:</td>
+				<td>Main - Authentication - Password (Database User Password):</td>
 				<td>${database.password}</td>
 			</tr>
 		</table>

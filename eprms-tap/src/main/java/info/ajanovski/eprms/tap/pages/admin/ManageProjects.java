@@ -20,6 +20,8 @@
 
 package info.ajanovski.eprms.tap.pages.admin;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -34,6 +36,7 @@ import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.PersistentLocale;
 import org.apache.tapestry5.services.SelectModelFactory;
+import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
@@ -44,13 +47,16 @@ import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.model.entities.Responsibility;
 import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ProjectManager;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
 import info.ajanovski.eprms.tap.services.TranslationService;
 import info.ajanovski.eprms.tap.util.AppConfig;
+import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @InstructorPage
@@ -61,7 +67,13 @@ public class ManageProjects {
 	private UserInfo userInfo;
 
 	@Inject
+	private Logger logger;
+
+	@Inject
 	private ProjectManager projectManager;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@Inject
 	private MessagingService messagingService;
@@ -106,6 +118,10 @@ public class ManageProjects {
 
 	@Persist
 	@Property
+	private Course newCourse;
+
+	@Persist
+	@Property
 	private Project newProject;
 
 	@Persist
@@ -132,11 +148,23 @@ public class ManageProjects {
 	@Property
 	private Project copyActivitiesFromProject;
 
+	@Persist
+	@Property
+	private Course selectedCourse;
+
 	void onActivate() {
 	}
 
 	public List<Project> getAllProjects() {
-		return (List<Project>) projectManager.getAllProjectsOrderByTitle();
+		List<Project> list = (List<Project>) projectManager.getAllProjectsOrderByTitle();
+		if (selectedCourse == null) {
+			return list;
+		} else {
+			return list.stream()
+					.filter(p -> (p.getCourseProjects().stream()
+							.anyMatch(cp -> cp.getCourse().getCourseId() == selectedCourse.getCourseId())))
+					.collect(Collectors.toList());
+		}
 	}
 
 	public List<Project> getProjects() {
@@ -159,6 +187,10 @@ public class ManageProjects {
 		inCourses = new ArrayList<Course>();
 	}
 
+	public void onActionFromNewCourse() {
+		newCourse = new Course();
+	}
+
 	public void onActionFromEditProject(Project p) {
 		newProject = p;
 		inCourses = projectManager.getProjectCourses(newProject).stream().map(cp -> cp.getCourse())
@@ -175,6 +207,26 @@ public class ManageProjects {
 	public void onActionFromNewDatabase(Project p) {
 		newDb = new Database();
 		newDb.setProject(p);
+		String dbPrefix = systemConfigService.getString(AppConstants.SystemParameterDBCreationPrefix);
+		String tunnelPrefix = systemConfigService.getString(AppConstants.SystemParameterDBTunnelPrefix);
+		String ownerSuffix = systemConfigService.getString(AppConstants.SystemParameterDBCreationOwnerSuffix);
+		String prjcode = p.getCode().toLowerCase();
+		newDb.setType(systemConfigService.getString(AppConstants.SystemParameterDBServerType));
+		newDb.setServer(systemConfigService.getString(AppConstants.SystemParameterDBServerName));
+		newDb.setPort(systemConfigService.getString(AppConstants.SystemParameterDBServerPort));
+		newDb.setName(dbPrefix + prjcode);
+		newDb.setOwner(dbPrefix + prjcode + ownerSuffix);
+		newDb.setPassword(generateRandomHexToken(6));
+		newDb.setTunnelServer(systemConfigService.getString(AppConstants.SystemParameterDBTunnelServerName));
+		newDb.setTunnelUser(tunnelPrefix + prjcode);
+		newDb.setTunnelPassword(generateRandomHexToken(4));
+	}
+
+	public static String generateRandomHexToken(int byteLength) {
+		SecureRandom secureRandom = new SecureRandom();
+		byte[] token = new byte[byteLength];
+		secureRandom.nextBytes(token);
+		return new BigInteger(1, token).toString(16);
 	}
 
 	public void onActionFromNewRepository(Project p) {
@@ -215,6 +267,14 @@ public class ManageProjects {
 	}
 
 	@CommitAfter
+	public void onSuccessFromNewCourseForm() {
+		genericService.saveOrUpdate(newCourse);
+		selectedCourse = newCourse;
+		selectedProject = null;
+		newCourse = null;
+	}
+
+	@CommitAfter
 	public void onSuccessFromNewProjectForm() {
 		genericService.saveOrUpdate(newProject);
 		projectManager.addCoursesToProject(inCourses, newProject);
@@ -233,16 +293,24 @@ public class ManageProjects {
 	@CommitAfter
 	public void onSuccessFromNewDatabaseForm() {
 		genericService.save(newDb);
-		messagingService.setupMQHost(AppConfig.getString("MQHost"));
-		messagingService.sendDatabaseNotification(newDb);
+		try {
+			messagingService.setupMQHost(AppConfig.getString("MQHost"));
+			messagingService.sendDatabaseNotification(newDb);
+		} catch (Exception e) {
+			logger.error("DB creation message not sent");
+		}
 		newDb = null;
 	}
 
 	@CommitAfter
 	public void onSuccessFromNewRepositoryForm() {
 		genericService.save(newRp);
-		messagingService.setupMQHost(AppConfig.getString("MQHost"));
-		messagingService.sendRepositoryNotification(newRp);
+		try {
+			messagingService.setupMQHost(AppConfig.getString("MQHost"));
+			messagingService.sendRepositoryNotification(newRp);
+		} catch (Exception e) {
+			logger.error("REPO creation message not sent");
+		}
 		newRp = null;
 	}
 
@@ -311,5 +379,14 @@ public class ManageProjects {
 
 	void onActionFromEditTeam(Team t) {
 		newTeam = t;
+	}
+
+	@CommitAfter
+	void onActionFromChangeStatus(Project p) {
+		projectManager.cycleStatus(p);
+	}
+
+	public String[] getModelProjectStatuses() {
+		return ModelConstants.AllProjectStatuses;
 	}
 }

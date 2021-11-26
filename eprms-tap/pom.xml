@@ -13,7 +13,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>eprms-tap</artifactId>
-	<version>0.0.4-T5.7.3</version>
+	<version>0.0.6-SNAPSHOT</version>
 	<name>EPRMS - Educational Project and Resource Management System</name>
 
 	<packaging>war</packaging>
@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>model</artifactId>
-			<version>0.0.4-SNAPSHOT</version>
+			<version>0.0.5-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -124,6 +124,12 @@
 			<version>${tapestry-version}</version>
 			<scope>compile</scope>
 		</dependency>
+		<dependency>
+			<groupId>org.apache.tapestry</groupId>
+			<artifactId>tapestry-beanvalidator</artifactId>
+			<version>${tapestry-version}</version>
+		</dependency>
+
 		<!-- CoffeeScript & Less support, plus resource minification -->
 		<dependency>
 			<groupId>org.apache.tapestry</groupId>

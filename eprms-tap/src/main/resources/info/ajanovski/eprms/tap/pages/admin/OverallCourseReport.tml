@@ -52,7 +52,7 @@
 			<h3>${message:Project-label}</h3>
 		</div>
 		<div class="col-2 p-1 bg-light" t:type="loop"
-			t:source="selectedCourse.courseActivityTypes"
+			t:source="selectedCourseCourseActivityTypes"
 			t:value="courseActivityType">
 			<small>${courseActivityType.activityType.title}</small>
 		</div>
@@ -61,11 +61,12 @@
 		t:value="project">
 		<div class="col-2 p-1 bg-dark text-light">
 			<p>${project.title}</p>
-			<p>${projectTotal}</p>
+			<p>Total: ${projectTotal}</p>
 		</div>
 		<div class="col-2 p-1 bg-light" t:type="loop"
-			t:source="selectedCourse.courseActivityTypes"
+			t:source="selectedCourseCourseActivityTypes"
 			t:value="courseActivityType">
+
 			<div class="card p-1 font-small" t:type="loop"
 				t:source="activity?.workReports" t:value="workReport">
 				<small>${workReport.title}<br />${workReport.description}</small>
@@ -86,6 +87,7 @@
 					t:context="workReport"><img t:type="svgicon"
 					t:path="check-square" /></a>
 			</div>
+
 			<p>
 				<a href="" t:type="actionlink" t:id="addWorkReport"
 					t:context="activity"><img t:type="svgicon" t:path="file-plus" /></a>

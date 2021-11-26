@@ -23,6 +23,7 @@ package info.ajanovski.eprms.model.entities;
 
 import java.util.*;
 import javax.persistence.*;
+import javax.validation.constraints.*;
 
 /*
 */
@@ -46,6 +47,7 @@ public class Project implements java.io.Serializable {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
+	@NotNull
 	@Column(name = "project_id", unique = true, nullable = false)
 	public long getProjectId() {
 		return this.projectId;
@@ -55,6 +57,7 @@ public class Project implements java.io.Serializable {
 		this.projectId=projectId;
 	}
 
+	@NotNull
 	@Column(name = "title", unique = true, nullable = false, length = 4000)
 	public String getTitle() {
 		return this.title;
@@ -91,7 +94,8 @@ public class Project implements java.io.Serializable {
 		this.finishDate=finishDate;
 	}
 
-	@Column(name = "code")
+	@NotNull
+	@Column(name = "code", nullable = false)
 	public String getCode() {
 		return this.code;
 	}

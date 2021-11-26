@@ -1,4 +1,4 @@
-<html t:type="layout" title="Index | epm"
+<html t:type="layout" title="${message:Report-label}"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 
