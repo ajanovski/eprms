@@ -88,8 +88,8 @@ public class ProjectDaoImpl implements ProjectDao {
 		if (selectedCourse != null) {
 			return getEntityManager().createQuery("""
 					select p
-					from Project p
-					join p.courseProjects cp
+					from CourseProject cp
+					join cp.project p
 					join cp.course c
 					where c.courseId=:courseId
 					order by p.title

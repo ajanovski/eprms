@@ -1,5 +1,6 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -65,15 +66,17 @@ public class OverallCourseReport {
 	private Zone zNewWorkReportModal, zNewWorkEvaluationModal;
 
 	public List<Project> getAllProjects() {
+		List<Project> list = new ArrayList<Project>();
 		if (selectedCourse == null) {
-			return ((List<Project>) projectManager.getAllProjectsOrderByTitle()).stream()
-					.filter(c -> c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive))
+			list = ((List<Project>) projectManager.getAllProjectsOrderByTitle()).stream()
+					.filter(c -> (c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
 		} else {
-			return ((List<Project>) projectManager.getCourseProjectsOrderByTitle(selectedCourse)).stream()
-					.filter(c -> c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive))
+			list = ((List<Project>) projectManager.getCourseProjectsOrderByTitle(selectedCourse)).stream()
+					.filter(c -> (c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
 		}
+		return list;
 	}
 
 	@Property

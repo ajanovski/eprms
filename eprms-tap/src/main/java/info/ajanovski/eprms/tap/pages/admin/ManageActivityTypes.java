@@ -22,18 +22,21 @@ import info.ajanovski.eprms.tap.services.GenericService;
 @InstructorPage
 public class ManageActivityTypes {
 
-	@Persist
-	@Property
-	private ActivityType newActivityType;
+	@InjectComponent
+	private Zone zoneActivityTypes;
+
+	@Inject
+	private GenericService genericService;
+
+	@Inject
+	private SelectModelFactory selectModelFactory;
 
 	@Property
 	private ActivityType activityType;
 
+	@Persist
 	@Property
-	private ActivityType activityType2;
-
-	@Inject
-	private GenericService genericService;
+	private ActivityType newActivityType;
 
 	public void onActionFromNewActivityType() {
 		newActivityType = new ActivityType();
@@ -42,18 +45,6 @@ public class ManageActivityTypes {
 	public void onActionFromEditActivityType(ActivityType at) {
 		newActivityType = at;
 	}
-
-	@InjectComponent
-	private Zone zoneActivityTypes;
-
-	@CommitAfter
-	public void onSuccessFromNewActivityTypeForm() {
-		genericService.saveOrUpdate(newActivityType);
-		newActivityType = null;
-	}
-
-	@Inject
-	private SelectModelFactory selectModelFactory;
 
 	public SelectModel getListTypes() {
 		return selectModelFactory.create(genericService.getAll(ActivityType.class), "title");
@@ -66,10 +57,6 @@ public class ManageActivityTypes {
 		return lista;
 	}
 
-	@Persist
-	@Property
-	private ActivityType selectedActivityType;
-
 	public Long getDepth(ActivityType at) {
 		if (at.getSuperActivityType() != null) {
 			return getDepth(at.getSuperActivityType()) + 1;
@@ -79,7 +66,20 @@ public class ManageActivityTypes {
 	}
 
 	public long getHierarchicalDepth() {
-		return (3*getDepth(activityType));
+		return (3 * getDepth(activityType));
+	}
+
+	public void onActivate() {
+		if (newActivityType != null) {
+			newActivityType = genericService.getByPK(ActivityType.class, newActivityType.getActivityTypeId());
+
+		}
+	}
+
+	@CommitAfter
+	public void onSuccessFromNewActivityTypeForm() {
+		genericService.saveOrUpdate(newActivityType);
+		newActivityType = null;
 	}
 
 }

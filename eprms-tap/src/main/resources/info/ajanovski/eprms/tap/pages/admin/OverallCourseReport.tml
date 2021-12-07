@@ -46,6 +46,7 @@
 	</div>
 </div>
 
+
 <div t:type="if" t:test="selectedCourse">
 	<div class="d-flex flex-row mb-1">
 		<div class="col-2 p-1 bg-dark text-light">
