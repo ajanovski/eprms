@@ -4,18 +4,52 @@
 
 <h1>${message:admin/ManageCourses-pagelink}</h1>
 
-<div t:type="if" t:test="editCourse" class="card">
-	<div class="card-body">
-		<form t:type="beaneditform" t:id="frmEditCourse" t:object="editCourse"
-			t:exclude="courseId"></form>
-	</div>
+<div t:type="if" t:test="addActivityTypeForCourse" class="card">
+	<t:modalbox>
+		<div class="card-body">
+			<form t:type="form" t:id="frmAddActivityType" class="form">
+				<div class="form-group">
+					<label t:type="label" t:for="selectParentActivityType" /> <select
+						t:type="select" t:model="activityTypeModel"
+						t:id="selectParentActivityType" t:value="selectParentActivityType" />
+				</div>
+				<t:submit t:id="submitSelectParentActivityType" t:value="OK" />
+				<t:submit t:id="cancelSelectParentActivityType" t:value="Cancel" />
+			</form>
+		</div>
+	</t:modalbox>
 </div>
 
-<table class="table table-sm" t:type="grid" t:source="allCourses"
-	t:row="course" t:exclude="courseId" t:add="edit">
+<div t:type="if" t:test="editCourse" class="card">
+	<t:modalbox>
+		<div class="card-body">
+			<form t:type="beaneditform" t:id="frmEditCourse"
+				t:object="editCourse" t:exclude="courseId" t:submitLabel="OK"></form>
+		</div>
+	</t:modalbox>
+</div>
+
+<table class="table table-sm table-bordered" t:type="grid"
+	t:source="allCourses" t:row="course" t:exclude="courseId"
+	t:add="activities,edit">
+	<p:activitiesCell>
+		<p class="m-0" style="margin-left:${hierarchicalDepth}em !important;"
+			t:type="loop" t:source="CourseCourseActivityTypes"
+			t:value="courseActivityType">
+			${courseActivityType?.activityType?.title} <a href=""
+				t:type="actionlink" t:id="deleteCourseActivityType"
+				t:context="courseActivityType" t:mixins="confirm"
+				class="btn btn-sm btn-danger p-0"><svg t:type="svgicon"
+					t:path="minus" /></a>
+		</p>
+		<a href="" t:type="actionlink" t:id="addCourseActivityType"
+			t:context="course" class="btn btn-sm btn-primary p-0"><svg
+				t:type="svgicon" t:path="plus" />${message:add-label}
+			${message:activityType-label}</a>
+	</p:activitiesCell>
 	<p:editCell>
 		<a href="" t:type="actionlink" t:id="editCourse" t:context="course"
-			class="btn btn-sm btn-primary"><svg t:type="svgicon"
+			class="btn btn-sm btn-secondary"><svg t:type="svgicon"
 				t:path="edit" />${message:edit-label}</a>
 		<t:if t:test="allowDeleteCourse">
 			<a href="" t:type="actionlink" t:id="deleteCourse" t:context="course"
