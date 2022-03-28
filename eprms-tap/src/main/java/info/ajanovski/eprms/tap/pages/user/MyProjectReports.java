@@ -77,11 +77,15 @@ public class MyProjectReports {
 	@Property
 	private WorkReport newWorkReport;
 
-	public void onActionFromAddReport(Activity a) {
+	public void onAddReport(Activity a) {
 		newWorkReport = new WorkReport();
 		newWorkReport.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
 		newWorkReport.setActivity(a);
 		newWorkReport.setSubmissionDate(new Date());
+	}
+
+	public void onEditWorkReport(WorkReport wr) {
+		newWorkReport = wr;
 	}
 
 	@CommitAfter
@@ -108,12 +112,8 @@ public class MyProjectReports {
 		}
 	}
 
-	public void onActionFromEditWorkReport(WorkReport wr) {
-		newWorkReport = wr;
-	}
-
 	@CommitAfter
-	public void onActionFromDeleteWorkReport(WorkReport wr) {
+	public void onDeleteWorkReport(WorkReport wr) {
 		genericService.delete(wr);
 		newWorkReport = null;
 	}
@@ -127,6 +127,14 @@ public class MyProjectReports {
 
 	public boolean isEvaluationPublished() {
 		return workEvaluation.getStatus().equals(ModelConstants.EvaluationStatusPublished);
+	}
+
+	public List<WorkReport> getWorkReportsForActivity() {
+		return projectManager.getWorkReportsForActivity(activity);
+	}
+
+	public List<WorkEvaluation> getWorkEvaluationsForWorkReport() {
+		return projectManager.getWorkEvaluationForWorkReport(workReport);
 	}
 
 }

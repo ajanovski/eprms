@@ -43,7 +43,7 @@ public class ProjectDaoImpl implements ProjectDao {
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<Project> getAllProjectsOrderByTitle() {
-		return getEntityManager().createQuery("from Project order by title").getResultList();
+		return getEntityManager().createQuery("from Project order by lower(title)").getResultList();
 	}
 
 	@Override
@@ -84,7 +84,7 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse) {
+	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse) {
 		if (selectedCourse != null) {
 			return getEntityManager().createQuery("""
 					select p
@@ -92,7 +92,7 @@ public class ProjectDaoImpl implements ProjectDao {
 					join cp.project p
 					join cp.course c
 					where c.courseId=:courseId
-					order by p.title
+					order by lower(p.title)
 					""").setParameter("courseId", selectedCourse.getCourseId()).getResultList();
 		} else {
 			return null;

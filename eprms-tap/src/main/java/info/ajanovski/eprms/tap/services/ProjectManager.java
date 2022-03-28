@@ -22,9 +22,12 @@ package info.ajanovski.eprms.tap.services;
 
 import java.util.List;
 
+import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.WorkEvaluation;
+import info.ajanovski.eprms.model.entities.WorkReport;
 
 public interface ProjectManager {
 
@@ -36,10 +39,14 @@ public interface ProjectManager {
 
 	public Float sumPoints(Project p);
 
-	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse);
+	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse);
 
 	public List<Project> getProjectByPerson(Long personId);
 	
 	public void cycleStatus(Project p);
+
+	public List<WorkEvaluation> getWorkEvaluationForWorkReport(WorkReport workReport);
+
+	public List<WorkReport> getWorkReportsForActivity(Activity activity);
 
 }

@@ -10,12 +10,15 @@ import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+import org.apache.tapestry5.http.services.Request;
 import org.apache.tapestry5.services.SelectModelFactory;
+import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import info.ajanovski.eprms.model.entities.ActivityType;
 import info.ajanovski.eprms.model.util.ActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
+import info.ajanovski.eprms.tap.model.ActivityTypeSelectModel;
 import info.ajanovski.eprms.tap.services.GenericService;
 
 @AdministratorPage
@@ -31,23 +34,44 @@ public class ManageActivityTypes {
 	@Inject
 	private SelectModelFactory selectModelFactory;
 
+	@Inject
+	private AjaxResponseRenderer ajaxResponseRenderer;
+	@Inject
+	private Request request;
+
 	@Property
 	private ActivityType activityType;
+
+	@Property
+	private ActivityType superActivityType;
+
+	@InjectComponent
+	private Zone editFormZone;
 
 	@Persist
 	@Property
 	private ActivityType newActivityType;
 
-	public void onActionFromNewActivityType() {
+	public void onNewActivityType() {
 		newActivityType = new ActivityType();
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(editFormZone);
+		}
 	}
 
-	public void onActionFromEditActivityType(ActivityType at) {
+	public void onEditActivityType(ActivityType at) {
 		newActivityType = at;
+		superActivityType = newActivityType.getSuperActivityType();
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(editFormZone);
+		}
 	}
 
 	public SelectModel getListTypes() {
-		return selectModelFactory.create(genericService.getAll(ActivityType.class), "title");
+		List<ActivityType> list = (List<ActivityType>) genericService.getAll(ActivityType.class);
+		ActivityTypeHierarchicalComparator athc = new ActivityTypeHierarchicalComparator();
+		list.sort(athc);
+		return new ActivityTypeSelectModel(list);
 	}
 
 	public List<ActivityType> getAllActivityTypes() {
@@ -72,7 +96,6 @@ public class ManageActivityTypes {
 	public void onActivate() {
 		if (newActivityType != null) {
 			newActivityType = genericService.getByPK(ActivityType.class, newActivityType.getActivityTypeId());
-
 		}
 	}
 
@@ -80,6 +103,13 @@ public class ManageActivityTypes {
 	public void onSuccessFromNewActivityTypeForm() {
 		genericService.saveOrUpdate(newActivityType);
 		newActivityType = null;
+	}
+
+	void onCancelNewActivityTypeForm() {
+		newActivityType = null;
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(editFormZone);
+		}
 	}
 
 }

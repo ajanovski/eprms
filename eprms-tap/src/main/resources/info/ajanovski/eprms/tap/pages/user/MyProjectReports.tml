@@ -51,19 +51,18 @@
 			t:value="activity">
 			<h3>${activity.title}</h3>
 			<div class="card mb-3 p-3 bg-light" t:type="loop"
-				t:source="activity.workReports" t:value="workReport">
+				t:source="workReportsForActivity" t:value="workReport">
 				<div class="d-flex">
-					<div class="mr-auto p-2">
+					<div class="mr-auto">
 						<h4>${message:report-label}</h4>
 					</div>
 					<div class="p-2">
 						<div t:type="unless" t:test="workReport.workEvaluations">
 							<a href="" class="btn btn-secondary" t:id="EditWorkReport"
-								t:type="actionlink" t:context="workReport"><svg
-									t:type="svgicon" t:path="edit" data-toggle="modal"
-									data-target="#newWorkReportModal" /> ${message:edit-label}</a> <a
+								t:type="eventlink" t:context="workReport"><svg
+									t:type="svgicon" t:path="edit" /> ${message:edit-label}</a> <a
 								href="" class="btn btn-danger" t:id="DeleteWorkReport"
-								t:type="actionlink" t:mixins="Confirm" t:context="workReport"><svg
+								t:type="eventlink" t:mixins="Confirm" t:context="workReport"><svg
 									t:type="svgicon" t:path="trash" /> ${message:remove-label}</a>
 						</div>
 					</div>
@@ -71,9 +70,12 @@
 				<div t:type="beandisplay" t:object="workReport"
 					t:exclude="workReportId" t:add="person">
 					<p:person>${workReport?.person?.lastName}</p:person>
+					<p:description>
+						<t:outputraw t:value="workReport.description" />
+					</p:description>
 				</div>
 				<div class="card mb-3 p-3 bg-info text-white" t:type="loop"
-					t:source="workReport.workEvaluations" t:value="workEvaluation">
+					t:source="workEvaluationsForWorkReport" t:value="workEvaluation">
 					<h5>${message:evaluation-label}</h5>
 					<div t:type="if" t:test="evaluationPublished">
 						<div t:type="beandisplay" t:object="workEvaluation"
@@ -87,7 +89,7 @@
 				</div>
 			</div>
 			<p>
-				<a href="" t:id="AddReport" t:type="actionlink" t:context="activity"
+				<a href="" t:id="AddReport" t:type="eventlink" t:context="activity"
 					class="btn btn-small btn-primary"><svg t:type="svgicon"
 						t:path="plus" /> ${message:add-label} ${message:report-label}</a>
 			</p>

@@ -1,6 +1,7 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -19,6 +20,7 @@ import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseActivityType;
 import info.ajanovski.eprms.model.util.ActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
+import info.ajanovski.eprms.model.util.CourseComparator;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.util.UserInfo;
@@ -59,7 +61,10 @@ public class ManageCourses {
 	private List<ActivityType> inActivityTypes;
 
 	public List<Course> getAllCourses() {
-		return (List<Course>) genericService.getAll(Course.class);
+		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
+		CourseComparator cc = new CourseComparator();
+		Collections.sort(lista, cc);
+		return lista;
 	}
 
 	public List<CourseActivityType> getCourseCourseActivityTypes() {

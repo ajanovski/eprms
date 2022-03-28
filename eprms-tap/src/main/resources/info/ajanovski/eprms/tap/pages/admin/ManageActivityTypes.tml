@@ -6,35 +6,45 @@
 
 <p>
 	<span t:type="unless" t:test="newActivityType"><a
-		class="btn btn-primary" t:type="actionlink" t:id="newActivityType"><img
-			t:type="SVGIcon" t:path="plus-square" /> ${message:New-label}
-			${message:ActivityType-label}</a></span>
+		class="btn btn-primary" t:type="eventlink" t:id="newActivityType"
+		t:zone="editFormZone"><img t:type="SVGIcon" t:path="plus-square" />
+			${message:New-label} ${message:ActivityType-label}</a></span>
 </p>
 
-<div class="card" t:type="if" t:test="newActivityType">
-	<div class="card-body">
-		<form t:type="beaneditform" id="newActivityTypeForm"
-			t:id="newActivityTypeForm" t:object="newActivityType"
-			t:exclude="activityTypeId" t:add="superActivityType"
-			t:submitLabel="OK" t:cancel="true">
-			<p:superActivityType>
-				<div class="form-group">
-					<label t:type="label" t:for="superActivityType"></label> <select
-						t:id="superActivityType" t:type="select" t:model="listTypes"
-						t:value="newActivityType.superActivityType"></select>
-				</div>
-			</p:superActivityType>
-		</form>
+<div t:type="zone" t:id="editFormZone">
+	<div class="card" t:type="if" t:test="newActivityType">
+		<t:modalbox>
+			<div class="card-body">
+				<form t:type="form" id="newActivityTypeForm"
+					t:id="newActivityTypeForm">
+					<t:beaneditor t:object="newActivityType" t:exclude="activityTypeId"
+						t:add="superActivityType">
+						<p:superActivityType>
+							<div class="form-group">
+								<label t:type="label" t:for="superActivityType"></label> <select
+									t:id="superActivityType" t:type="select" t:model="listTypes"
+									t:value="newActivityType.superActivityType"></select>
+							</div>
+						</p:superActivityType>
+					</t:beaneditor>
+					<div class="form-row">
+						<t:submit t:value="OK" />
+						<a href="" class="btn btn-default" t:type="eventlink"
+							t:id="cancelNewActivityTypeForm">Cancel</a>
+					</div>
+				</form>
+			</div>
+		</t:modalbox>
 	</div>
 </div>
 
 <div t:type="zone" id="zoneActivityTypes" t:id="zoneActivityTypes">
-	<p class="m-0" style="margin-left:${hierarchicalDepth}em !important;" t:type="loop"
-		t:source="allActivityTypes" t:value="activityType">
-		${activityType.title} <a href="" t:type="ActionLink"
+	<p class="m-0" style="margin-left:${hierarchicalDepth}em !important;"
+		t:type="loop" t:source="allActivityTypes" t:value="activityType">
+		${activityType.title} <a href="" t:type="EventLink"
 			t:id="EditActivityType" id="EditActivityType"
-			t:context="activityType"><img t:type="SVGIcon" t:path="edit" /></a>
+			t:context="activityType" t:zone="editFormZone"><img
+			t:type="SVGIcon" t:path="edit" /></a>
 	</p>
 </div>
-
 </html>

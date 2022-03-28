@@ -4,13 +4,69 @@
 <style>
 .CREATED {
 	background-color: #ffc0c0ff !important;
+	color: #000000ff !important;
+}
+
+.report {
+	min-height: 5rem;
+	max-height: 10rem;
+	overflow: auto;
+	font-size: 75%;
+}
+
+.evaluation {
+	font-size: 85%;
+	max-height: 12.5rem;
+	overflow: auto;
+}
+
+table {
+	margin: 0;
+	table-layout: fixed;
+}
+
+table thead th {
+	position: sticky;
+	top: 3.5em;
+	z-index: 1;
+	width: 18vw;
+	background: white;
+}
+
+table thead th:first-child {
+	position: sticky;
+	left: 0;
+	z-index: 2;
+	width: 8vw;
+}
+
+table td {
+	background: #fff;
+}
+
+table tbody th {
+	position: relative;
+}
+
+table tbody th {
+	position: sticky;
+	left: 0;
+	background: #eee;
+	z-index: 1;
+}
+
+[role="region"][aria-labelledby][tabindex] {
+	width: 100%;
+	max-height: 98vh;
+	overflow: auto;
 }
 </style>
 
 
 <h1>${message:admin/OverallCourseReport-pagelink}</h1>
 
-<form t:type="form" id="selectProject" class="form-inline col-12 mb-3">
+<form t:type="form" id="selectProject" class="form-inline col-12 mb-3"
+	t:zone="zTable">
 	<div class="form-group">
 		<label t:type="label" t:for="selectCourse"></label><select
 			t:id="selectCourse" t:type="select" t:model="coursesModel"
@@ -19,81 +75,135 @@
 	<t:submit t:value="OK" />
 </form>
 
+<div t:type="zone" id="zTable" t:id="zTable">
 
-<div t:type="zone" t:id="zNewWorkReportModal" id="zNewWorkReportModal">
-	<div t:type="if" t:test="newWorkReport">
-		<t:ModalBox t:id="newWorkReportModal">
-			<h2>${message:Report-label}</h2>
-			<form t:id="frmAddWorkReport" t:type="beaneditform"
-				t:object="newWorkReport" t:exclude="workReportId"></form>
-		</t:ModalBox>
+	<div t:type="zone" t:id="zNewWorkReportModal" id="zNewWorkReportModal">
+		<div t:type="if" t:test="newWorkReport">
+			<t:ModalBox t:id="newWorkReportModal">
+				<h2>${message:Report-label}</h2>
+				<form t:id="frmAddWorkReport" t:type="beaneditform"
+					t:object="newWorkReport" t:exclude="workReportId"></form>
+			</t:ModalBox>
+		</div>
+	</div>
+
+	<div t:type="zone" t:id="zNewWorkEvaluationModal"
+		id="zNewWorkEvaluationModal">
+		<div t:type="if" t:test="newWorkEvaluation">
+			<t:ModalBox t:id="newWorkEvaluationModal">
+				<form t:id="frmAddWorkEvaluation" t:type="beaneditform"
+					t:object="newWorkEvaluation" t:exclude="workEvaluationId"
+					t:add="mtitle" t:reorder="mtitle,title,description">
+					<p:mtitle>
+						<h3>${message:Evaluation-label}
+							<small class="text-muted">${newWorkEvaluation.workReport.activity.title}</small>
+						</h3>
+					</p:mtitle>
+					<p:description>
+						<textarea t:type="textarea"
+							t:value="newWorkEvaluation.description" t:mixins="webeditor"
+							t:WebEditor.areaType="" />
+					</p:description>
+				</form>
+			</t:ModalBox>
+		</div>
+	</div>
+
+	<div role="region" tabindex="0" t:type="if" t:test="selectedCourse">
+
+		<table class="table table-hover">
+
+			<thead class="thead-dark">
+				<tr>
+					<th scope="col">${message:Project-label}</th>
+
+					<th scope="col" t:type="loop" t:source="allProjects"
+						t:value="project">
+						<p>
+							<strong>${project.title}</strong> <br /> <a
+								class="btn btn-sm p-0 pl-1 pr-1 btn-primary"
+								href="https://develop.finki.ukim.mk/projects/${project.code}">Home</a>
+							<a class="btn btn-sm p-0 pl-1 pr-1 btn-secondary"
+								href="https://develop.finki.ukim.mk/projects/${project.code}/report/6">Tickets</a>
+							<br /> Total: <span class="badge text-nowrap">${projectTotal}</span>
+						</p>
+					</th>
+				</tr>
+			</thead>
+
+			<tbody>
+				<tr t:type="loop" t:source="selectedCourseCourseActivityTypes"
+					t:value="courseActivityType">
+
+
+					<th class="">${courseActivityType.activityType.title}</th>
+
+					<td class="" t:type="loop" t:source="allProjects" t:value="project">
+
+						<div class="card p-1 font-small" t:type="loop"
+							t:source="workReportsForActivity" t:value="workReport">
+
+							<div class="report">
+								<p class="mb-1">
+									<strong>${workReport.title}</strong>
+								</p>
+								<t:outputraw t:value="workReport.description" />
+							</div>
+
+							<div
+								class="card p-1 mt-2 bg-info text-light evaluation ${workEvaluation.status}"
+								t:type="loop" t:source="workEvaluationsForWorkReport"
+								t:value="workEvaluation">
+								<div class="row">
+									<div class="col-2">
+										<p>
+											<a class="btn btn-sm btn-primary p-0" href=""
+												t:type="eventlink" t:id="editWorkEvaluation"
+												t:context="workEvaluation" t:zone="zNewWorkEvaluationModal"><img
+												t:type="svgicon" t:path="edit" /></a><br /> <a
+												class="btn btn-sm btn-secondary p-0" href=""
+												t:type="eventlink" t:id="toggleWorkEvaluationStatus"
+												t:context="workEvaluation" t:zone="zTable"><img
+												t:type="svgicon" t:path="toggle-left" /></a> <br /> <span
+												class="badge badge-dark text-nowrap">${workEvaluation.points}</span>
+										</p>
+									</div>
+									<div class="col-10">
+										<p class="mb-0">
+											<strong>${workEvaluation.title}</strong>
+										</p>
+										<t:outputRaw t:value="workEvaluation.description" />
+									</div>
+								</div>
+							</div>
+
+							<p class="mt-3 text-right ">
+								<a href="" class="p-1 btn btn-sm btn-outline-dark"
+									t:type="eventlink" t:id="addWorkEvaluation"
+									t:context="workReport" t:zone="zNewWorkEvaluationModal"><img
+									t:type="svgicon" t:path="plus" /> ${message:evaluation-label}</a>
+							</p>
+
+						</div>
+
+						<p>
+							<a href="" class="btn btn-sm btn-default" t:type="eventlink"
+								t:id="addWorkReport" t:context="activity"
+								t:zone="zNewWorkReportModal"><img t:type="svgicon"
+								t:path="file-plus" /></a>
+						</p>
+					</td>
+
+
+				</tr>
+			</tbody>
+
+		</table>
+
+
 	</div>
 </div>
 
-<div t:type="zone" t:id="zNewWorkEvaluationModal"
-	id="zNewWorkEvaluationModal">
-	<div t:type="if" t:test="newWorkEvaluation">
-		<t:ModalBox t:id="newWorkEvaluationModal">
-			<h2>${message:Evaluation-label}</h2>
-			<form t:id="frmAddWorkEvaluation" t:type="beaneditform"
-				t:object="newWorkEvaluation" t:exclude="workEvaluationId">
-				<p:description>
-					<textarea t:type="textarea" t:value="newWorkEvaluation.description"
-						t:mixins="webeditor" t:WebEditor.areaType="" />
-				</p:description>
-			</form>
-		</t:ModalBox>
-	</div>
-</div>
 
 
-<div t:type="if" t:test="selectedCourse">
-	<div class="d-flex flex-row mb-1">
-		<div class="col-2 p-1 bg-dark text-light">
-			<h3>${message:Project-label}</h3>
-		</div>
-		<div class="col-2 p-1 bg-light" t:type="loop"
-			t:source="selectedCourseCourseActivityTypes"
-			t:value="courseActivityType">
-			<small>${courseActivityType.activityType.title}</small>
-		</div>
-	</div>
-	<div class="d-flex flex-row mb-1" t:type="loop" t:source="allProjects"
-		t:value="project">
-		<div class="col-2 p-1 bg-dark text-light">
-			<p>${project.title}</p>
-			<p>Total: ${projectTotal}</p>
-		</div>
-		<div class="col-2 p-1 bg-light" t:type="loop"
-			t:source="selectedCourseCourseActivityTypes"
-			t:value="courseActivityType">
-
-			<div class="card p-1 font-small" t:type="loop"
-				t:source="activity?.workReports" t:value="workReport">
-				<small>${workReport.title}<br />${workReport.description}</small>
-				<div
-					class="card p-1 font-small bg-info text-light ${workEvaluation.status}"
-					t:type="loop" t:source="workReport.workEvaluations"
-					t:value="workEvaluation">
-					<small>${workEvaluation.title}<br /> <t:outputRaw
-							t:value="workEvaluation.description" /> ${workEvaluation.points}<a
-						href="" t:type="actionlink" t:id="editWorkEvaluation"
-						t:context="workEvaluation"><img t:type="svgicon" t:path="edit" /></a><a
-						href="" t:type="actionlink" t:id="toggleWorkEvaluationStatus"
-						t:context="workEvaluation"><img t:type="svgicon"
-							t:path="toggle-left" /></a>
-					</small>
-				</div>
-				<a href="" t:type="actionlink" t:id="addWorkEvaluation"
-					t:context="workReport"><img t:type="svgicon"
-					t:path="check-square" /></a>
-			</div>
-
-			<p>
-				<a href="" t:type="actionlink" t:id="addWorkReport"
-					t:context="activity"><img t:type="svgicon" t:path="file-plus" /></a>
-			</p>
-		</div>
-	</div>
-</div>
 </html>

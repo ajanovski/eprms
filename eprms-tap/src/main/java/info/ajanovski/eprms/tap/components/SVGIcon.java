@@ -21,12 +21,19 @@
 package info.ajanovski.eprms.tap.components;
 
 import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.annotations.Mixin;
 import org.apache.tapestry5.annotations.Parameter;
 import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.annotations.SupportsInformalParameters;
+import org.apache.tapestry5.corelib.mixins.RenderInformals;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.AssetSource;
 
+@SupportsInformalParameters
 public class SVGIcon {
+
+	@Mixin
+	private RenderInformals renderInformals;
 
 	@Property
 	@Parameter(required = true, defaultPrefix = BindingConstants.LITERAL)

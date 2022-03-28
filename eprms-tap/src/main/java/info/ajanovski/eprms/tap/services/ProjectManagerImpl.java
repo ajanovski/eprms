@@ -20,16 +20,23 @@
 
 package info.ajanovski.eprms.tap.services;
 
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
+import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.WorkEvaluation;
+import info.ajanovski.eprms.model.entities.WorkReport;
 import info.ajanovski.eprms.model.util.ModelConstants;
+import info.ajanovski.eprms.model.util.WorkEvaluationComparator;
+import info.ajanovski.eprms.model.util.WorkReportComparator;
 import info.ajanovski.eprms.tap.data.ProjectDao;
 
 public class ProjectManagerImpl implements ProjectManager {
@@ -76,8 +83,8 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	@Override
-	public List<Project> getCourseProjectsOrderByTitle(Course selectedCourse) {
-		return projectDao.getCourseProjectsOrderByTitle(selectedCourse);
+	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse) {
+		return projectDao.getAllProjectsInCourseOrderByTitle(selectedCourse);
 	}
 
 	@Override
@@ -101,6 +108,27 @@ public class ProjectManagerImpl implements ProjectManager {
 		} else {
 			p.setStatus(ModelConstants.AllProjectStatuses[0]);
 		}
+	}
+
+	@Override
+	public List<WorkEvaluation> getWorkEvaluationForWorkReport(WorkReport workReport) {
+		List<WorkEvaluation> list = workReport.getWorkEvaluations();
+		WorkEvaluationComparator comparator = new WorkEvaluationComparator();
+		Collections.sort(list, comparator);
+		return list;
+	}
+
+	@Override
+	public List<WorkReport> getWorkReportsForActivity(Activity activity) {
+		List<WorkReport> list;
+		if (activity != null) {
+			list = activity.getWorkReports();
+		} else {
+			list = new ArrayList<WorkReport>();
+		}
+		WorkReportComparator comparator = new WorkReportComparator();
+		Collections.sort(list, comparator);
+		return list;
 	}
 
 }

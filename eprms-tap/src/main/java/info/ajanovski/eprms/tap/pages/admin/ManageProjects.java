@@ -23,6 +23,7 @@ package info.ajanovski.eprms.tap.pages.admin;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -47,6 +48,7 @@ import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.model.entities.Responsibility;
 import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
+import info.ajanovski.eprms.model.util.CourseComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
@@ -235,7 +237,10 @@ public class ManageProjects {
 	}
 
 	public List<Course> getAllCourses() {
-		return (List<Course>) genericService.getAll(Course.class);
+		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
+		CourseComparator cc = new CourseComparator();
+		Collections.sort(lista, cc);
+		return lista;
 	}
 
 	public SelectModel getCoursesModel() {

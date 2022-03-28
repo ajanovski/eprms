@@ -16,27 +16,23 @@
  *     
  * You should have received a copy of the GNU General Public License
  * along with EPRMS.  If not, see <https://www.gnu.org/licenses/>.
- * 
  ******************************************************************************/
 
-package info.ajanovski.eprms.tap.data;
+package info.ajanovski.eprms.tap.components;
 
-import java.util.List;
+import org.apache.tapestry5.BindingConstants;
+import org.apache.tapestry5.annotations.Parameter;
+import org.apache.tapestry5.annotations.Property;
+import org.apache.tapestry5.corelib.components.Any;
 
-import info.ajanovski.eprms.model.entities.Course;
-import info.ajanovski.eprms.model.entities.CourseProject;
-import info.ajanovski.eprms.model.entities.Project;
+public class IconActionLink extends Any {
 
-public interface ProjectDao {
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.PROP)
+	private Object context;
 
-	public List<Project> getAllProjectsOrderByTitle();
-
-	public List<CourseProject> getProjectCourses(Project p);
-
-	public Float sumPoints(Project p);
-
-	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse);
-
-	public List<Project> getProjectByPerson(Long personId);
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL)
+	private String path;
 
 }

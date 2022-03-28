@@ -42,10 +42,10 @@
 				class="btn btn-sm btn-danger p-0"><svg t:type="svgicon"
 					t:path="minus" /></a>
 		</p>
-		<a href="" t:type="actionlink" t:id="addCourseActivityType"
-			t:context="course" class="btn btn-sm btn-primary p-0"><svg
-				t:type="svgicon" t:path="plus" />${message:add-label}
-			${message:activityType-label}</a>
+		<p class="text-center">
+			<a href="" t:type="iconActionLink" t:id="addCourseActivityType"
+				t:context="course" t:path="plus" class="btn btn-sm btn-primary p-0">${message:add-label}</a>
+		</p>
 	</p:activitiesCell>
 	<p:editCell>
 		<a href="" t:type="actionlink" t:id="editCourse" t:context="course"

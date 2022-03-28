@@ -1,6 +1,7 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -27,7 +28,9 @@ import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
 import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
+import info.ajanovski.eprms.model.util.CourseComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
+import info.ajanovski.eprms.model.util.WorkEvaluationComparator;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
@@ -62,18 +65,42 @@ public class OverallCourseReport {
 	@Inject
 	private AjaxResponseRenderer ajaxResponseRenderer;
 
+	@Inject
+	private SelectModelFactory selectModelFactory;
+
 	@InjectComponent
-	private Zone zNewWorkReportModal, zNewWorkEvaluationModal;
+	private Zone zNewWorkReportModal, zNewWorkEvaluationModal, zTable;
+
+	@Persist
+	@Property
+	private Course selectedCourse;
+
+	@Property
+	private CourseActivityType courseActivityType;
+
+	@Property
+	private WorkReport workReport;
+
+	@Property
+	private WorkEvaluation workEvaluation;
+
+	@Persist
+	@Property
+	private WorkReport newWorkReport;
+
+	@Persist
+	@Property
+	private WorkEvaluation newWorkEvaluation;
 
 	public List<Project> getAllProjects() {
 		List<Project> list = new ArrayList<Project>();
 		if (selectedCourse == null) {
 			list = ((List<Project>) projectManager.getAllProjectsOrderByTitle()).stream()
-					.filter(c -> (c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive)))
+					.filter(p -> (p.getStatus() != null && p.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
 		} else {
-			list = ((List<Project>) projectManager.getCourseProjectsOrderByTitle(selectedCourse)).stream()
-					.filter(c -> (c.getStatus() != null && c.getStatus().equals(ModelConstants.ProjectStatusActive)))
+			list = ((List<Project>) projectManager.getAllProjectsInCourseOrderByTitle(selectedCourse)).stream()
+					.filter(p -> (p.getStatus() != null && p.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
 		}
 		return list;
@@ -97,20 +124,15 @@ public class OverallCourseReport {
 		return list;
 	}
 
-	@Property
-	private CourseActivityType courseActivityType;
+	public List<WorkReport> getWorkReportsForActivity() {
+		return projectManager.getWorkReportsForActivity(getActivity());
+	}
 
-	@Property
-	private WorkReport workReport;
+	public List<WorkEvaluation> getWorkEvaluationsForWorkReport() {
+		return projectManager.getWorkEvaluationForWorkReport(workReport);
+	}
 
-	@Property
-	private WorkEvaluation workEvaluation;
-
-	@Persist
-	@Property
-	private WorkReport newWorkReport;
-
-	public void onActionFromAddWorkReport(Activity a) {
+	public void onAddWorkReport(Activity a) {
 		newWorkEvaluation = null;
 		newWorkReport = new WorkReport();
 		newWorkReport.setActivity(a);
@@ -126,23 +148,20 @@ public class OverallCourseReport {
 		newWorkEvaluation = null;
 	}
 
-	@Persist
-	@Property
-	private WorkEvaluation newWorkEvaluation;
-
-	public void onActionFromAddWorkEvaluation(WorkReport wr) {
+	public void onAddWorkEvaluation(WorkReport wr) {
+		WorkReport wr1 = genericService.getByPK(WorkReport.class, wr.getWorkReportId());
 		newWorkReport = null;
 		newWorkEvaluation = new WorkEvaluation();
 		newWorkEvaluation.setEvaluationDate(new Date());
 		newWorkEvaluation.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
 		newWorkEvaluation.setStatus(ModelConstants.EvaluationStatusCreated);
-		newWorkEvaluation.setWorkReport(wr);
+		newWorkEvaluation.setWorkReport(wr1);
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(zNewWorkEvaluationModal);
 		}
 	}
 
-	public void onActionFromEditWorkEvaluation(WorkEvaluation wa) {
+	public void onEditWorkEvaluation(WorkEvaluation wa) {
 		newWorkReport = null;
 		newWorkEvaluation = wa;
 		if (request.isXHR()) {
@@ -151,13 +170,16 @@ public class OverallCourseReport {
 	}
 
 	@CommitAfter
-	public void onActionFromToggleWorkEvaluationStatus(WorkEvaluation wa) {
+	public void onToggleWorkEvaluationStatus(WorkEvaluation wa) {
 		if (wa.getStatus().equals(ModelConstants.EvaluationStatusCreated)) {
 			wa.setStatus(ModelConstants.EvaluationStatusPublished);
 		} else {
 			wa.setStatus(ModelConstants.EvaluationStatusCreated);
 		}
 		genericService.saveOrUpdate(wa);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zTable);
+		}
 	}
 
 	@CommitAfter
@@ -172,24 +194,24 @@ public class OverallCourseReport {
 		return projectManager.sumPoints(project);
 	}
 
-	@Inject
-	private SelectModelFactory selectModelFactory;
-
 	public SelectModel getCoursesModel() {
 		return selectModelFactory.create(getAllCourses(), "title");
 	}
 
 	public List<Course> getAllCourses() {
-		return (List<Course>) genericService.getAll(Course.class);
+		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
+		CourseComparator cc = new CourseComparator();
+		Collections.sort(lista, cc);
+		return lista;
 	}
-
-	@Persist
-	@Property
-	private Course selectedCourse;
 
 	public void onActivate() {
 		if (selectedCourse != null) {
 			selectedCourse = genericService.getByPK(Course.class, selectedCourse.getCourseId());
+		}
+		if (newWorkEvaluation != null && newWorkEvaluation.getWorkReport() != null) {
+			newWorkEvaluation.setWorkReport(
+					genericService.getByPK(WorkReport.class, newWorkEvaluation.getWorkReport().getWorkReportId()));
 		}
 		messagingService.setupMQHost(AppConfig.getString("MQHost"));
 	}
