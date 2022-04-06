@@ -27,8 +27,8 @@
 			<div class="card-body">
 				<h3>${message:Course-label}</h3>
 				<form t:id="NewCourseForm" t:type="beaneditform"
-					t:object="newCourse" t:exclude="courseId" t:submitLabel="message:submit-label">
-				</form>
+					t:object="newCourse" t:exclude="courseId"
+					t:submitLabel="message:submit-label"></form>
 			</div>
 		</div>
 		<div t:type="unless" t:test="newCourse">
@@ -189,7 +189,8 @@
 					<small class="text-muted">Status: ${project.status} <a
 						t:type="actionlink" t:context="project" t:id="changeStatus"
 						class="btn btn-sm btn-efault"> <img t:type="SVGIcon"
-							t:path="repeat" /></a></small>
+							t:path="repeat" /></a></small> <small class="text-muted">Started:
+						${project?.startDate}</small>
 				</h3>
 				<p t:type="if" t:test="projectCourses">
 					<span t:type="loop" t:source="projectCourses" t:value="course">${courseTitle}</span>
