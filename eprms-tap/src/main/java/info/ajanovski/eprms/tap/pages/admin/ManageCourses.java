@@ -81,7 +81,7 @@ public class ManageCourses {
 	}
 
 	@CommitAfter
-	void onActionFromDeleteCourse(Course c) {
+	void onDeleteCourse(Course c) {
 		genericService.delete(c);
 	}
 
@@ -177,4 +177,12 @@ public class ManageCourses {
 		}
 	}
 
+	public void onActionFromAddCourse() {
+		editCourse = new Course();
+	}
+
+	void onCancelEditCourse() {
+		editCourse = null;
+	}
+	
 }

@@ -20,20 +20,32 @@
 	</t:modalbox>
 </div>
 
-<div t:type="if" t:test="editCourse" class="card">
-	<t:modalbox>
-		<div class="card-body">
-			<form t:type="beaneditform" t:id="frmEditCourse"
-				t:object="editCourse" t:exclude="courseId" t:submitLabel="OK"></form>
-		</div>
-	</t:modalbox>
+<div class="mb-3">
+	<div t:type="if" t:test="editCourse">
+		<t:modalbox>
+			<form t:type="form" t:id="frmEditCourse" id="frmEditCourse">
+				<t:beaneditor t:object="editCourse" t:exclude="courseId" />
+				<div class="form-row">
+					<t:submit t:value="OK" />
+					<a href="" t:type="eventlink" t:id="cancelEditCourse"
+						class="btn btn-default">${message:cancel-label}</a>
+				</div>
+			</form>
+		</t:modalbox>
+		<p:else>
+			<p>
+				<t:iconActionLink t:id="addCourse" t:path="plus"
+					class="btn btn-primary">${message:add-label}</t:iconActionLink>
+			</p>
+		</p:else>
+	</div>
 </div>
 
 <table class="table table-sm table-bordered" t:type="grid"
 	t:source="allCourses" t:row="course" t:exclude="courseId"
-	t:add="activities,edit">
+	t:add="activities,actions">
 	<p:activitiesCell>
-		<p class="m-0" style="margin-left:${hierarchicalDepth}em !important;"
+		<div style="margin-left:${hierarchicalDepth}em !important;"
 			t:type="loop" t:source="CourseCourseActivityTypes"
 			t:value="courseActivityType">
 			${courseActivityType?.activityType?.title} <a href=""
@@ -41,22 +53,20 @@
 				t:context="courseActivityType" t:mixins="confirm"
 				class="btn btn-sm btn-danger p-0"><svg t:type="svgicon"
 					t:path="minus" /></a>
-		</p>
-		<p class="text-center">
-			<a href="" t:type="iconActionLink" t:id="addCourseActivityType"
-				t:context="course" t:path="plus" class="btn btn-sm btn-primary p-0">${message:add-label}</a>
-		</p>
+		</div>
+		<t:iconActionLink t:id="addCourseActivityType" t:context="course"
+			t:path="plus" class="btn btn-sm btn-primary mt-0">${message:add-label}</t:iconActionLink>
 	</p:activitiesCell>
-	<p:editCell>
-		<a href="" t:type="actionlink" t:id="editCourse" t:context="course"
+	<p:actionsCell>
+		<a href="" t:type="actionLink" t:id="editCourse" t:context="course"
 			class="btn btn-sm btn-secondary"><svg t:type="svgicon"
 				t:path="edit" />${message:edit-label}</a>
 		<t:if t:test="allowDeleteCourse">
-			<a href="" t:type="actionlink" t:id="deleteCourse" t:context="course"
+			<a href="" t:type="eventLink" t:id="deleteCourse" t:context="course"
 				class="btn btn-sm btn-danger"><svg t:type="svgicon"
 					t:path="minus" />${message:remove-label}</a>
 		</t:if>
-	</p:editCell>
+	</p:actionsCell>
 </table>
 
 </html>
