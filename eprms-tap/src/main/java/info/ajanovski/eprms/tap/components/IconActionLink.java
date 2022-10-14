@@ -35,4 +35,8 @@ public class IconActionLink extends Any {
 	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL)
 	private String path;
 
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL, name = "class")
+	private String theClass;
+
 }

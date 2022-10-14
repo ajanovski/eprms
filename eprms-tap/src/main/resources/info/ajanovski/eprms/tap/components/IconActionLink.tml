@@ -1,6 +1,7 @@
 <html xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
-<a t:type="actionlink"
-	t:context="context"><svg t:type="svgicon" t:path="prop:path" />
-	<t:body /></a>
+<t:actionlink t:context="prop:context" class="prop:theClass">
+	<svg t:type="svgicon" t:path="prop:path"></svg>
+	<t:body />
+</t:actionlink>
 </html>
