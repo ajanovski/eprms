@@ -4,12 +4,14 @@ import java.util.List;
 
 import javax.inject.Inject;
 
+import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.InjectComponent;
 import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
+import org.apache.tapestry5.services.SelectModelFactory;
 import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Person;
@@ -140,4 +142,47 @@ public class ManagePersons {
 		personToEdit = null;
 	}
 
+	@Inject
+	private SelectModelFactory selectModelFactory;
+
+	@Persist
+	@Property
+	private Person personToAddRole;
+
+	@Persist
+	@Property
+	private Role selectRole;
+
+	@Property
+	private PersonRole personRole;
+
+	public SelectModel getRolesModel() {
+		return selectModelFactory.create(genericService.getAll(Role.class), "name");
+	}
+
+	public void onAddRole(Person p) {
+		personToAddRole = p;
+	}
+
+	public void onCancelAddRole() {
+		personToAddRole = null;
+	}
+
+	public List<PersonRole> getPersonRoles() {
+		return personManager.getPersonRolesForPerson(person.getPersonId());
+	}
+
+	@CommitAfter
+	public void onSuccessFromFrmSelectRole() {
+		PersonRole pr = new PersonRole();
+		pr.setRole(selectRole);
+		pr.setPerson(personToAddRole);
+		genericService.save(pr);
+		personToAddRole = null;
+	}
+
+	@CommitAfter
+	public void onRemoveRole(PersonRole personRole) {
+		genericService.delete(personRole);
+	}
 }
