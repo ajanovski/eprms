@@ -28,13 +28,15 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table(schema = "epm_main", name = "course")
+@Table (schema="epm_main", name="course")
 public class Course implements java.io.Serializable {
 	private long courseId;
 	private String title;
 	private String code;
 	private List<CourseActivityType> courseActivityTypes = new ArrayList<CourseActivityType>();
 	private List<CourseProject> courseProjects = new ArrayList<CourseProject>();
+	private List<CourseTeacher> courseTeachers = new ArrayList<CourseTeacher>();
+
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -46,7 +48,7 @@ public class Course implements java.io.Serializable {
 	}
 
 	public void setCourseId(long courseId) {
-		this.courseId = courseId;
+		this.courseId=courseId;
 	}
 
 	@NotNull
@@ -56,7 +58,7 @@ public class Course implements java.io.Serializable {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title=title;
 	}
 
 	@NotNull
@@ -66,7 +68,7 @@ public class Course implements java.io.Serializable {
 	}
 
 	public void setCode(String code) {
-		this.code = code;
+		this.code=code;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
@@ -75,7 +77,7 @@ public class Course implements java.io.Serializable {
 	}
 
 	public void setCourseActivityTypes(List<CourseActivityType> courseActivityTypes) {
-		this.courseActivityTypes = courseActivityTypes;
+		this.courseActivityTypes=courseActivityTypes;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
@@ -85,6 +87,15 @@ public class Course implements java.io.Serializable {
 
 	public void setCourseProjects(List<CourseProject> courseProjects) {
 		this.courseProjects=courseProjects;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "course")
+	public List<CourseTeacher> getCourseTeachers() {
+		return this.courseTeachers;
+	}
+
+	public void setCourseTeachers(List<CourseTeacher> courseTeachers) {
+		this.courseTeachers=courseTeachers;
 	}
 
 }

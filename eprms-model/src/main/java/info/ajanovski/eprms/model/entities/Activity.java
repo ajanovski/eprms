@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table(schema = "epm_main", name = "activity")
+@Table (schema="epm_main", name="activity")
 public class Activity implements java.io.Serializable {
 	private long activityId;
 	private String title;
@@ -41,6 +41,7 @@ public class Activity implements java.io.Serializable {
 	private ActivityType activityType;
 	private List<Activity> subActivities = new ArrayList<Activity>();
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -51,7 +52,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setActivityId(long activityId) {
-		this.activityId = activityId;
+		this.activityId=activityId;
 	}
 
 	@Column(name = "title", length = 4000)
@@ -60,7 +61,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setTitle(String title) {
-		this.title = title;
+		this.title=title;
 	}
 
 	@Column(name = "description", length = 1000000)
@@ -69,7 +70,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setDescription(String description) {
-		this.description = description;
+		this.description=description;
 	}
 
 	@Column(name = "start_date")
@@ -107,7 +108,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setProject(Project project) {
-		this.project = project;
+		this.project=project;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "activity")
@@ -126,7 +127,7 @@ public class Activity implements java.io.Serializable {
 	}
 
 	public void setActivityType(ActivityType activityType) {
-		this.activityType = activityType;
+		this.activityType=activityType;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "superActivity")

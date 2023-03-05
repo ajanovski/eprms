@@ -106,9 +106,9 @@ public class WorkEvaluation implements java.io.Serializable {
 	}
 
 	public void setStatus(String status) {
-		this.status = status;
+		this.status=status;
 	}
-	
+
 	@ManyToOne(fetch = FetchType.LAZY)
 	@JoinColumn(name = "work_report_id", nullable = false, foreignKey = @ForeignKey(name = "fk_work_evaluation_work_report"))
 	public WorkReport getWorkReport() {

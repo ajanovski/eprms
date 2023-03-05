@@ -32,7 +32,14 @@ import javax.validation.constraints.*;
 public class Team implements java.io.Serializable {
 	private long teamId;
 	private String name;
+	private String status;
+	private Date createdDate;
+	private Date statusDate;
+	private String description;
+	private Boolean openForNewMembers;
+	private Integer maxMembers;
 	private List<TeamMember> teamMembers = new ArrayList<TeamMember>();
+	private List<Responsibility> responsibilities = new ArrayList<Responsibility>();
 
 
 	@Id
@@ -48,13 +55,67 @@ public class Team implements java.io.Serializable {
 		this.teamId=teamId;
 	}
 
-	@Column(name = "name")
+	@Column(name = "name", length = 2000)
 	public String getName() {
 		return this.name;
 	}
 
 	public void setName(String name) {
 		this.name=name;
+	}
+
+	@Column(name = "status")
+	public String getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(String status) {
+		this.status=status;
+	}
+
+	@Column(name = "created_date")
+	public Date getCreatedDate() {
+		return this.createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate=createdDate;
+	}
+
+	@Column(name = "status_date")
+	public Date getStatusDate() {
+		return this.statusDate;
+	}
+
+	public void setStatusDate(Date statusDate) {
+		this.statusDate=statusDate;
+	}
+
+	@Column(name = "description", length = 1000000)
+	public String getDescription() {
+		return this.description;
+	}
+
+	public void setDescription(String description) {
+		this.description=description;
+	}
+
+	@Column(name = "open_for_new_members")
+	public Boolean getOpenForNewMembers() {
+		return this.openForNewMembers;
+	}
+
+	public void setOpenForNewMembers(Boolean openForNewMembers) {
+		this.openForNewMembers=openForNewMembers;
+	}
+
+	@Column(name = "max_members")
+	public Integer getMaxMembers() {
+		return this.maxMembers;
+	}
+
+	public void setMaxMembers(Integer maxMembers) {
+		this.maxMembers=maxMembers;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
@@ -64,6 +125,15 @@ public class Team implements java.io.Serializable {
 
 	public void setTeamMembers(List<TeamMember> teamMembers) {
 		this.teamMembers=teamMembers;
+	}
+
+	@OneToMany(fetch = FetchType.LAZY, mappedBy = "team")
+	public List<Responsibility> getResponsibilities() {
+		return this.responsibilities;
+	}
+
+	public void setResponsibilities(List<Responsibility> responsibilities) {
+		this.responsibilities=responsibilities;
 	}
 
 }

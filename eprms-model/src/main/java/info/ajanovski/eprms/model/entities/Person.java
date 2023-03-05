@@ -37,6 +37,7 @@ public class Person implements java.io.Serializable {
 	private String userName;
 	private String authString;
 
+
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 

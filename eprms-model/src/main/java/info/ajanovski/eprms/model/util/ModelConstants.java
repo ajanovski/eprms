@@ -50,4 +50,28 @@ public class ModelConstants {
 	public static final String[] AllEvaluationStatuses = { EvaluationStatusCreated, EvaluationStatusPublished };
 
 	public static final String CourseUnknown = "CourseNA";
+
+	public static final String TeamMemberRoleCoordinator = "COORDINATOR";
+	public static final String TeamMemberRoleMember = "MEMBER";
+	public static final String TeamMemberRoleSupervisor = "SUPERVISOR";
+
+	public static final String[] AllTeamMemberRoles = { TeamMemberRoleCoordinator, TeamMemberRoleMember,
+			TeamMemberRoleSupervisor };
+
+	public static final String TeamStatusProposed = "PROPOSED";
+	public static final String TeamStatusAccepted = "ACTIVE";
+	public static final String TeamStatusPaused = "PAUSED";
+	public static final String TeamStatusFinished = "FINISHED";
+
+	public static final String[] AllTeamStatuses = { TeamStatusProposed, TeamStatusAccepted, TeamStatusPaused,
+			TeamStatusFinished };
+
+	public static final String TeamMemberStatusProposed = "PROPOSED";
+	public static final String TeamMemberStatusAccepted = "ACTIVE";
+	public static final String TeamMemberStatusPaused = "PAUSED";
+	public static final String TeamMemberStatusFinished = "FINISHED";
+	public static final String TeamMemberStatusQuit = "QUIT";
+
+	public static final String[] AllTeamMemberStatuses = { TeamMemberStatusProposed, TeamMemberStatusAccepted,
+			TeamMemberStatusPaused, TeamMemberStatusFinished, TeamMemberStatusQuit };
 }

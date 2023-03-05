@@ -33,6 +33,9 @@ public class TeamMember implements java.io.Serializable {
 	private long teamMemberId;
 	private Integer positionNumber;
 	private String role;
+	private String status;
+	private Date createdDate;
+	private Date statusDate;
 	private Person person;
 	private Team team;
 
@@ -66,6 +69,33 @@ public class TeamMember implements java.io.Serializable {
 
 	public void setRole(String role) {
 		this.role=role;
+	}
+
+	@Column(name = "status")
+	public String getStatus() {
+		return this.status;
+	}
+
+	public void setStatus(String status) {
+		this.status=status;
+	}
+
+	@Column(name = "created_date")
+	public Date getCreatedDate() {
+		return this.createdDate;
+	}
+
+	public void setCreatedDate(Date createdDate) {
+		this.createdDate=createdDate;
+	}
+
+	@Column(name = "status_date")
+	public Date getStatusDate() {
+		return this.statusDate;
+	}
+
+	public void setStatusDate(Date statusDate) {
+		this.statusDate=statusDate;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)

@@ -37,6 +37,8 @@ public class Project implements java.io.Serializable {
 	private Date finishDate;
 	private String code;
 	private String status;
+	private Boolean acceptingNewResponsibilities;
+	private Integer maxResponsibilities;
 	private List<Responsibility> responsibilities = new ArrayList<Responsibility>();
 	private List<Repository> repositories = new ArrayList<Repository>();
 	private List<Database> databases = new ArrayList<Database>();
@@ -111,6 +113,24 @@ public class Project implements java.io.Serializable {
 
 	public void setStatus(String status) {
 		this.status=status;
+	}
+
+	@Column(name = "accepting_new_responsibilities")
+	public Boolean getAcceptingNewResponsibilities() {
+		return this.acceptingNewResponsibilities;
+	}
+
+	public void setAcceptingNewResponsibilities(Boolean acceptingNewResponsibilities) {
+		this.acceptingNewResponsibilities=acceptingNewResponsibilities;
+	}
+
+	@Column(name = "max_responsibilities")
+	public Integer getMaxResponsibilities() {
+		return this.maxResponsibilities;
+	}
+
+	public void setMaxResponsibilities(Integer maxResponsibilities) {
+		this.maxResponsibilities=maxResponsibilities;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
