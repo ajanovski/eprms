@@ -33,6 +33,7 @@ import org.slf4j.Logger;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
 import info.ajanovski.eprms.model.entities.Role;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.util.UsefulMethods;
 
 public class PersonDaoImpl implements PersonDao {
@@ -93,6 +94,12 @@ public class PersonDaoImpl implements PersonDao {
 	public List<Role> getRolesForPerson(long personId) {
 		return getEntityManager().createQuery("select pr.role from PersonRole pr where pr.person.personId=:personId")
 				.setParameter("personId", personId).getResultList();
+	}
+
+	@Override
+	public List<Person> getAllPersonsFromRole(String roleName) {
+		return getEntityManager().createQuery("select pr.person from PersonRole pr where pr.role.name=:roleName")
+				.setParameter("roleName", roleName).getResultList();
 	}
 
 }

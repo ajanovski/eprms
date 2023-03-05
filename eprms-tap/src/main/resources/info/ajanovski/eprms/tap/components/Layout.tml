@@ -30,12 +30,13 @@
 				<li t:type="loop" t:source="studentPageNames" t:value="pageName"
 					class="nav-item"><a class="nav-link ${classForPageName}"
 					t:type="pagelink" t:page="prop:pageName">${pageNameTitle}</a></li>
-				<t:if t:test="userInfo.administrator">
+				<t:if t:test="userInfo.instructor">
 					<li class="nav-item dropdown"><a
-						class="nav-link dropdown-toggle" href="#" id="mainMenuProjectManager"
-						role="button" data-toggle="dropdown" aria-haspopup="true"
-						aria-expanded="false">${message:projectManager-label}</a>
-						<div class="dropdown-menu" aria-labelledby="mainMenuProjectManager">
+						class="nav-link dropdown-toggle" href="#"
+						id="mainMenuProjectManager" role="button" data-toggle="dropdown"
+						aria-haspopup="true" aria-expanded="false">${message:projectManager-label}</a>
+						<div class="dropdown-menu"
+							aria-labelledby="mainMenuProjectManager">
 							<t:loop t:source="projectManagerPageNames" t:value="pageName">
 								<a class="dropdown-item ${classForPageName}" t:type="pagelink"
 									t:page="prop:pageName">${pageNameTitle}</a>
@@ -69,6 +70,8 @@
 						${userInfo.userName}</a>
 					<div class="dropdown-menu" aria-labelledby="mainMenuUserProfile">
 						<t:if t:test="userInfo">
+							<a class="dropdown-item" t:type="pagelink"
+								t:page="user/MyProfile">${message:user/MyProfile-pagelink}</a>
 							<a href="" t:type="pagelink" t:page="user/Logout"
 								class="dropdown-item"><img t:type="SVGIcon" t:path="log-out" />
 								${message:Logout-label}</a>

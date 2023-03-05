@@ -18,14 +18,20 @@ import org.slf4j.Logger;
 import info.ajanovski.eprms.model.entities.ActivityType;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseActivityType;
+import info.ajanovski.eprms.model.entities.CourseTeacher;
+import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.util.ActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.CourseComparator;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
+import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @AdministratorPage
+@InstructorPage
 public class ManageCourses {
 	@SessionState
 	@Property
@@ -42,9 +48,15 @@ public class ManageCourses {
 
 	@Property
 	private Course course;
+
 	@Property
 	@Persist
 	private Course addActivityTypeForCourse;
+
+	@Property
+	@Persist
+	private Course addTeacherForCourse;
+
 	@Property
 	private ActivityType activityType;
 	@Property
@@ -62,6 +74,12 @@ public class ManageCourses {
 
 	public List<Course> getAllCourses() {
 		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
+		if (userInfo.isInstructor() && !userInfo.isAdministrator()) {
+			lista = lista.stream()
+					.filter(p -> p.getCourseTeachers().stream()
+							.anyMatch(q -> q.getTeacher().getPersonId() == userInfo.getPersonId()))
+					.collect(Collectors.toList());
+		}
 		CourseComparator cc = new CourseComparator();
 		Collections.sort(lista, cc);
 		return lista;
@@ -89,9 +107,18 @@ public class ManageCourses {
 		addActivityTypeForCourse = c;
 	}
 
+	void onActionFromAddCourseTeacher(Course c) {
+		addTeacherForCourse = c;
+	}
+
 	@CommitAfter
 	void onActionFromDeleteCourseActivityType(CourseActivityType cat) {
 		genericService.delete(cat);
+	}
+
+	@CommitAfter
+	void onActionFromDeleteCourseTeacher(CourseTeacher ct) {
+		genericService.delete(ct);
 	}
 
 	public boolean isAllowDeleteCourse() {
@@ -184,5 +211,35 @@ public class ManageCourses {
 	void onCancelEditCourse() {
 		editCourse = null;
 	}
-	
+
+	@Inject
+	private PersonManager personManager;
+
+	public SelectModel getTeacherModel() {
+		return selectModelFactory.create(personManager.getAllPersonsFromRole(ModelConstants.RoleInstructor),
+				"userName");
+	}
+
+	@Property
+	private Person selectTeacher;
+
+	public List<CourseTeacher> getCourseTeachers() {
+		return course.getCourseTeachers();
+	}
+
+	@Property
+	private CourseTeacher courseTeacher;
+
+	void onCancelSelectTeacher() {
+		addTeacherForCourse = null;
+	}
+
+	@CommitAfter
+	public void onSuccessFromFrmAddTeacher() {
+		CourseTeacher ct = new CourseTeacher();
+		ct.setCourse(addTeacherForCourse);
+		ct.setTeacher(selectTeacher);
+		genericService.save(ct);
+		addTeacherForCourse = null;
+	}
 }

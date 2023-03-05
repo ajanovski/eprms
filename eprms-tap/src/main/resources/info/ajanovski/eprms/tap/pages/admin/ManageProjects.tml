@@ -22,22 +22,6 @@
 		</div>
 	</div>
 
-	<div class="col-6">
-		<div class="card mb-3" t:type="if" t:test="newCourse">
-			<div class="card-body">
-				<h3>${message:Course-label}</h3>
-				<form t:id="NewCourseForm" t:type="beaneditform"
-					t:object="newCourse" t:exclude="courseId"
-					t:submitLabel="message:submit-label"></form>
-			</div>
-		</div>
-		<div t:type="unless" t:test="newCourse">
-			<a t:type="actionlink" t:id="NewCourse" class="btn btn-primary"><img
-				t:type="SVGIcon" t:path="plus-square" /> ${message:new-label}
-				${message:Course-label}</a>
-		</div>
-
-	</div>
 </div>
 
 <div t:type="zone" t:id="courseZone">
@@ -75,41 +59,54 @@
 					<h3>${message:Project-label}</h3>
 				</div>
 				<div class="card-body">
-					<form t:id="NewProjectForm" t:type="beaneditform"
-						t:object="newProject" t:exclude="projectId" t:add="courses"
-						t:submitLabel="OK" class="form-horizontal">
-						<p:description>
-							<div class="form-group">
-								<label t:type="label" t:for="description"></label>
-								<textarea t:id="description" t:type="textarea"
-									t:value="newProject.description" t:mixins="webeditor"
-									t:WebEditor.areaType="" />
+					<t:modalbox>
+						<form t:id="NewProjectForm" t:type="form" class="form-horizontal">
+							<t:beaneditor t:object="newProject" t:exclude="projectId"
+								t:add="courses" t:submitLabel="OK">
+								<p:description>
+									<div class="form-group">
+										<label t:type="label" t:for="description"></label>
+										<textarea t:id="description" t:type="textarea"
+											t:value="newProject.description" t:mixins="webeditor"
+											t:WebEditor.areaType="" />
+									</div>
+								</p:description>
+								<p:status>
+									<div class="form-group">
+										<label t:type="label" t:for="status"></label> <select
+											t:id="status" t:type="select" t:model="modelProjectStatuses"
+											t:value="newProject.status" />
+									</div>
+								</p:status>
+								<p:courses>
+									<div class="form-group col-12">
+										<label t:type="label" t:for="inCourses"></label>
+										<div t:type="palette" t:id="inCourses"
+											t:encoder="courseEncoder" t:model="coursesModel"
+											t:selected="inCourses" t:size="3"></div>
+									</div>
+								</p:courses>
+							</t:beaneditor>
+							<div class="form-row">
+								<t:submit t:value="OK" />
+								<a href="" t:type="eventlink" t:id="cancelNewProject"
+									class="btn btn-default">${message:cancel-label}</a>
 							</div>
-						</p:description>
-						<p:status>
-							<div class="form-group">
-								<label t:type="label" t:for="status"></label> <select
-									t:id="status" t:type="select" t:model="modelProjectStatuses"
-									t:value="newProject.status" />
-							</div>
-						</p:status>
-						<p:courses>
-							<div class="form-group col-12">
-								<label t:type="label" t:for="inCourses"></label>
-								<div t:type="palette" t:id="inCourses" t:encoder="courseEncoder"
-									t:model="coursesModel" t:selected="inCourses" t:size="4"></div>
-							</div>
-						</p:courses>
-
-					</form>
+						</form>
+					</t:modalbox>
 				</div>
 			</div>
 
 			<div class="card mb-3" t:type="if" t:test="newTeam">
 				<div class="card-body">
-					<h3>${message:Team-label}</h3>
-					<form t:id="NewTeamForm" t:type="beaneditform" t:object="newTeam"
-						t:exclude="teamId"></form>
+					<t:modalbox>
+						<h3>${message:Team-label}</h3>
+						<form t:id="NewTeamForm" t:type="form">
+							<t:beaneditor t:object="newTeam" t:exclude="teamId" />
+							<t:submit t:value="OK" />
+							<a t:type="eventlink" t:id="cancelNewTeam">${message:cancel-label}</a>
+						</form>
+					</t:modalbox>
 				</div>
 			</div>
 
@@ -181,19 +178,24 @@
 						class="btn btn-sm btn-info"> <img t:type="SVGIcon"
 							t:path="clipboard" /> ${message:Paste-label}
 							${message:Activities-label}
-					</a>
-					</span>
+					</a></span> <a t:type="iconactionLink" t:context="project"
+						t:id="deleteProject" class="btn btn-sm btn-danger" t:path="minus">
+						${message:remove-label} </a>
 				</p>
 
 				<h3>${project.title}
-					<small class="text-muted">Status: ${project.status} <a
-						t:type="actionlink" t:context="project" t:id="changeStatus"
-						class="btn btn-sm btn-efault"> <img t:type="SVGIcon"
-							t:path="repeat" /></a></small> <small class="text-muted">Started:
-						${project?.startDate}</small>
+					<small class="text-muted ml-3">Code: ${project.code} -
+						Status: ${project.status} <a t:type="iconactionlink"
+						t:context="project" t:id="changeStatus" class="btn"
+						t:path="repeat"></a>
+					</small>
 				</h3>
 				<p t:type="if" t:test="projectCourses">
 					<span t:type="loop" t:source="projectCourses" t:value="course">${courseTitle}</span>
+				</p>
+				<p>Started: ${project?.startDate}</p>
+				<p t:type="if" t:test="selectedProject">
+					<t:outputraw t:value="project.description" />
 				</p>
 			</div>
 

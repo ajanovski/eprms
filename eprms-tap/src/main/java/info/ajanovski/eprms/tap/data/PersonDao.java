@@ -42,4 +42,6 @@ public interface PersonDao {
 
 	public List<Role> getRolesForPerson(long personId);
 
+	public List<Person> getAllPersonsFromRole(String roleName);
+
 }

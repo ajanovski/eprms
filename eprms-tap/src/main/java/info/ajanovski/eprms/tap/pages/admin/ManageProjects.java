@@ -41,6 +41,7 @@ import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
+import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.Project;
@@ -120,10 +121,6 @@ public class ManageProjects {
 
 	@Persist
 	@Property
-	private Course newCourse;
-
-	@Persist
-	@Property
 	private Project newProject;
 
 	@Persist
@@ -160,7 +157,7 @@ public class ManageProjects {
 	public List<Project> getAllProjects() {
 		List<Project> list = (List<Project>) projectManager.getAllProjectsOrderByTitle();
 		if (selectedCourse == null) {
-			return list;
+			return new ArrayList<Project>();
 		} else {
 			return list.stream()
 					.filter(p -> (p.getCourseProjects().stream()
@@ -189,10 +186,6 @@ public class ManageProjects {
 		inCourses = new ArrayList<Course>();
 	}
 
-	public void onActionFromNewCourse() {
-		newCourse = new Course();
-	}
-
 	public void onActionFromEditProject(Project p) {
 		newProject = p;
 		inCourses = projectManager.getProjectCourses(newProject).stream().map(cp -> cp.getCourse())
@@ -212,12 +205,13 @@ public class ManageProjects {
 		String dbPrefix = systemConfigService.getString(AppConstants.SystemParameterDBCreationPrefix);
 		String tunnelPrefix = systemConfigService.getString(AppConstants.SystemParameterDBTunnelPrefix);
 		String ownerSuffix = systemConfigService.getString(AppConstants.SystemParameterDBCreationOwnerSuffix);
-		String prjcode = p.getCode().toLowerCase();
+		String prjcode = p.getCode().toLowerCase().replace("-", "_").replace(" ", "_");
 		newDb.setType(systemConfigService.getString(AppConstants.SystemParameterDBServerType));
 		newDb.setServer(systemConfigService.getString(AppConstants.SystemParameterDBServerName));
 		newDb.setPort(systemConfigService.getString(AppConstants.SystemParameterDBServerPort));
-		newDb.setName(dbPrefix + prjcode);
-		newDb.setOwner(dbPrefix + prjcode + ownerSuffix);
+		String dbName = (dbPrefix + prjcode).toLowerCase().replace("-", "_").replace(" ", "_");
+		newDb.setName(dbName);
+		newDb.setOwner(dbName + ownerSuffix);
 		newDb.setPassword(generateRandomHexToken(6));
 		newDb.setTunnelServer(systemConfigService.getString(AppConstants.SystemParameterDBTunnelServerName));
 		newDb.setTunnelUser(tunnelPrefix + prjcode);
@@ -238,6 +232,12 @@ public class ManageProjects {
 
 	public List<Course> getAllCourses() {
 		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
+		if (userInfo.isInstructor() && !userInfo.isAdministrator()) {
+			lista = lista.stream()
+					.filter(p -> p.getCourseTeachers().stream()
+							.anyMatch(q -> q.getTeacher().getPersonId() == userInfo.getPersonId()))
+					.collect(Collectors.toList());
+		}
 		CourseComparator cc = new CourseComparator();
 		Collections.sort(lista, cc);
 		return lista;
@@ -272,14 +272,6 @@ public class ManageProjects {
 	}
 
 	@CommitAfter
-	public void onSuccessFromNewCourseForm() {
-		genericService.saveOrUpdate(newCourse);
-		selectedCourse = newCourse;
-		selectedProject = null;
-		newCourse = null;
-	}
-
-	@CommitAfter
 	public void onSuccessFromNewProjectForm() {
 		genericService.saveOrUpdate(newProject);
 		projectManager.addCoursesToProject(inCourses, newProject);
@@ -287,10 +279,17 @@ public class ManageProjects {
 		newProject = null;
 	}
 
+	public void onCancelNewProject() {
+		newProject = null;
+	}
+
 	@CommitAfter
 	public void onSuccessFromNewTeamForm() {
-		genericService.save(newTeam);
-		genericService.save(newResponsibility);
+		genericService.saveOrUpdate(newTeam);
+		if (newResponsibility != null) {
+			genericService.saveOrUpdate(newResponsibility.getTeam());
+			genericService.saveOrUpdate(newResponsibility);
+		}
 		newTeam = null;
 		newResponsibility = null;
 	}
@@ -386,6 +385,10 @@ public class ManageProjects {
 		newTeam = t;
 	}
 
+	void onCancelNewTeam() {
+		newTeam = null;
+	}
+
 	@CommitAfter
 	void onActionFromChangeStatus(Project p) {
 		projectManager.cycleStatus(p);
@@ -393,5 +396,17 @@ public class ManageProjects {
 
 	public String[] getModelProjectStatuses() {
 		return ModelConstants.AllProjectStatuses;
+	}
+
+	@CommitAfter
+	public void onActionFromDeleteProject(Project p) {
+		try {
+			for (CourseProject cp : p.getCourseProjects()) {
+				genericService.delete(cp);
+			}
+			genericService.delete(p);
+		} catch (Exception e) {
+
+		}
 	}
 }

@@ -42,4 +42,8 @@ public interface PersonManager {
 
 	public List<Role> getRolesForPerson(long personId);
 
+	public List<Person> getAllPersonsFromRole(String roleName);
+	
+	
+
 }

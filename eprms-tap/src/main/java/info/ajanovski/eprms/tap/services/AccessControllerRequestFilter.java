@@ -51,11 +51,13 @@ public class AccessControllerRequestFilter implements ComponentRequestFilter {
 	private PageRenderLinkSource linkSource;
 
 	public AccessControllerRequestFilter(final ApplicationStateManager asm, final ComponentSource componentSource,
-			final Logger logger) {
+			final Logger logger, Response response, PageRenderLinkSource linkSource) {
 		logger.info("AccessController ComponentRequestFilter constructor");
-		this.applicationStateManager = asm;
 		this.componentSource = componentSource;
+		this.response = response;
+		this.applicationStateManager = asm;
 		this.logger = logger;
+		this.linkSource = linkSource;
 	}
 
 	@Override
@@ -119,6 +121,10 @@ public class AccessControllerRequestFilter implements ComponentRequestFilter {
 				if (studentPage) {
 					logger.debug("checkAccess: studentPage");
 					canAccess = canAccess || userInfo.isStudent();
+				}
+				if (instructorPage) {
+					logger.debug("checkAccess: instructorPage");
+					canAccess = canAccess || userInfo.isInstructor();
 				}
 				if (adminPage) {
 					logger.debug("checkAccess: adminPage");

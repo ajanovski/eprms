@@ -75,4 +75,9 @@ public class PersonManagerImpl implements PersonManager {
 		return personDao.getRolesForPerson(personId);
 	}
 
+	@Override
+	public List<Person> getAllPersonsFromRole(String roleName) {
+		return personDao.getAllPersonsFromRole(roleName);
+	}
+
 }

@@ -80,16 +80,14 @@ public class Layout {
 	private UserInfo userInfo;
 
 	public String[] getStudentPageNames() {
-		return new String[] { "user/MyProfile", "user/MyProjectReports", "user/MyDatabases", "user/MyRepositories",
+		return new String[] { "user/MyProjects", "user/MyProjectReports", "user/MyDatabases", "user/MyRepositories",
 				"user/MyRepositoryAuth" };
 	}
 
 	public String[] getProjectManagerPageNames() {
-		if (userInfo.isAdministrator()) {
+		if (userInfo.isAdministrator() || userInfo.isInstructor()) {
 			return new String[] { "projectmanager/ProjectOverviewTickets", "projectmanager/ProjectOverviewTimeline",
-					"admin/ManageCourses", "admin/ManageProjects", "admin/ProjectAutomation",
-					"admin/OverallCourseReport", "admin/ManageActivityTypes", "admin/ManageTeams",
-					"admin/ManageDatabases", "admin/ManageRepositories", };
+					"admin/ManageCourses", "admin/ManageProjects", "admin/OverallCourseReport" };
 		} else {
 			return null;
 		}
@@ -97,7 +95,9 @@ public class Layout {
 
 	public String[] getAdminPageNames() {
 		if (userInfo.isAdministrator()) {
-			return new String[] { "admin/ManagePersons", "admin/Translations", "admin/SystemParameters" };
+			return new String[] { "admin/ManageActivityTypes", "admin/ManagePersons", "admin/ManageTeams",
+					"admin/ProjectAutomation", "admin/Translations", "admin/SystemParameters", "admin/ManageDatabases",
+					"admin/ManageRepositories" };
 		} else {
 			return null;
 		}
