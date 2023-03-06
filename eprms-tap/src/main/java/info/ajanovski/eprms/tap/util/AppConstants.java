@@ -25,19 +25,20 @@ public class AppConstants {
 	/**
 	 * Pages
 	 */
-	public final static String PageIndex = "Index";
+	public static final String PageIndex = "Index";
 
 	public static final String SystemParameterDBServerType = "DBServerType";
 	public static final String SystemParameterDBServerName = "DBServerName";
 	public static final String SystemParameterDBServerPort = "DBServerPort";
-	public final static String SystemParameterDBCreationPrefix = "DBCreationPrefix";
-	public final static String SystemParameterDBCreationOwnerSuffix = "DBCreationOwnerSuffix";
+	public static final String SystemParameterDBCreationPrefix = "DBCreationPrefix";
+	public static final String SystemParameterDBCreationOwnerSuffix = "DBCreationOwnerSuffix";
 	public static final String SystemParameterDBTunnelServerName = "DBTunnelServer";
-	public final static String SystemParameterDBTunnelPrefix = "DBTunnelPrefix";
-	public final static String[] AllSystemParameters = { SystemParameterDBServerType, SystemParameterDBServerName,
+	public static final String SystemParameterDBTunnelPrefix = "DBTunnelPrefix";
+	public static final String[] AllSystemParameters = { SystemParameterDBServerType, SystemParameterDBServerName,
 			SystemParameterDBServerPort, SystemParameterDBCreationPrefix, SystemParameterDBCreationOwnerSuffix,
 			SystemParameterDBTunnelPrefix };
 
-	public final static String SystemParameterPMOverviewTicketsURL = "PM-Overview-Tickets-URL";
-	public final static String SystemParameterPMOverviewTimelineURL = "PM-Overview-Timeline-URL";
+	public static final String SystemParameterPMOverviewTicketsURL = "PM-Overview-Tickets-URL";
+	public static final String SystemParameterPMOverviewTimelineURL = "PM-Overview-Timeline-URL";
+	public static final String SystemParameterPMCreationScript = "PM-CreationScript";
 }
