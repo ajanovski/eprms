@@ -16,6 +16,8 @@ import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
+import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @InstructorPage
@@ -27,6 +29,9 @@ public class ProjectAutomation {
 
 	@Inject
 	private GenericService genericService;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@Property
 	private Project project;
@@ -57,6 +62,10 @@ public class ProjectAutomation {
 		} else {
 			return ModelConstants.CourseUnknown;
 		}
+	}
+
+	public String getPMCreationScript() {
+		return systemConfigService.getString(AppConstants.SystemParameterPMCreationScript);
 	}
 
 }

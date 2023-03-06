@@ -6,11 +6,11 @@
 
 <ul>
 	<li t:type="loop" t:source="projects" t:value="project">#
-		${project.title}
+		${project.code}
 		<ul t:type="if" t:test="project.responsibilities">
 			<li t:type="loop" t:source="project.responsibilities"
-				t:value="responsibility">../create_trac_repo_with_db.sh
-				${responsibility?.team.name} ${courseCode} <span t:type="loop"
+				t:value="responsibility">${PMCreationScript}
+				${responsibility?.project?.code} ${courseCode} <span t:type="loop"
 				t:source="responsibility?.team?.teamMembers" t:value="member">&nbsp;${member.person.userName}</span>
 			</li>
 		</ul>
