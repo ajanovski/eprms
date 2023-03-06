@@ -17,16 +17,25 @@ import org.apache.tapestry5.services.javascript.JavaScriptSupport;
 @Import(module = { "ModalBox" })
 public class ModalBox implements ClientElement {
 
-	@Parameter(name = "componentClientId", value = "prop:componentResources.id",
-			defaultPrefix = BindingConstants.LITERAL) private String																									componentClientId;
+	@Parameter(name = "componentClientId", value = "prop:componentResources.id", defaultPrefix = BindingConstants.LITERAL)
+	private String componentClientId;
+	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL)
+	private String closeBox;
 
-	@Inject private JavaScriptSupport																																		javaScriptSupport;
-	@Inject private AjaxResponseRenderer																																	ajaxResponseRenderer;
-	@Inject private Request																																						request;
+	@Inject
+	private JavaScriptSupport javaScriptSupport;
+	@Inject
+	private AjaxResponseRenderer ajaxResponseRenderer;
+	@Inject
+	private Request request;
 
 	@Override
 	public String getClientId() {
 		return componentClientId;
+	}
+
+	public String getCloseBox() {
+		return closeBox;
 	}
 
 	void setupRender() {
@@ -34,8 +43,7 @@ public class ModalBox implements ClientElement {
 		json.put("keyboard", true);
 		json.put("backdrop", "static");
 		json.put("focus", true);
-		javaScriptSupport.require("ModalBox").invoke("activate")
-				.with(componentClientId, json);
+		javaScriptSupport.require("ModalBox").invoke("activate").with(componentClientId, json);
 	}
 
 	public void hide() {
@@ -47,8 +55,7 @@ public class ModalBox implements ClientElement {
 	private JavaScriptCallback makeScriptToHideModal() {
 		return new JavaScriptCallback() {
 			public void run(JavaScriptSupport javascriptSupport) {
-				javaScriptSupport.require("ModalBox").invoke("hide")
-						.with(componentClientId);
+				javaScriptSupport.require("ModalBox").invoke("hide").with(componentClientId);
 			}
 		};
 	}
