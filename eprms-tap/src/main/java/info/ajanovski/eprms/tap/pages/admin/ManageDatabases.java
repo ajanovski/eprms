@@ -1,5 +1,6 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
+import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -49,6 +50,13 @@ public class ManageDatabases {
 	public void onActionFromDelete(Database db) {
 		if (db.getDateCreated() == null) {
 			genericService.delete(db);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromActivateDatabases() {
+		for (Database db : getDatabases()) {
+			db.setDateCreated(new Date());
 		}
 	}
 
