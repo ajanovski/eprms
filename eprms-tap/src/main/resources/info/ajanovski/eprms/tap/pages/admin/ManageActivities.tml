@@ -23,7 +23,13 @@
 </div>
 
 <div t:type="zone" id="zoneActivities" t:id="zoneActivities">
-	<table class="table table-sm" t:type="grid" t:source="allActivities">
+	<table class="table table-sm" t:type="grid" t:source="allActivities"
+		t:row="activity" t:add="actions">
+		<p:actionsCell>
+			<a class="btn btn-danger" t:type="eventlink" t:mixins="confirm"
+				t:id="deleteActivity" t:context="activity"><img t:type="SVGIcon"
+				t:path="minus" /> ${message:delete-label}</a>
+		</p:actionsCell>
 	</table>
 </div>
 <p>

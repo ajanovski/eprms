@@ -44,7 +44,10 @@
 		${activityType.title} <a href="" t:type="EventLink"
 			t:id="EditActivityType" id="EditActivityType"
 			t:context="activityType" t:zone="editFormZone"><img
-			t:type="SVGIcon" t:path="edit" /></a>
+			t:type="SVGIcon" t:path="edit" /></a> <a class="btn btn-danger"
+			t:type="eventlink" t:id="deleteActivityType" t:mixins="confirm"
+			t:context="activityType"><img t:type="SVGIcon" t:path="minus" />
+			${message:delete-label}</a>
 	</p>
 </div>
 </html>

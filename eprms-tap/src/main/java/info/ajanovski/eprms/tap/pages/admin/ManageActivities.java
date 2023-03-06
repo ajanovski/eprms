@@ -29,6 +29,9 @@ public class ManageActivities {
 	@Property
 	private Activity newActivity;
 
+	@Property
+	private Activity activity;
+
 	@Inject
 	private GenericService genericService;
 
@@ -67,4 +70,8 @@ public class ManageActivities {
 		return selectedProject.getActivities();
 	}
 
+	@CommitAfter
+	void onDeleteActivity(Activity a) {
+		genericService.delete(a);
+	}
 }

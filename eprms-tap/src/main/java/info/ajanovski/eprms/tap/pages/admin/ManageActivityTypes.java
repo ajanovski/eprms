@@ -112,4 +112,9 @@ public class ManageActivityTypes {
 		}
 	}
 
+	@CommitAfter
+	void onDeleteActivityType(ActivityType at) {
+		genericService.delete(at);
+	}
+
 }
