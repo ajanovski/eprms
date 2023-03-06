@@ -1,0 +1,191 @@
+<html t:type="layout" title="${message:user/MyProjects-pagelink}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<style>
+.bg-project:nth-child(even) {
+	background: #e0ffff;
+}
+
+.bg-project:nth-child(odd) {
+	background: #80ffff;
+}
+</style>
+
+<div t:type="zone" t:id="zJTModal" id="zJTModal">
+	<t:if t:test="chooseATeam">
+		<t:ModalBox t:id="JTModal">
+			<h3>${message:Join-label}${message:Team-label}</h3>
+			<form t:type="form" t:id="frmJoinTeam">
+				<select t:type="select" t:model="joinableTeams"
+					t:value="selectedTeam" />
+				<submit t:type="submit" t:value="OK" />
+				<a href="" t:type="eventlink" t:id="cancelJoinTeam">${message:cancel-label}</a>
+			</form>
+		</t:ModalBox>
+	</t:if>
+</div>
+
+<div t:type="zone" t:id="zJNTModal" id="zJNTModal">
+	<t:if t:test="newMember">
+		<t:ModalBox t:id="JNTModal">
+			<h3>${message:Join-label}${message:Team-label}</h3>
+			<form t:type="form" t:id="frmAddMembers">
+				<input t:type="textfield" t:value="newMember" />
+				<submit t:type="submit" t:value="OK" />
+				<a href="" t:type="eventlink" t:id="cancelAddMembers">${message:cancel-label}</a>
+			</form>
+		</t:ModalBox>
+	</t:if>
+</div>
+
+<div t:type="zone" t:id="zNPModal" id="zNPModal">
+	<t:if t:test="newProject">
+		<t:ModalBox t:id="NPModal">
+			<h3>${message:Project-label}</h3>
+			<form t:id="frmProposeProject" t:type="Form" t:value="OK">
+				<t:beaneditor t:object="newProject" t:add="course,team"
+					t:exclude="projectId,status,startDate,finishDate"
+					t:reorder="team,course,code,title,description">
+					<p:course>
+						<label t:type="label" t:for="selectCourse"></label>
+						<select t:id="selectCourse" t:type="select" t:model="allCourses"
+							t:value="selectedCourse" />
+					</p:course>
+					<p:team>
+						<label t:type="label" t:for="selectTeam"></label>
+						<select t:id="selectTeam" t:type="select" t:model="myTeamsModel"
+							t:value="selectedTeam" />
+					</p:team>
+					<p:description>
+						<div class="form-group">
+							<label t:type="label" t:for="projectDescription"></label>
+							<textarea t:id="projectDescription" t:type="textarea"
+								t:value="newProject.description" t:mixins="webeditor"
+								t:WebEditor.areaType="" />
+						</div>
+					</p:description>
+				</t:beaneditor>
+				<button t:type="submit" t:value="OK" />
+				<a href="" t:type="eventlink" t:id="cancelNewProject">${message:cancel-label}</a>
+			</form>
+		</t:ModalBox>
+	</t:if>
+</div>
+
+<div t:type="zone" t:id="zNTModal" id="zNTModal">
+	<t:if t:test="teamToEdit">
+		<t:ModalBox t:id="NTModal">
+			<h3>${message:Team-label}</h3>
+			<form t:id="frmProposeTeam" t:type="Form" t:value="OK">
+				<t:beaneditor t:object="teamToEdit"
+					t:exclude="teamId,status,statusDate,createdDate">
+					<p:description>
+						<div class="form-group">
+							<label t:type="label" t:for="teamDescription"></label>
+							<textarea t:id="teamDescription" t:type="textarea"
+								t:value="teamToEdit.description" t:mixins="webeditor"
+								t:WebEditor.areaType="" />
+						</div>
+					</p:description>
+				</t:beaneditor>
+				<button t:type="submit" t:value="OK" />
+				<a href="" t:type="eventlink" t:id="cancelNewTeam">${message:cancel-label}</a>
+			</form>
+		</t:ModalBox>
+	</t:if>
+</div>
+
+<div class="row">
+<div class="col-6">
+
+
+<h1>${message:user/MyTeams-pagelink}</h1>
+
+<p>
+	<a href="" t:id="ProposeTeam" t:type="iconactionlink"
+		class="btn btn-primary" t:path="plus-square">
+		${message:propose-label} ${message:team-label}</a> <a href=""
+		t:id="ChooseTeamToJoin" t:type="iconactionlink"
+		class="btn btn-primary" t:path="users"> ${message:join-label}
+		${message:team-label}</a>
+</p>
+
+
+<div t:type="loop" t:source="myMemberTeams" t:value="myTeamMember"
+	class="card bg-light mb-3">
+	<div class="card-header">
+		<div class="float-right">
+			<span t:type="if" t:test="canApprove"> <a href=""
+				t:type="iconactionlink" t:id="addMembers" t:context="myTeamMember"
+				t:path="edit" class="btn btn-sm btn-secondary">${message:add-label}
+					${message:teamMember-label}</a>
+			</span> <span t:type="if" t:test="canApprove"> <a href=""
+				t:type="iconactionlink" t:id="editTeam" t:context="myTeamMember"
+				t:path="edit" class="btn btn-sm btn-info">${message:edit-label}</a>
+			</span> <a href="" t:type="iconactionlink" t:id="leaveTeam"
+				t:context="myTeamMember" t:path="minus-square" t:mixins="Confirm"
+				class="btn btn-sm btn-danger">${message:leave-label}</a>
+		</div>
+		<h3>${myTeamMember.team.name}
+			<small class="text-muted">${message:status-label}:
+				${myTeamMember.team.status}</small>
+		</h3>
+	</div>
+	<div class="card-body">
+		<p class="card-text">
+			<t:outputRaw t:value="myTeamMember.team.description" />
+		</p>
+
+		<table class="table table-sm table-hover " t:type="grid"
+			t:source="myTeamMember.team.teamMembers" t:row="teamMember"
+			t:reorder="positionNumber,name,role,status" t:add="name,actions"
+			t:exclude="teamMemberId,createdDate,statusDate">
+			<p:nameCell>${teamMember.person.userName}</p:nameCell>
+			<p:actionsCell>
+				<div t:type="if" t:test="canApprove">
+					<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
+						t:path="check" t:id="approveTeamMember" t:context="teamMember">${message:approve-label}</a>
+				</div>
+			</p:actionsCell>
+		</table>
+	</div>
+
+</div>
+
+</div>
+<div class="col-6">
+
+<h1>${message:user/MyProjects-pagelink}</h1>
+
+<p>
+	<t:if t:test="myTeams">
+		<a href="" t:id="ProposeProject" t:type="iconactionlink"
+			class="btn btn-primary" t:path="plus-square">
+			${message:propose-label} ${message:project-label}</a>
+	</t:if>
+</p>
+
+
+<div class="card mb-4 bg-project" t:type="loop" t:source="myProjects"
+	t:value="project">
+	<div class="card-header">
+		<div class="float-right">
+			<t:if t:test="projectEditable">
+				<a class="btn btn-sm btn-info" href="" t:type="iconactionlink"
+					t:path="edit" t:id="editProject" t:context="project">${message:edit-label}
+				</a>
+			</t:if>
+		</div>
+<p class="text-muted float-right">${message:status-label}:
+                                ${project.status}<br/>Code: ${project.code}</p>
+
+		<h3>${project.title}</h3>
+	</div>
+	<div class="card-body">
+		<t:outputraw t:value="project.description" />
+	</div>
+</div>
+</div>
+</div>
+</html>

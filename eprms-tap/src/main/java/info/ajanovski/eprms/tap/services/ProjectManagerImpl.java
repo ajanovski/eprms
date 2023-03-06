@@ -32,6 +32,7 @@ import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
 import info.ajanovski.eprms.model.util.ModelConstants;
@@ -97,12 +98,13 @@ public class ProjectManagerImpl implements ProjectManager {
 		if (p.getStatus() != null) {
 			String s = p.getStatus();
 			int index = Arrays.asList(ModelConstants.AllProjectStatuses).indexOf(s);
+			index++;
 			if (index < 0) {
 				index = 0;
-			} else if (index > ModelConstants.AllProjectStatuses.length) {
+			} else if (index >= ModelConstants.AllProjectStatuses.length) {
 				index = 0;
 			} else {
-				index++;
+				index = index;
 			}
 			p.setStatus(Arrays.asList(ModelConstants.AllProjectStatuses).get(index));
 		} else {
@@ -129,6 +131,11 @@ public class ProjectManagerImpl implements ProjectManager {
 		WorkReportComparator comparator = new WorkReportComparator();
 		Collections.sort(list, comparator);
 		return list;
+	}
+
+	@Override
+	public List<TeamMember> getTeamMembershipOfPerson(Long personId) {
+		return projectDao.getTeamMembershipOfPerson(personId);
 	}
 
 }

@@ -26,6 +26,7 @@ import java.util.List;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.TeamMember;
 
 public interface ProjectDao {
 
@@ -38,5 +39,7 @@ public interface ProjectDao {
 	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse);
 
 	public List<Project> getProjectByPerson(Long personId);
+
+	public List<TeamMember> getTeamMembershipOfPerson(Long personId);
 
 }

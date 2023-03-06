@@ -26,6 +26,7 @@ import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
 
@@ -42,11 +43,13 @@ public interface ProjectManager {
 	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse);
 
 	public List<Project> getProjectByPerson(Long personId);
-	
+
 	public void cycleStatus(Project p);
 
 	public List<WorkEvaluation> getWorkEvaluationForWorkReport(WorkReport workReport);
 
 	public List<WorkReport> getWorkReportsForActivity(Activity activity);
+
+	public List<TeamMember> getTeamMembershipOfPerson(Long personId);
 
 }

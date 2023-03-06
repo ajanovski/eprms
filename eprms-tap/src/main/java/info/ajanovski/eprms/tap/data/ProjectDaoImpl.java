@@ -30,6 +30,7 @@ import org.hibernate.Session;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.TeamMember;
 
 public class ProjectDaoImpl implements ProjectDao {
 
@@ -116,6 +117,17 @@ public class ProjectDaoImpl implements ProjectDao {
 		} else {
 			return null;
 		}
+	}
+
+	@Override
+	public List<TeamMember> getTeamMembershipOfPerson(Long personId) {
+		return getEntityManager().createQuery("""
+				select tm
+				from Team t
+				join t.teamMembers tm
+				join tm.person p
+				where p.personId=:personId
+				""").setParameter("personId", personId).getResultList();
 	}
 
 }

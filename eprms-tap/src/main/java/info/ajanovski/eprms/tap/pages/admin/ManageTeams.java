@@ -20,13 +20,18 @@
 
 package info.ajanovski.eprms.tap.pages.admin;
 
+import java.util.Date;
 import java.util.List;
 
+import org.apache.tapestry5.annotations.Persist;
 import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.annotations.SessionState;
+import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import info.ajanovski.eprms.model.entities.Team;
+import info.ajanovski.eprms.model.entities.TeamMember;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
@@ -43,6 +48,44 @@ public class ManageTeams {
 	private GenericService genericService;
 
 	public List<Team> getTeams() {
-		return (List<Team>) genericService.getAll(Team.class);
+		List<Team> lista = (List<Team>) genericService.getAll(Team.class);
+		if (approvalOnly != null && approvalOnly) {
+			return lista.stream()
+					.filter(p -> p.getStatus() != null && p.getStatus().equals(ModelConstants.TeamStatusProposed))
+					.toList();
+		} else {
+			return lista;
+		}
 	}
+
+	@Property
+	private Team team;
+
+	@Property
+	private TeamMember teamMember;
+
+	@Persist
+	@Property
+	private Boolean approvalOnly;
+
+	void onActionFromToggleApprovalOnly() {
+		if (approvalOnly == null) {
+			approvalOnly = false;
+		} else {
+			approvalOnly = !approvalOnly;
+		}
+	}
+
+	@CommitAfter
+	void onActionFromApproveTeam(Team t) {
+		t.setStatus(ModelConstants.TeamStatusAccepted);
+		t.setOpenForNewMembers(false);
+		t.setStatusDate(new Date());
+		for (TeamMember tm : t.getTeamMembers()) {
+			tm.setStatus(ModelConstants.TeamMemberStatusAccepted);
+			genericService.saveOrUpdate(tm);
+		}
+		genericService.saveOrUpdate(t);
+	}
+
 }
