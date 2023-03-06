@@ -1,34 +1,51 @@
-<html t:type="layout" title="message:admin/ManageTeams-pagelink"
+<html t:type="layout" title="message:admin/ManagePersons-pagelink"
 	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
 	xmlns:p="tapestry:parameter">
 
 <h1>${message:admin/ManagePersons-pagelink}</h1>
 
 <p>
-	<span t:type="unless" t:test="personListToImport">
-		<a href="" t:type="actionlink" t:id="ImportPersons"
-			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
+	<span t:type="unless" t:test="personListToImport"> <a href=""
+		t:type="actionlink" t:id="ImportPersons"
+		class="btn btn-sm btn-primary"><img t:type="SVGIcon"
 			t:path="upload" /> ${message:import-label}</a>
-	</span>
-
-	<span t:type="unless" t:test="personToEdit">
-		<a href="" t:type="actionlink" t:id="NewPerson" t:context="person"
-			class="btn btn-sm btn-primary"><img t:type="SVGIcon" t:path="plus-square" />
-			${message:New-label}</a>
+	</span> <span t:type="unless" t:test="personToEdit"> <a href=""
+		t:type="actionlink" t:id="NewPerson" t:context="person"
+		class="btn btn-sm btn-primary"><img t:type="SVGIcon"
+			t:path="plus-square" /> ${message:New-label}</a>
 	</span>
 </p>
 
 <div t:type="if" t:test="personListToImport"
 	class="card bg-light p-3 mb-3">
-	<form t:type="form" t:id="frmImport">
-		<div class="form-group">
-			<label t:type="label" t:for="personListToImport"></label><input
-				t:id="personListToImport" t:type="textarea"
-				t:object="personListToImport" />
-		</div>
-		<input t:type="submit" t:value="OK" />
-	</form>
-	<p class="bg-warning p-1 mt-3">${errors}</p>
+	<t:modalbox>
+		<form t:type="form" t:id="frmImport">
+			<div class="form-group">
+				<label t:type="label" t:for="personListToImport"></label><input
+					t:id="personListToImport" t:type="textarea"
+					t:object="personListToImport" />
+			</div>
+			<input t:type="submit" t:value="OK" /> <a href="" t:type="eventlink"
+				t:id="cancelImport">${message:cancel-label}</a>
+		</form>
+		<p class="bg-warning p-1 mt-3">${errors}</p>
+	</t:modalbox>
+</div>
+
+<div t:type="if" t:test="personToAddRole" class="card bg-light p-3 mb-3">
+	<t:modalbox>
+		<h3>${message:user-label}:${personToAddRole.lastName}
+			${personToAddRole.userName}</h3>
+		<form t:type="form" t:id="frmSelectRole">
+			<div class="form-group">
+				<label t:type="label" t:for="selectRole"></label><select
+					t:type="select" t:id="selectRole" t:value="selectRole"
+					t:model="rolesModel" />
+			</div>
+			<input t:type="submit" t:value="OK" /> <a href="" t:type="eventlink"
+				t:id="cancelAddRole">${message:cancel-label} </a>
+		</form>
+	</t:modalbox>
 </div>
 
 <div t:type="if" t:test="personToEdit" class="card bg-light p-3 mb-3">
@@ -37,7 +54,17 @@
 </div>
 
 <table class="table table-sm" t:type="grid" t:source="allPersons"
-	t:row="person" t:exclude="personId,authString" t:add="actions">
+	t:row="person" t:exclude="personId,authString" t:add="roles,actions">
+	<p:rolesCell>
+		<div class="btn btn-default" t:type="loop" t:source="personRoles"
+			t:value="personRole">${personRole.role.name}<a href=""
+				class="btn btn-sm btn-danger p-0" t:type="eventlink" t:id="removeRole"
+				t:context="personRole"><img t:type="SVGIcon" t:path="trash" /></a>
+		</div>
+		<a href="" t:type="eventlink" t:id="AddRole" t:context="person"
+			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
+			t:path="plus" /> ${message:role-label}</a>
+	</p:rolesCell>
 	<p:actionsCell>
 		<a href="" t:type="actionlink" t:id="EditPerson" t:context="person"
 			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
