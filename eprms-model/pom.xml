@@ -5,7 +5,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>model</artifactId>
-	<version>0.0.7-SNAPSHOT</version>
+	<version>0.0.8-SNAPSHOT</version>
 
 	<name>EPRMS - Educational Project and Resource Management System - Model</name>
 

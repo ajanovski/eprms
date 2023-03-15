@@ -74,4 +74,12 @@ public class ModelConstants {
 
 	public static final String[] AllTeamMemberStatuses = { TeamMemberStatusProposed, TeamMemberStatusAccepted,
 			TeamMemberStatusPaused, TeamMemberStatusFinished, TeamMemberStatusQuit };
+
+	public static final String DiscussionPostTypeBug = "BUG";
+	public static final String DiscussionPostTypeImprovement = "IMPROVEMENT";
+	public static final String DiscussionPostTypeTask = "TASK";
+	public static final String DiscussionPostTypeOther = "OTHER";
+	public static final String[] AllDiscussionPostTypes = { DiscussionPostTypeBug, DiscussionPostTypeImprovement,
+			DiscussionPostTypeTask, DiscussionPostTypeOther };
+
 }
