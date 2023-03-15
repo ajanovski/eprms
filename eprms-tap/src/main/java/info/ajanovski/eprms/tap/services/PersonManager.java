@@ -43,7 +43,11 @@ public interface PersonManager {
 	public List<Role> getRolesForPerson(long personId);
 
 	public List<Person> getAllPersonsFromRole(String roleName);
-	
-	
+
+	public boolean isInstructor(long personId);
+
+	public boolean isStudent(long personId);
+
+	public boolean isAdministrator(long personId);
 
 }

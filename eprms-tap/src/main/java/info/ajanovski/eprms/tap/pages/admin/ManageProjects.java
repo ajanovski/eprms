@@ -54,6 +54,7 @@ import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
+import info.ajanovski.eprms.tap.services.CourseManager;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ProjectManager;
 import info.ajanovski.eprms.tap.services.SystemConfigService;
@@ -74,6 +75,9 @@ public class ManageProjects {
 
 	@Inject
 	private ProjectManager projectManager;
+
+	@Inject
+	private CourseManager courseManager;
 
 	@Inject
 	private SystemConfigService systemConfigService;
@@ -231,16 +235,7 @@ public class ManageProjects {
 	}
 
 	public List<Course> getAllCourses() {
-		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
-		if (userInfo.isInstructor() && !userInfo.isAdministrator()) {
-			lista = lista.stream()
-					.filter(p -> p.getCourseTeachers().stream()
-							.anyMatch(q -> q.getTeacher().getPersonId() == userInfo.getPersonId()))
-					.collect(Collectors.toList());
-		}
-		CourseComparator cc = new CourseComparator();
-		Collections.sort(lista, cc);
-		return lista;
+		return courseManager.getAllCoursesByPerson(userInfo.getPersonId());
 	}
 
 	public SelectModel getCoursesModel() {

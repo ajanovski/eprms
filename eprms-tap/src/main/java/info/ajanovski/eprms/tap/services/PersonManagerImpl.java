@@ -27,7 +27,9 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
 import info.ajanovski.eprms.model.entities.Role;
+import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.data.PersonDao;
+import info.ajanovski.eprms.tap.util.UserInfo.UserRole;
 
 public class PersonManagerImpl implements PersonManager {
 
@@ -78,6 +80,24 @@ public class PersonManagerImpl implements PersonManager {
 	@Override
 	public List<Person> getAllPersonsFromRole(String roleName) {
 		return personDao.getAllPersonsFromRole(roleName);
+	}
+
+	@Override
+	public boolean isInstructor(long personId) {
+		List<Role> userRoles = getRolesForPerson(personId);
+		return userRoles.stream().anyMatch(p -> p.getName().equals(ModelConstants.RoleInstructor));
+	}
+
+	@Override
+	public boolean isStudent(long personId) {
+		List<Role> userRoles = getRolesForPerson(personId);
+		return userRoles.stream().anyMatch(p -> p.getName().equals(ModelConstants.RoleStudent));
+	}
+
+	@Override
+	public boolean isAdministrator(long personId) {
+		List<Role> userRoles = getRolesForPerson(personId);
+		return userRoles.stream().anyMatch(p -> p.getName().equals(ModelConstants.RoleAdministrator));
 	}
 
 }
