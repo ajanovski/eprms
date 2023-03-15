@@ -1,0 +1,65 @@
+<html t:type="layout" title="${message:user/Discussions-pagelink}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:user/Discussions-pagelink}</h1>
+
+<form t:type="form" t:id="selectCourseForm"
+	class="form-inline col-12 mb-3">
+	<div class="form-group">
+		<label t:type="label" t:for="selectCourse"></label> <select
+			class="ml-1" t:id="selectCourse" t:type="select"
+			t:model="courseModel" t:value="selectedCourse" t:zone="courseZone"
+			onchange="this.form.submit(); "></select>
+	</div>
+	<t:submit t:value="OK" />
+</form>
+
+<div t:type="zone" t:id="courseZone">
+
+	<t:if t:test="selectedCourse">
+		<form t:type="form" t:id="selectDiscussionSessionForm"
+			class="form-inline col-12 mb-3">
+			<div class="form-group">
+				<label t:type="label" t:for="selectDiscussionSession"></label> <select
+					class="ml-1" t:id="selectDiscussionSession" t:type="select"
+					t:model="discussionSessionModel"
+					t:value="selectedDiscussionSession" t:zone="discussionSessionZone"
+					onchange="this.form.submit(); "></select>
+			</div>
+			<t:submit t:value="OK" />
+		</form>
+	</t:if>
+
+	<div t:type="zone" t:id="discussionSessonZone">
+		<div t:type="if" t:test="selectedDiscussionSession">
+			<div t:type="loop"
+				t:source="selectedDiscussionSession.discussionsOnCourseProjects"
+				t:value="discussionOnCourseProject"
+				class="card mb-3 card-body bg-light p-1">
+				<div class="card-body pb-0 pt-1 pl-1">
+					<p class="float-right m-0 mt-2">
+						${message:team-label}: <span t:type="loop"
+							t:source="discussionOnCourseProject.courseProject.project.responsibilities"
+							t:value="responsibility" class="border p-1 ml-2"> <span
+							t:type="loop" t:source="responsibility.team.teamMembers"
+							t:value="teamMember"> ${teamMember.person.firstName}
+								${teamMember.person.lastName} [${teamMember.person.userName}]</span>
+						</span>
+					</p>
+					<h3>${discussionOnCourseProject.courseProject.project.title}</h3>
+					<p>
+						<a class="btn btn-primary" t:type="pagelink"
+							t:page="user/DiscussProject"
+							t:context="discussionOnCourseProject"><svg t:type="svgicon"
+								t:path="file-text" t:height="24" />${message:discussions-label}:
+							${discussionOnCourseProject.discussionPosts.size()}</a>
+					</p>
+
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+</html>

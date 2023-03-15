@@ -80,7 +80,7 @@ public class Layout {
 	private UserInfo userInfo;
 
 	public String[] getStudentPageNames() {
-		return new String[] { "user/MyProjects", "user/MyProjectReports", "user/MyDatabases", "user/MyRepositories",
+		return new String[] { "user/MyProjects", "user/MyProjectReports", "user/Discussions", "user/MyDatabases", "user/MyRepositories",
 				"user/MyRepositoryAuth" };
 	}
 

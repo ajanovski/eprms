@@ -1,0 +1,65 @@
+<html t:type="layout" title="${message:user/Discussions-pagelink}"
+	xmlns:t="http://tapestry.apache.org/schema/tapestry_5_4.xsd"
+	xmlns:p="tapestry:parameter">
+
+<h1>${message:user/Discussions-pagelink}</h1>
+
+<h2>Project:
+	${discussionOnCourseProject?.courseProject?.project?.title}</h2>
+
+<div t:type="zone" t:id="zAllPosts">
+	<div t:type='if' t:test="editDiscussionPost">
+		<t:modalbox>
+			<form t:type="form" t:id="FrmEditPost">
+				<t:beaneditor t:object="editDiscussionPost"
+					t:exclude="discussionPostId, postedOn">
+					<p:type>
+						<t:unless t:test="editDiscussionPost.replyTo">
+							<div class="form-group">
+								<label t:type="label" t:for="selectPostType" /> <select
+									t:type="select" t:id="selectPostType" t:model="postTypes"
+									t:value="editDiscussionPost.type" />
+							</div>
+						</t:unless>
+					</p:type>
+					<p:message>
+						<div class="form-group">
+							<label t:type="label" t:for="message"></label>
+							<textarea t:id="message" t:type="textarea"
+								t:value="editDiscussionPost.message" t:mixins="webeditor"
+								t:WebEditor.areaType="" />
+						</div>
+					</p:message>
+				</t:beaneditor>
+				<t:submit t:value="OK" />
+				<a t:type="actionlink" t:id="cancelFrmEditPost"
+					class="btn btn-secondary">${message:cancel-label}</a>
+			</form>
+		</t:modalbox>
+	</div>
+
+	<div class="card mb-1 bg-light ${classOfPostAuthor} ${indentation}"
+		t:type="loop" t:source="allDiscussionPosts" t:value="discussionPost">
+		<div class="card-header  p-2">
+			<div class="row">
+				<div class="col-9" id="postAuthor">${postAuthor}</div>
+				<div class="col-3 float-right text-right">${discussionPost.type}
+					- ${discussionPost.postedOn}</div>
+			</div>
+		</div>
+		<div class="card-body p-2">
+			<t:outputraw t:value="discussionPost.message" />
+			<p>
+				<a href="" class="btn btn-sm btn-secondary" t:type="iconactionlink"
+					t:id="replyToPost" t:context="discussionPost"
+					t:path="corner-down-left" t:zone="zAllPosts">${message:replyTo-label}</a>
+			</p>
+		</div>
+
+	</div>
+
+	<a href="" class="btn btn-primary" t:type="iconactionlink"
+		t:id="addPost" t:path="message-square" t:zone="zAllPosts">${message:newMessage-label}</a>
+
+</div>
+</html>

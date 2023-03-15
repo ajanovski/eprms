@@ -16,9 +16,10 @@
 <meta http-equiv="X-UA-Compatible" content="IE=edge" />
 </head>
 
-<body style="padding-top: 4.5em;">
-	<nav class="navbar navbar-dark navbar-expand-lg fixed-top">
+<body>
+	<nav id="mainnav" class="navbar navbar-dark navbar-expand-lg fixed-top">
 		<a class="navbar-brand" t:type="pagelink" t:page="user/MyProfile">${message:app-title-short}</a>
+
 		<button class="navbar-toggler" type="button" data-toggle="collapse"
 			data-target="#mainMenu" aria-controls="mainMenu"
 			aria-expanded="false" aria-label="Toggle navigation">
@@ -43,7 +44,7 @@
 							</t:loop>
 						</div></li>
 				</t:if>
-				<t:if t:test="userInfo.administrator">
+				<t:if t:test="userInfo?.administrator">
 					<li class="nav-item dropdown"><a
 						class="nav-link dropdown-toggle" href="#" id="mainMenuAdmin"
 						role="button" data-toggle="dropdown" aria-haspopup="true"
@@ -58,7 +59,6 @@
 			</ul>
 
 			<ul class="navbar-nav navbar-right">
-
 				<li class="nav-item"><a class="nav-link" href=""
 					t:type="actionlink" t:id="localeToggle">${message:lang-label} <span
 						class="btn btn-primary pl-1 pr-1 pt-0 pb-0">${displayLanguage}</span></a></li>
@@ -88,9 +88,7 @@
 			</div>
 		</div>
 
-		<!-- content -->
 		<t:body />
-		<!-- /content -->
 
 		<hr />
 		<footer>

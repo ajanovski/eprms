@@ -1,0 +1,57 @@
+.indentation0 {
+	margin: 0rem;
+}
+
+.indentation1 {
+	margin-left: 0rem;
+}
+
+.indentation2 {
+	margin-left: 2rem;
+}
+
+.indentation3 {
+	margin-left: 4rem;
+}
+
+.indentation4 {
+	margin-left: 6rem;
+}
+
+.indentation5 {
+	margin-left: 8rem;
+}
+
+.indentation6 {
+	margin-left: 10rem;
+}
+
+.reshenieto img {
+	width: 100%;
+}
+
+.discussion {
+	font-size: 90%;
+}
+
+.discussion img {
+	width: 100%;
+}
+
+.feedback img {
+	width: 100%;	
+}
+
+.personAdmin #postAuthor::after {
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Crect x='4' y='4' width='16' height='16' rx='2' ry='2'%3E%3C/rect%3E%3Crect x='9' y='9' width='6' height='6'%3E%3C/rect%3E%3Cline x1='9' y1='1' x2='9' y2='4'%3E%3C/line%3E%3Cline x1='15' y1='1' x2='15' y2='4'%3E%3C/line%3E%3Cline x1='9' y1='20' x2='9' y2='23'%3E%3C/line%3E%3Cline x1='15' y1='20' x2='15' y2='23'%3E%3C/line%3E%3Cline x1='20' y1='9' x2='23' y2='9'%3E%3C/line%3E%3Cline x1='20' y1='14' x2='23' y2='14'%3E%3C/line%3E%3Cline x1='1' y1='9' x2='4' y2='9'%3E%3C/line%3E%3Cline x1='1' y1='14' x2='4' y2='14'%3E%3C/line%3E%3C/svg%3E");
+    display: inline-block;
+	margin-left:0.5em;
+	 vertical-align: -3px;
+}
+
+.personProjectTeamMember #postAuthor::after {
+	content: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' width='16' height='16' stroke='currentColor' stroke-width='2' fill='none' stroke-linecap='round' stroke-linejoin='round' class='css-i6dzq1'%3E%3Cpath d='M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2'%3E%3C/path%3E%3Ccircle cx='9' cy='7' r='4'%3E%3C/circle%3E%3Cpath d='M23 21v-2a4 4 0 0 0-3-3.87'%3E%3C/path%3E%3Cpath d='M16 3.13a4 4 0 0 1 0 7.75'%3E%3C/path%3E%3C/svg%3E");    
+	display: inline-block;
+	margin-left:0.5em;
+	 vertical-align: -3px;
+}
