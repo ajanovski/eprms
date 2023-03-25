@@ -16,25 +16,27 @@
 	</p:else>
 </div>
 
-<div class="card card-body bg-light mb-3" t:type="loop" t:source="teams"
+<div class="card bg-light mb-3" t:type="loop" t:source="teams"
 	t:value="team">
-	<h2>${team.name}
-		<div t:type="if" t:test="approvalOnly">
-			<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
-				t:id="approveTeam" t:context="team" t:path="check">${message:approve-label}</a>
-		</div>
-	</h2>
-	<p>
-		<t:outputraw t:value="team.description" />
-	</p>
-	${team.statusDate} <br />${message:openForNewMembers-label}:
-	${team.openForNewMembers} - Max: ${team.maxMembers}
+	<div class="card-header">
+		<h2>${team.name}
+			<div t:type="if" t:test="approvalOnly">
+				<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
+					t:id="approveTeam" t:context="team" t:path="check">${message:approve-label}</a>
+			</div>
+		</h2>
+	</div>
+	<div class="card-body">
+		<p>
+			<t:outputraw t:value="team.description" />
+		</p>
+		<p>${team.statusDate}</p>
+		<p>${message:openForNewMembers-label}:
+			&nbsp;${team.openForNewMembers} Max: ${team.maxMembers}</p>
 
-	<table class="table table-sm " t:type="grid"
-		t:source="team.teamMembers" t:row="teamMember" t:add="name"
-		t:exclude="teamMemberId,createdDate,statusDate">
-		<p:nameCell>${teamMember.person.userName}  ${teamMember.person.firstName} ${teamMember.person.lastName}</p:nameCell>
-	</table>
+		<t:TeamMembersGrid t:team="team" t:title="false" t:actions="true"
+			t:dates="true" />
 
+	</div>
 </div>
 </html>

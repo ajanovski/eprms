@@ -227,7 +227,8 @@
 					<div class="col-8">
 						<div class="card mb-3 p-3" t:type="loop"
 							t:source="project.responsibilities" t:value="responsibility">
-							<t:TeamMembersGrid t:team="responsibility.team" />
+							<t:TeamMembersGrid t:team="responsibility.team" t:actions="true"
+								t:dates="true" />
 							<p>
 								<a t:type="actionlink" t:context="responsibility.team"
 									t:id="addTeamMember" role="button"
