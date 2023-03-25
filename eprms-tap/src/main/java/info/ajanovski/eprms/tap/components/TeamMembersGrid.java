@@ -51,6 +51,18 @@ public class TeamMembersGrid {
 	private Team team;
 
 	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.PROP, value = "false")
+	private boolean actions;
+
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.PROP, value = "false")
+	private boolean dates;
+
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.PROP, value = "true")
+	private boolean title;
+
+	@Property
 	private TeamMember teamMember;
 
 	@CommitAfter
@@ -74,11 +86,17 @@ public class TeamMembersGrid {
 	public BeanModel<TeamMember> getBeanModel() {
 		BeanModel<TeamMember> bm = beanModelSource.createDisplayModel(TeamMember.class, messages);
 		bm.exclude("teamMemberId");
+		bm.add("email", pcs.create(TeamMember.class, "person.email"));
 		bm.add("userName", pcs.create(TeamMember.class, "person.userName"));
 		bm.add("lastName", pcs.create(TeamMember.class, "person.lastName"));
 		bm.add("firstName", pcs.create(TeamMember.class, "person.firstName"));
-		bm.reorder("positionNumber", "role", "lastName", "firstName", "userName");
-		bm.add("actions", null);
+		bm.reorder("positionNumber", "role", "lastName", "firstName", "userName", "email");
+		if (actions) {
+			bm.add("actions", null);
+		}
+		if (!dates) {
+			bm.exclude("createdDate", "statusDate");
+		}
 		return bm;
 	}
 
