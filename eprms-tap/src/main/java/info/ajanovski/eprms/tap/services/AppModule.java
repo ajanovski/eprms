@@ -70,6 +70,7 @@ public class AppModule {
 
 	public static void bind(ServiceBinder binder) {
 		binder.bind(AccessControllerRequestFilter.class);
+		binder.bind(CourseManager.class);
 		binder.bind(GenericDao.class);
 		binder.bind(GenericService.class);
 		binder.bind(PersonDao.class);
