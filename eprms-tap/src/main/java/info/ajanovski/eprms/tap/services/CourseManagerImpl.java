@@ -7,7 +7,6 @@ import java.util.stream.Collectors;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import info.ajanovski.eprms.model.entities.Course;
-import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.util.CourseComparator;
 
 public class CourseManagerImpl implements CourseManager {

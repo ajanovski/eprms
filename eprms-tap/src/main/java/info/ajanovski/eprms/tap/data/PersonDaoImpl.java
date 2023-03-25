@@ -33,7 +33,6 @@ import org.slf4j.Logger;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
 import info.ajanovski.eprms.model.entities.Role;
-import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.util.UsefulMethods;
 
 public class PersonDaoImpl implements PersonDao {

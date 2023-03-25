@@ -1,7 +1,6 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -22,7 +21,6 @@ import info.ajanovski.eprms.model.entities.CourseTeacher;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.util.ActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
-import info.ajanovski.eprms.model.util.CourseComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;

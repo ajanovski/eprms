@@ -29,7 +29,6 @@ import info.ajanovski.eprms.model.entities.PersonRole;
 import info.ajanovski.eprms.model.entities.Role;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.data.PersonDao;
-import info.ajanovski.eprms.tap.util.UserInfo.UserRole;
 
 public class PersonManagerImpl implements PersonManager {
 

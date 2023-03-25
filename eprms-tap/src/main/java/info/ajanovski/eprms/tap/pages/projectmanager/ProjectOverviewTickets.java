@@ -38,7 +38,6 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
-import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.SystemConfigService;
 import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;

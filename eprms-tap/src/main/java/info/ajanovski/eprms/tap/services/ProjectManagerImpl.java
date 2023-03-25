@@ -104,7 +104,6 @@ public class ProjectManagerImpl implements ProjectManager {
 			} else if (index >= ModelConstants.AllProjectStatuses.length) {
 				index = 0;
 			} else {
-				index = index;
 			}
 			p.setStatus(Arrays.asList(ModelConstants.AllProjectStatuses).get(index));
 		} else {

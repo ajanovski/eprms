@@ -8,8 +8,6 @@ import javax.inject.Inject;
 
 import org.slf4j.Logger;
 
-import info.ajanovski.eprms.model.entities.SystemParameter;
-
 public class AppConfig {
 	private static final String BUNDLE_NAME = "AppConfig";
 
