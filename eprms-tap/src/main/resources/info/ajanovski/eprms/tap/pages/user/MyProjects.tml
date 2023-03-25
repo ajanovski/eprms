@@ -15,13 +15,21 @@
 <div t:type="zone" t:id="zJTModal" id="zJTModal">
 	<t:if t:test="chooseATeam">
 		<t:ModalBox t:id="JTModal">
-			<h3>${message:Join-label}${message:Team-label}</h3>
-			<form t:type="form" t:id="frmJoinTeam">
-				<select t:type="select" t:model="joinableTeams"
-					t:value="selectedTeam" />
-				<submit t:type="submit" t:value="OK" />
-				<a href="" t:type="eventlink" t:id="cancelJoinTeam">${message:cancel-label}</a>
-			</form>
+			<a href="" t:type="eventlink" t:id="cancelJoinTeam"
+				class="btn btn-default float-right">${message:cancel-label}</a>
+			<h3>${message:Join-label}&nbsp;${message:Team-label}</h3>
+			<div class="card bg-light mb-3" t:type="loop" t:source="listOfJoinableTeams"
+				t:value="joinableTeam">
+				<div class="card-header">
+					<a class="btn btn-sm btn-primary float-right"
+						t:type="iconactionlink" t:id="joinTeam" t:context="joinableTeam"
+						t:path="plus">${message:Join-label}</a><h4>${joinableTeam.name}</h4></div>
+				<div class="card-body">
+					<t:outputraw t:value="joinableTeam.description" />
+					<p></p>
+					<t:TeamMembersGrid t:team="joinableTeam" />
+				</div>
+			</div>
 		</t:ModalBox>
 	</t:if>
 </div>
@@ -97,95 +105,87 @@
 </div>
 
 <div class="row">
-<div class="col-6">
-
-
-<h1>${message:user/MyTeams-pagelink}</h1>
-
-<p>
-	<a href="" t:id="ProposeTeam" t:type="iconactionlink"
-		class="btn btn-primary" t:path="plus-square">
-		${message:propose-label} ${message:team-label}</a> <a href=""
-		t:id="ChooseTeamToJoin" t:type="iconactionlink"
-		class="btn btn-primary" t:path="users"> ${message:join-label}
-		${message:team-label}</a>
-</p>
-
-
-<div t:type="loop" t:source="myMemberTeams" t:value="myTeamMember"
-	class="card bg-light mb-3">
-	<div class="card-header">
-		<div class="float-right">
-			<span t:type="if" t:test="canApprove"> <a href=""
-				t:type="iconactionlink" t:id="addMembers" t:context="myTeamMember"
-				t:path="edit" class="btn btn-sm btn-secondary">${message:add-label}
-					${message:teamMember-label}</a>
-			</span> <span t:type="if" t:test="canApprove"> <a href=""
-				t:type="iconactionlink" t:id="editTeam" t:context="myTeamMember"
-				t:path="edit" class="btn btn-sm btn-info">${message:edit-label}</a>
-			</span> <a href="" t:type="iconactionlink" t:id="leaveTeam"
-				t:context="myTeamMember" t:path="minus-square" t:mixins="Confirm"
-				class="btn btn-sm btn-danger">${message:leave-label}</a>
-		</div>
-		<h3>${myTeamMember.team.name}
-			<small class="text-muted">${message:status-label}:
-				${myTeamMember.team.status}</small>
-		</h3>
-	</div>
-	<div class="card-body">
-		<p class="card-text">
-			<t:outputRaw t:value="myTeamMember.team.description" />
+	<div class="col-6">
+		<h1>${message:user/MyTeams-pagelink}</h1>
+		<p>
+			<a href="" t:id="ProposeTeam" t:type="iconactionlink"
+				class="btn btn-primary" t:path="plus-square">
+				${message:propose-label} ${message:team-label}</a> <a href=""
+				t:id="ChooseTeamToJoin" t:type="iconactionlink"
+				class="btn btn-primary" t:path="users"> ${message:join-label}
+				${message:team-label}</a>
 		</p>
-
-		<table class="table table-sm table-hover " t:type="grid"
-			t:source="myTeamMember.team.teamMembers" t:row="teamMember"
-			t:reorder="positionNumber,name,role,status" t:add="name,actions"
-			t:exclude="teamMemberId,createdDate,statusDate">
-			<p:nameCell>${teamMember.person.userName}</p:nameCell>
-			<p:actionsCell>
-				<div t:type="if" t:test="canApprove">
-					<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
-						t:path="check" t:id="approveTeamMember" t:context="teamMember">${message:approve-label}</a>
+		<div t:type="loop" t:source="myMemberTeams" t:value="myTeamMember"
+			class="card bg-light mb-3">
+			<div class="card-header">
+				<div class="float-right">
+					<span t:type="if" t:test="canApprove"> <a href=""
+						t:type="iconactionlink" t:id="addMembers" t:context="myTeamMember"
+						t:path="edit" class="btn btn-sm btn-secondary">${message:add-label}
+							${message:teamMember-label}</a>
+					</span> <span t:type="if" t:test="canApprove"> <a href=""
+						t:type="iconactionlink" t:id="editTeam" t:context="myTeamMember"
+						t:path="edit" class="btn btn-sm btn-info">${message:edit-label}</a>
+					</span> <a href="" t:type="iconactionlink" t:id="leaveTeam"
+						t:context="myTeamMember" t:path="minus-square" t:mixins="Confirm"
+						class="btn btn-sm btn-danger">${message:leave-label}</a>
 				</div>
-			</p:actionsCell>
-		</table>
-	</div>
-
-</div>
-
-</div>
-<div class="col-6">
-
-<h1>${message:user/MyProjects-pagelink}</h1>
-
-<p>
-	<t:if t:test="myTeams">
-		<a href="" t:id="ProposeProject" t:type="iconactionlink"
-			class="btn btn-primary" t:path="plus-square">
-			${message:propose-label} ${message:project-label}</a>
-	</t:if>
-</p>
-
-
-<div class="card mb-4 bg-project" t:type="loop" t:source="myProjects"
-	t:value="project">
-	<div class="card-header">
-		<div class="float-right">
-			<t:if t:test="projectEditable">
-				<a class="btn btn-sm btn-info" href="" t:type="iconactionlink"
-					t:path="edit" t:id="editProject" t:context="project">${message:edit-label}
-				</a>
-			</t:if>
+				<h3>${myTeamMember.team.name}
+					<small class="text-muted">${message:status-label}:
+						${myTeamMember.team.status}</small>
+				</h3>
+			</div>
+			<div class="card-body">
+				<p class="card-text">
+					<t:outputRaw t:value="myTeamMember.team.description" />
+				</p>
+				<table class="table table-sm table-hover " t:type="grid"
+					t:source="myTeamMember.team.teamMembers" t:row="teamMember"
+					t:reorder="positionNumber,name,role,status"
+					t:add="name,email,actions"
+					t:exclude="teamMemberId,createdDate,statusDate">
+					<p:nameCell>${teamMember.person.firstName} ${teamMember.person.lastName} [${teamMember.person.userName}]</p:nameCell>
+					<p:emailCell>${teamMember.person.email}</p:emailCell>
+					<p:actionsCell>
+						<div t:type="if" t:test="canApprove">
+							<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
+								t:path="check" t:id="approveTeamMember" t:context="teamMember">${message:approve-label}</a>
+						</div>
+					</p:actionsCell>
+				</table>
+			</div>
 		</div>
-<p class="text-muted float-right">${message:status-label}:
-                                ${project.status}<br/>Code: ${project.code}</p>
+	</div>
 
-		<h3>${project.title}</h3>
+	<div class="col-6">
+		<h1>${message:user/MyProjects-pagelink}</h1>
+		<p>
+			<t:if t:test="myTeams">
+				<a href="" t:id="ProposeProject" t:type="iconactionlink"
+					class="btn btn-primary" t:path="plus-square">
+					${message:propose-label} ${message:project-label}</a>
+			</t:if>
+		</p>
+		<div class="card mb-4 bg-project" t:type="loop" t:source="myProjects"
+			t:value="project">
+			<div class="card-header">
+				<div class="float-right">
+					<t:if t:test="projectEditable">
+						<a class="btn btn-sm btn-info" href="" t:type="iconactionlink"
+							t:path="edit" t:id="editProject" t:context="project">${message:edit-label}
+						</a>
+					</t:if>
+				</div>
+				<p class="text-muted float-right">${message:status-label}:
+					${project.status}<br />Code: ${project.code}
+				</p>
+
+				<h3>${project.title}</h3>
+			</div>
+			<div class="card-body">
+				<t:outputraw t:value="project.description" />
+			</div>
+		</div>
 	</div>
-	<div class="card-body">
-		<t:outputraw t:value="project.description" />
-	</div>
-</div>
-</div>
 </div>
 </html>

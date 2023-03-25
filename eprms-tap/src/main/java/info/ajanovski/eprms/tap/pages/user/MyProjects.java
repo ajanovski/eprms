@@ -78,10 +78,6 @@ public class MyProjects {
 	@Inject
 	private GenericService genericService;
 
-	public List<Project> getMyProjects() {
-		return projectManager.getProjectByPerson(userInfo.getPersonId());
-	}
-
 	@Property
 	private Project project;
 
@@ -128,12 +124,19 @@ public class MyProjects {
 	@Persist
 	private String newMember;
 
+	@Property
+	private Team joinableTeam;
+
 	public void setupRender() {
 		if (teamNew == null) {
 			if (teamToEdit != null) {
 				teamToEdit = genericService.getByPK(Team.class, teamToEdit.getTeamId());
 			}
 		}
+	}
+
+	public List<Project> getMyProjects() {
+		return projectManager.getProjectByPerson(userInfo.getPersonId());
 	}
 
 	public SelectModel getAllCourses() {
@@ -287,29 +290,28 @@ public class MyProjects {
 		}
 	}
 
-	public SelectModel getJoinableTeams() {
+	public List<Team> getListOfJoinableTeams() {
 		List<Team> lista = (List<Team>) genericService.getAll(Team.class);
-		return selectModelFactory.create(lista.stream()
+		return lista.stream()
 				.filter(p -> p.getOpenForNewMembers() != null && p.getOpenForNewMembers() == true
 						&& !(getMyMemberTeams().stream().anyMatch(q -> q.getTeam().getTeamId() == p.getTeamId())))
-				.collect(Collectors.toList()), "name");
+				.collect(Collectors.toList());
+	}
+
+	public SelectModel getJoinableTeams() {
+		return selectModelFactory.create(getListOfJoinableTeams(), "name");
 	}
 
 	@CommitAfter
-	public void onValidateFromFrmJoinTeam() {
-		if (selectedTeam != null) {
-			TeamMember tm = new TeamMember();
-			tm.setPerson(getMyself());
-			tm.setRole(ModelConstants.TeamMemberRoleMember);
-			tm.setTeam(selectedTeam);
-			tm.setStatus(ModelConstants.TeamMemberStatusProposed);
-			tm.setCreatedDate(new Date());
-			tm.setStatusDate(new Date());
-			genericService.saveOrUpdate(tm);
-		}
-	}
-
-	public void onSuccessFromFrmJoinTeam() {
+	public void onActionFromJoinTeam(Team t) {
+		TeamMember tm = new TeamMember();
+		tm.setPerson(getMyself());
+		tm.setRole(ModelConstants.TeamMemberRoleMember);
+		tm.setTeam(t);
+		tm.setStatus(ModelConstants.TeamMemberStatusProposed);
+		tm.setCreatedDate(new Date());
+		tm.setStatusDate(new Date());
+		genericService.saveOrUpdate(tm);
 		selectedTeam = null;
 		chooseATeam = null;
 		if (request.isXHR()) {
@@ -395,7 +397,9 @@ public class MyProjects {
 
 	public boolean isProjectEditable() {
 		if (project != null) {
-			if (project.getStatus().equals(ModelConstants.ProjectStatusProposed)) {
+			if (project.getStatus() == null) {
+				return true;
+			} else if (project.getStatus().equals(ModelConstants.ProjectStatusProposed)) {
 				return true;
 			} else {
 				return false;
