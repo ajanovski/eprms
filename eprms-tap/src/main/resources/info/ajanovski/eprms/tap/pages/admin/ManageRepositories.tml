@@ -4,17 +4,44 @@
 
 <h1>${message:admin/ManageRepositories-pagelink}</h1>
 
-<a t:type="actionlink" t:id="toggle" class="btn btn-primary">Show
-	repositories for creation: ${isOnlyShowNotCreated}</a>
+
+<div class="row">
+	<div class="col-3">
+		<a t:type="actionlink" t:id="toggle" class="btn btn-primary">Show
+			repositories for creation: ${isOnlyShowNotCreated}</a>
+	</div>
+	<div class="col-9">
+		<div class="card-body" t:type="if" t:test="editRepository">
+			<h3>${message:Repository-label}</h3>
+			<form class="form-horizontal" t:id="editForm" t:type="beaneditform"
+				t:object="editRepository" t:exclude="repositoryId"
+				t:submitLabel="OK"></form>
+		</div>
+	</div>
+</div>
 
 <div t:type="if" t:test="isOnlyShowNotCreated">
+	<p>
+		<a t:type="iconactionlink" t:id="activateRepositories"
+			class="btn btn-secondary">Activate repositories</a>
+	</p>
 	<code>
 		<t:loop t:source="repositories" t:value="repository">./create_repository.sh "${repository.type}" "${repository.title}" 
 			"${repository.url}"<br />
 		</t:loop>
 	</code>
 	<p:else>
-		<table class="table table-sm" t:type="grid" t:source="repositories"></table>
+		<table class="table table-sm" t:type="grid" t:source="repositories"
+			t:row="repository">
+			<p:repositoryIdCell>
+				<a href="" t:type="actionlink" t:id="edit" t:context="repository"
+					class="btn btn-sm btn-secondary" t:mixins="confirm"><img
+					t:type="SVGIcon" t:path="edit" /> ${message:edit-label}</a>
+				<a href="" t:type="actionlink" t:id="delete" t:context="repository"
+					class="btn btn-sm btn-danger" t:mixins="confirm"><img
+					t:type="SVGIcon" t:path="trash" /> ${message:remove-label}</a>
+			</p:repositoryIdCell>
+		</table>
 	</p:else>
 </div>
 
