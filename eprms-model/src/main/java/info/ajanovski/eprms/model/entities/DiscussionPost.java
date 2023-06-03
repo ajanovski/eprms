@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="discussion_post")
+@Table(schema = "epm_main", name = "discussion_post")
 public class DiscussionPost implements java.io.Serializable {
 	private long discussionPostId;
 	private String type;
@@ -40,10 +40,9 @@ public class DiscussionPost implements java.io.Serializable {
 	private DiscussionOnCourseProject discussionOnCourseProject;
 	private Person person;
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-
+	
 	@NotNull
 	@Column(name = "discussion_post_id", unique = true, nullable = false)
 	public long getDiscussionPostId() {
@@ -51,7 +50,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setDiscussionPostId(long discussionPostId) {
-		this.discussionPostId=discussionPostId;
+		this.discussionPostId = discussionPostId;
 	}
 
 	@Column(name = "type")
@@ -60,17 +59,17 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setType(String type) {
-		this.type=type;
+		this.type = type;
 	}
 
 	@NotNull
-	@Column(name = "message", nullable = false, length=100000)
+	@Column(name = "message", nullable = false, length = 100000)
 	public String getMessage() {
 		return this.message;
 	}
 
 	public void setMessage(String message) {
-		this.message=message;
+		this.message = message;
 	}
 
 	@NotNull
@@ -80,7 +79,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setPostedOn(Date postedOn) {
-		this.postedOn=postedOn;
+		this.postedOn = postedOn;
 	}
 
 	@NotNull
@@ -90,7 +89,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setPublicPosting(boolean publicPosting) {
-		this.publicPosting=publicPosting;
+		this.publicPosting = publicPosting;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "replyTo")
@@ -99,7 +98,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setReplies(List<DiscussionPost> replies) {
-		this.replies=replies;
+		this.replies = replies;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -109,7 +108,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setReplyTo(DiscussionPost replyTo) {
-		this.replyTo=replyTo;
+		this.replyTo = replyTo;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -119,7 +118,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setDiscussionOnCourseProject(DiscussionOnCourseProject discussionOnCourseProject) {
-		this.discussionOnCourseProject=discussionOnCourseProject;
+		this.discussionOnCourseProject = discussionOnCourseProject;
 	}
 
 	@ManyToOne(fetch = FetchType.LAZY)
@@ -129,7 +128,7 @@ public class DiscussionPost implements java.io.Serializable {
 	}
 
 	public void setPerson(Person person) {
-		this.person=person;
+		this.person = person;
 	}
 
 }
