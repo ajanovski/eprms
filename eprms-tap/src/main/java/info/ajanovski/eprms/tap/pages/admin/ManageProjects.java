@@ -23,6 +23,7 @@ package info.ajanovski.eprms.tap.pages.admin;
 import java.math.BigInteger;
 import java.security.SecureRandom;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -48,6 +49,7 @@ import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.model.entities.Responsibility;
 import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
+import info.ajanovski.eprms.model.util.ActivityComparatorViaType;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
@@ -105,6 +107,10 @@ public class ManageProjects {
 	@Property
 	private Project selectedProject;
 
+	@Persist
+	@Property
+	private String selectedStatus;
+
 	@Property
 	private Responsibility responsibility;
 
@@ -135,6 +141,10 @@ public class ManageProjects {
 
 	@Persist
 	@Property
+	private Responsibility linkResponsibility;
+
+	@Persist
+	@Property
 	private Database newDb;
 
 	@Persist
@@ -161,10 +171,18 @@ public class ManageProjects {
 		if (selectedCourse == null) {
 			return new ArrayList<Project>();
 		} else {
-			return list.stream()
-					.filter(p -> (p.getCourseProjects().stream()
-							.anyMatch(cp -> cp.getCourse().getCourseId() == selectedCourse.getCourseId())))
-					.collect(Collectors.toList());
+			if (selectedStatus == null) {
+				return list.stream()
+						.filter(p -> (p.getCourseProjects().stream()
+								.anyMatch(cp -> cp.getCourse().getCourseId() == selectedCourse.getCourseId())))
+						.collect(Collectors.toList());
+			} else {
+				return list.stream()
+						.filter(p -> (p.getCourseProjects().stream()
+								.anyMatch(cp -> cp.getCourse().getCourseId() == selectedCourse.getCourseId()
+										&& selectedStatus.equals(cp.getProject().getStatus()))))
+						.collect(Collectors.toList());
+			}
 		}
 	}
 
@@ -199,6 +217,11 @@ public class ManageProjects {
 		newResponsibility = new Responsibility();
 		newResponsibility.setProject(p);
 		newResponsibility.setTeam(newTeam);
+	}
+
+	public void onActionFromLinkTeam(Project p) {
+		linkResponsibility = new Responsibility();
+		linkResponsibility.setProject(p);
 	}
 
 	public void onActionFromNewDatabase(Project p) {
@@ -236,8 +259,16 @@ public class ManageProjects {
 		return courseManager.getAllCoursesByPerson(userInfo.getPersonId());
 	}
 
+	public List<Team> getAllTeams() {
+		return (List<Team>) genericService.getAll(Team.class);
+	}
+
 	public SelectModel getCoursesModel() {
 		return selectModelFactory.create(getAllCourses(), "title");
+	}
+
+	public SelectModel getAllTeamsModel() {
+		return selectModelFactory.create(getAllTeams(), "name");
 	}
 
 	public SelectModel getSelectedCoursesModel() {
@@ -285,6 +316,14 @@ public class ManageProjects {
 		}
 		newTeam = null;
 		newResponsibility = null;
+	}
+
+	@CommitAfter
+	public void onSuccessFromLinkTeamForm() {
+		if (linkResponsibility != null) {
+			genericService.saveOrUpdate(linkResponsibility);
+		}
+		linkResponsibility = null;
 	}
 
 	@CommitAfter
@@ -344,8 +383,10 @@ public class ManageProjects {
 
 	@CommitAfter
 	public void onActionFromPasteActivities(Project pasteActivitiesToProject) {
-		for (Activity original : genericService.getByPK(Project.class, copyActivitiesFromProject.getProjectId())
-				.getActivities()) {
+		List<Activity> activities = genericService.getByPK(Project.class, copyActivitiesFromProject.getProjectId())
+				.getActivities();
+		Collections.sort(activities, new ActivityComparatorViaType());
+		for (Activity original : activities) {
 			Activity copy = new Activity();
 			copy.setDescription(original.getDescription());
 			copy.setTitle(original.getTitle());
@@ -368,10 +409,17 @@ public class ManageProjects {
 	}
 
 	@CommitAfter
-	void onActionFromDeleteResponsibility(Responsibility r) {
+	void onActionFromDeleteResponsibilityAndTeam(Responsibility r) {
 		Team t = r.getTeam();
 		genericService.delete(r);
-		genericService.delete(t);
+		if (t.getResponsibilities().size() == 0) {
+			genericService.delete(t);
+		}
+	}
+
+	@CommitAfter
+	void onActionFromDeleteResponsibility(Responsibility r) {
+		genericService.delete(r);
 	}
 
 	void onActionFromEditTeam(Team t) {
@@ -380,6 +428,10 @@ public class ManageProjects {
 
 	void onCancelNewTeam() {
 		newTeam = null;
+	}
+
+	void onCancelLinkTeam() {
+		linkResponsibility = null;
 	}
 
 	@CommitAfter
