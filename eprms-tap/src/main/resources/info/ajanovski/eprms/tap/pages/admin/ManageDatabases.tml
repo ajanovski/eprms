@@ -21,13 +21,13 @@
 </div>
 
 <div t:type="if" t:test="isOnlyShowNotCreated">
-	<a t:type="iconactionlink" t:id="activateDatabases" class="btn btn-secondary">Activate
-		databases</a>
+	<a t:type="iconactionlink" t:id="activateDatabases"
+		class="btn btn-secondary">Activate databases</a>
 	<code>
-		<t:loop t:source="databases" t:value="database">./create_database.sh "${database.name}"
+		<t:loop t:source="databases" t:value="database">${DBCreationCommand} "${database.name}"
 			"${database.owner}" "${database.password}"<br />
 		</t:loop>
-		<t:loop t:source="databases" t:value="database">./create_tunnels.sh "${database.tunnelUser}"
+		<t:loop t:source="databases" t:value="database">${DBSSHTunnelUserCreationCommand} "${database.tunnelUser}"
 			"${database.tunnelPassword}"<br />
 		</t:loop>
 	</code>

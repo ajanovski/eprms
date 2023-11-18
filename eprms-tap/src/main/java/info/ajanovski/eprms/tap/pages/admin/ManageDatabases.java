@@ -13,6 +13,8 @@ import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
+import info.ajanovski.eprms.tap.util.AppConstants;
 
 @AdministratorPage
 @InstructorPage
@@ -20,6 +22,9 @@ public class ManageDatabases {
 
 	@Inject
 	private GenericService genericService;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@Property
 	@Persist
@@ -73,6 +78,15 @@ public class ManageDatabases {
 		} else {
 			return ls;
 		}
+	}
+
+	public String getDBCreationCommand() {
+		return systemConfigService.getString(AppConstants.SystemParameterDBCreationCommand);
+	}
+
+
+	public String getDBSSHTunnelUserCreationCommand() {
+		return systemConfigService.getString(AppConstants.SystemParameterDBSSHTunnelUserCreationCommand);
 	}
 
 }
