@@ -18,12 +18,14 @@
 			<a href="" t:type="eventlink" t:id="cancelJoinTeam"
 				class="btn btn-default float-right">${message:cancel-label}</a>
 			<h3>${message:Join-label}&nbsp;${message:Team-label}</h3>
-			<div class="card bg-light mb-3" t:type="loop" t:source="listOfJoinableTeams"
-				t:value="joinableTeam">
+			<div class="card bg-light mb-3" t:type="loop"
+				t:source="listOfJoinableTeams" t:value="joinableTeam">
 				<div class="card-header">
 					<a class="btn btn-sm btn-primary float-right"
 						t:type="iconactionlink" t:id="joinTeam" t:context="joinableTeam"
-						t:path="plus">${message:Join-label}</a><h4>${joinableTeam.name}</h4></div>
+						t:path="plus">${message:Join-label}</a>
+					<h4>${joinableTeam.name}</h4>
+				</div>
 				<div class="card-body">
 					<t:outputraw t:value="joinableTeam.description" />
 					<p></p>
@@ -54,7 +56,12 @@
 			<form t:id="frmProposeProject" t:type="Form" t:value="OK">
 				<t:beaneditor t:object="newProject" t:add="course,team"
 					t:exclude="projectId,status,startDate,finishDate"
-					t:reorder="team,course,code,title,description">
+					t:reorder="team,course,title,code,description">
+					<p:code>
+						<label t:type="label" t:for="code"></label>
+						<textfield t:id="code" t:type="textfield" t:validate="required,regexp"
+							t:value="newProject.code" />
+					</p:code>
 					<p:course>
 						<label t:type="label" t:for="selectCourse"></label>
 						<select t:id="selectCourse" t:type="select" t:model="allCourses"
@@ -181,6 +188,9 @@
 				</p>
 
 				<h3>${project.title}</h3>
+				<p t:type="if" t:test="projectUrl">
+					<a href="${projectUrl}">${projectUrl}</a>
+				</p>
 			</div>
 			<div class="card-body">
 				<t:outputraw t:value="project.description" />

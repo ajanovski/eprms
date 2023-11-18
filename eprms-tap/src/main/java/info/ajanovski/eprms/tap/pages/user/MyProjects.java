@@ -37,6 +37,8 @@ import info.ajanovski.eprms.tap.annotations.StudentPage;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.services.ProjectManager;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
+import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
@@ -59,6 +61,9 @@ public class MyProjects {
 
 	@Inject
 	private SelectModelFactory selectModelFactory;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@InjectComponent
 	private Zone zNPModal;
@@ -197,32 +202,34 @@ public class MyProjects {
 
 	@CommitAfter
 	public void onValidateFromFrmProposeProject() {
-		genericService.saveOrUpdate(newProject);
-		if (selectedTeam != null) {
-			if (!(newProject.getResponsibilities().stream()
-					.anyMatch(p -> p.getTeam().getTeamId() == selectedTeam.getTeamId()))) {
-				Responsibility r = new Responsibility();
-				r.setProject(newProject);
-				r.setTeam(selectedTeam);
-				List<Responsibility> listr = new ArrayList<Responsibility>();
-				listr.add(r);
-				newProject.setResponsibilities(listr);
-				genericService.saveOrUpdate(r);
+		if (newProject.getCode() != null) {
+			genericService.saveOrUpdate(newProject);
+			if (selectedTeam != null) {
+				if (!(newProject.getResponsibilities().stream()
+						.anyMatch(p -> p.getTeam().getTeamId() == selectedTeam.getTeamId()))) {
+					Responsibility r = new Responsibility();
+					r.setProject(newProject);
+					r.setTeam(selectedTeam);
+					List<Responsibility> listr = new ArrayList<Responsibility>();
+					listr.add(r);
+					newProject.setResponsibilities(listr);
+					genericService.saveOrUpdate(r);
+				}
 			}
-		}
-		if (selectedCourse != null) {
-			if (!(newProject.getCourseProjects().stream()
-					.anyMatch(p -> p.getCourse().getCourseId() == selectedCourse.getCourseId()))) {
-				CourseProject cp = new CourseProject();
-				cp.setProject(newProject);
-				cp.setCourse(selectedCourse);
-				List<CourseProject> listcp = new ArrayList<CourseProject>();
-				listcp.add(cp);
-				newProject.setCourseProjects(listcp);
-				genericService.saveOrUpdate(cp);
+			if (selectedCourse != null) {
+				if (!(newProject.getCourseProjects().stream()
+						.anyMatch(p -> p.getCourse().getCourseId() == selectedCourse.getCourseId()))) {
+					CourseProject cp = new CourseProject();
+					cp.setProject(newProject);
+					cp.setCourse(selectedCourse);
+					List<CourseProject> listcp = new ArrayList<CourseProject>();
+					listcp.add(cp);
+					newProject.setCourseProjects(listcp);
+					genericService.saveOrUpdate(cp);
+				}
 			}
+			genericService.saveOrUpdate(newProject);
 		}
-		genericService.saveOrUpdate(newProject);
 	}
 
 	public void onActionFromProposeTeam() {
@@ -407,5 +414,9 @@ public class MyProjects {
 		} else {
 			return false;
 		}
+	}
+
+	public String getProjectURL() {
+		return projectManager.getProjectURL(project);
 	}
 }
