@@ -14,8 +14,8 @@
 		<div class="card-body" t:type="if" t:test="editRepository">
 			<h3>${message:Repository-label}</h3>
 			<form class="form-horizontal" t:id="editForm" t:type="beaneditform"
-				t:object="editRepository" t:exclude="repositoryId"
-				t:submitLabel="OK"></form>
+				t:object="editRepository"
+				t:exclude="repositoryISSHTunUserCreationCommandd" t:submitLabel="OK"></form>
 		</div>
 	</div>
 </div>
@@ -26,7 +26,7 @@
 			class="btn btn-secondary">Activate repositories</a>
 	</p>
 	<code>
-		<t:loop t:source="repositories" t:value="repository">./create_repository.sh "${repository.type}" "${repository.title}" 
+		<t:loop t:source="repositories" t:value="repository">${repoCreationCommand} "${repository.type}" "${repository.title}" 
 			"${repository.url}"<br />
 		</t:loop>
 	</code>

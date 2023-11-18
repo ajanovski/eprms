@@ -9,11 +9,12 @@ import org.apache.tapestry5.annotations.Property;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
-import info.ajanovski.eprms.model.entities.Database;
 import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
+import info.ajanovski.eprms.tap.util.AppConstants;
 
 @AdministratorPage
 @InstructorPage
@@ -21,6 +22,9 @@ public class ManageRepositories {
 
 	@Inject
 	private GenericService genericService;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@Property
 	@Persist
@@ -76,5 +80,8 @@ public class ManageRepositories {
 		}
 	}
 
+	public String getRepoCreationCommand() {
+		return systemConfigService.getString(AppConstants.SystemParameterRepoCreationCommand);
+	}
 
 }
