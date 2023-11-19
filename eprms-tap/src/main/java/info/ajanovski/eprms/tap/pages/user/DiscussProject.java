@@ -18,13 +18,17 @@ import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 
 import info.ajanovski.eprms.model.entities.DiscussionOnCourseProject;
 import info.ajanovski.eprms.model.entities.DiscussionPost;
+import info.ajanovski.eprms.model.entities.DiscussionPostEvaluation;
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.util.ComparatorDiscussionPostByReplyTo;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
+import info.ajanovski.eprms.tap.services.DiscussionManager;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.PersonManager;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
+import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
@@ -37,6 +41,9 @@ public class DiscussProject {
 
 	@Inject
 	private GenericService genericService;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@Inject
 	private PersonManager personManager;
@@ -55,6 +62,9 @@ public class DiscussProject {
 
 	@Property
 	DiscussionPost discussionPost;
+
+	@Property
+	DiscussionPostEvaluation discussionPostEvaluation;
 
 	@Persist
 	@Property
@@ -133,31 +143,148 @@ public class DiscussProject {
 	}
 
 	public String getPostAuthor() {
-		String fullName = discussionPost.getPerson().getLastName() + " " + discussionPost.getPerson().getFirstName()
-				+ " [" + discussionPost.getPerson().getUserName() + "]";
-		if (personManager.isAdministrator(discussionPost.getPerson().getPersonId())) {
+		String fullName = personManager.getPersonFullNameWithId(discussionPost.getPerson());
+		if (personManager.isInstructor(discussionPost.getPerson().getPersonId())) {
 			return fullName;
 		} else if (isPostAuthorProjectTeamMember()) {
 			return fullName;
 		} else if (discussionPost.getPublicPosting()) {
-			return discussionPost.getPerson().getLastName() + " " + discussionPost.getPerson().getFirstName() + " ["
-					+ discussionPost.getPerson().getUserName() + "]";
+			return fullName;
 		} else {
-			return "Anon";
+			if (userInfo.isInstructor()) {
+				return "Anon" + " - " + fullName;
+			} else {
+				return "Anon";
+			}
 		}
 	}
 
 	public String getClassOfPostAuthor() {
-		if (personManager.isAdministrator(discussionPost.getPerson().getPersonId())) {
-			return "border-dark personAdmin";
+		if (personManager.isInstructor(discussionPost.getPerson().getPersonId())) {
+			return "border-primary personAdmin";
+		} else if (personManager.isAdministrator(discussionPost.getPerson().getPersonId())) {
+			return "border-primary personAdmin";
 		} else if (isPostAuthorProjectTeamMember()) {
-			return "border-primary personProjectTeamMember";
+			return "border-dark personProjectTeamMember";
 		} else {
 			return "border-light";
 		}
 	}
 
+	public String getRoleOfPostAuthor() {
+		if (personManager.isInstructor(discussionPost.getPerson().getPersonId())) {
+			return ModelConstants.RoleInstructor;
+		} else if (personManager.isAdministrator(discussionPost.getPerson().getPersonId())) {
+			return ModelConstants.RoleAdministrator;
+		} else if (isPostAuthorProjectTeamMember()) {
+			return ModelConstants.TeamMemberRoleMember;
+		} else {
+			return "";
+		}
+	}
+
+	public String getIconOfPostAuthor() {
+		if (personManager.isInstructor(discussionPost.getPerson().getPersonId())) {
+			return "award";
+		} else if (personManager.isAdministrator(discussionPost.getPerson().getPersonId())) {
+			return "cpu";
+		} else if (isPostAuthorProjectTeamMember()) {
+			return "users";
+		} else {
+			return "";
+		}
+	}
+
 	void onActionFromCancelFrmEditPost() {
 		editDiscussionPost = null;
+	}
+
+	@Inject
+	private DiscussionManager discussionManager;
+
+	public List<DiscussionPostEvaluation> getDiscussionPostEvaluations() {
+		return discussionManager.getDiscussionPostEvaluations(discussionPost.getDiscussionPostId());
+	}
+
+	public void createDiscussionPostEvaluation(String type, DiscussionPost dp) {
+		discussionManager.createDiscussionPostEvaluation(type,
+				genericService.getByPK(Person.class, userInfo.getPersonId()), dp);
+	}
+
+	@CommitAfter
+	public void onActionFromEvaluatePostFunctionality(DiscussionPost discussionPost) {
+		createDiscussionPostEvaluation(ModelConstants.DiscussionPostEvaluationTypeFunctionality, discussionPost);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromEvaluatePostBug(DiscussionPost discussionPost) {
+		createDiscussionPostEvaluation(ModelConstants.DiscussionPostEvaluationTypeBug, discussionPost);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromEvaluatePostModel(DiscussionPost discussionPost) {
+		createDiscussionPostEvaluation(ModelConstants.DiscussionPostEvaluationTypeModel, discussionPost);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromEvaluatePostIdea(DiscussionPost discussionPost) {
+		createDiscussionPostEvaluation(ModelConstants.DiscussionPostEvaluationTypeIdea, discussionPost);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromEvaluatePostOther(DiscussionPost discussionPost) {
+		createDiscussionPostEvaluation(ModelConstants.DiscussionPostEvaluationTypeOther, discussionPost);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromDeleteDiscussionPostEvaluation(DiscussionPostEvaluation discussionPostEvaluation) {
+		genericService.delete(discussionPostEvaluation);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromSetAcceptedDiscussionPostEvaluation(DiscussionPostEvaluation discussionPostEvaluation) {
+		if (discussionPostEvaluation.getAccepted() != null) {
+			discussionPostEvaluation.setAccepted(!discussionPostEvaluation.getAccepted());
+		} else {
+			discussionPostEvaluation.setAccepted(true);
+		}
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromSetEvaluatedPostingAsATeamDiscussionPostEvaluation(
+			DiscussionPostEvaluation discussionPostEvaluation) {
+		if (discussionPostEvaluation.getEvaluatePostingAsATeam() != null) {
+			discussionPostEvaluation.setEvaluatePostingAsATeam(!discussionPostEvaluation.getEvaluatePostingAsATeam());
+		} else {
+			discussionPostEvaluation.setEvaluatePostingAsATeam(true);
+		}
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	public String getPMProjectURLPrefix() {
+		return systemConfigService.getString(AppConstants.SystemParameterPMProjectURLPrefix);
 	}
 }

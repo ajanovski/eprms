@@ -13,12 +13,14 @@ import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.DiscussionOnCourseProject;
 import info.ajanovski.eprms.model.entities.DiscussionPost;
 import info.ajanovski.eprms.model.entities.DiscussionSession;
+import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.Responsibility;
 import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
 import info.ajanovski.eprms.tap.services.CourseManager;
+import info.ajanovski.eprms.tap.services.DiscussionManager;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
@@ -35,6 +37,9 @@ public class Discussions {
 
 	@Inject
 	private CourseManager courseManager;
+
+	@Inject
+	private DiscussionManager discussionManager;
 
 	@Inject
 	private SelectModelFactory selectModelFactory;
@@ -59,6 +64,12 @@ public class Discussions {
 	@Property
 	private TeamMember teamMember;
 
+	@Property
+	private Person activePerson;
+
+	@Property
+	private DiscussionPost personPost;
+
 	void onActivate() {
 		if (selectedDiscussionSession != null) {
 			selectedDiscussionSession = genericService.getByPK(DiscussionSession.class,
@@ -82,6 +93,14 @@ public class Discussions {
 
 	void onSuccessFromSelectCourseForm() {
 		selectedDiscussionSession = null;
+	}
+
+	public List<Person> getActivePersons() {
+		return discussionManager.getPersonsActiveInDiscussionSession(selectedDiscussionSession);
+	}
+
+	public List<DiscussionPost> getPersonPosts() {
+		return discussionManager.getPersonsDiscussionPostsInDiscussionSession(selectedDiscussionSession, activePerson);
 	}
 
 }

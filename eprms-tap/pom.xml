@@ -13,7 +13,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>eprms-tap</artifactId>
-	<version>0.0.9-SNAPSHOT</version>
+	<version>0.0.10-SNAPSHOT</version>
 	<name>EPRMS - Educational Project and Resource Management System</name>
 
 	<packaging>war</packaging>
@@ -38,7 +38,7 @@
 		<java.version>17</java.version>
 
 		<spring-boot-version>2.6.3</spring-boot-version>
-		<tapestry-version>5.8.2</tapestry-version>
+		<tapestry-version>5.8.3</tapestry-version>
 		<tapestry-testify-version>1.0.4</tapestry-testify-version>
 		<tapestry-xpath-version>1.0.1</tapestry-xpath-version>
 
@@ -70,7 +70,7 @@
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>model</artifactId>
-			<version>0.0.8-SNAPSHOT</version>
+			<version>0.0.10-SNAPSHOT</version>
 		</dependency>
 
 		<dependency>
@@ -265,7 +265,7 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>webjars-locator</artifactId>
-			<version>0.42</version>
+			<version>0.48</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
@@ -275,7 +275,7 @@
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>feather-icons</artifactId>
-			<version>4.28.0</version>
+			<version>4.29.0</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>

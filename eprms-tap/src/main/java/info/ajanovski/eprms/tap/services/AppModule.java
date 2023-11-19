@@ -56,6 +56,7 @@ import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.model.entities.PersonRole;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
+import info.ajanovski.eprms.tap.data.DiscussionDao;
 import info.ajanovski.eprms.tap.data.GenericDao;
 import info.ajanovski.eprms.tap.data.PersonDao;
 import info.ajanovski.eprms.tap.data.ProjectDao;
@@ -83,6 +84,8 @@ public class AppModule {
 		binder.bind(TranslationDao.class);
 		binder.bind(TranslationService.class);
 		binder.bind(SystemConfigService.class);
+		binder.bind(DiscussionManager.class);
+		binder.bind(DiscussionDao.class);
 	}
 
 	public static void contributeFactoryDefaults(MappedConfiguration<String, Object> configuration) {
@@ -158,8 +161,8 @@ public class AppModule {
 					logger.info("Login by user: " + userName);
 
 					Person loggedInPerson = (Person) session.getSession()
-							.createQuery("from Person p where userName=:userName").setParameter("userName", userName)
-							.getSingleResult();
+							.createQuery("from Person p where active=true and userName=:userName")
+							.setParameter("userName", userName).getSingleResult();
 
 					if (loggedInPerson == null) {
 						userInfo.setUserRoles(null);

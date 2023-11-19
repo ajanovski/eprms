@@ -4,11 +4,13 @@
 
 <h1>${message:user/Discussions-pagelink}</h1>
 
-<h2>Project:
-	${discussionOnCourseProject?.courseProject?.project?.title}</h2>
+<h2>
+	Project: <a
+		href="${PMProjectURLPrefix}${discussionOnCourseProject?.courseProject?.project?.code}">${discussionOnCourseProject?.courseProject?.project?.title}</a>
+</h2>
 
 <div t:type="zone" t:id="zAllPosts">
-	<div t:type='if' t:test="editDiscussionPost">
+	<div t:type="if" t:test="editDiscussionPost">
 		<t:modalbox>
 			<form t:type="form" t:id="FrmEditPost">
 				<t:beaneditor t:object="editDiscussionPost"
@@ -16,9 +18,9 @@
 					<p:type>
 						<t:unless t:test="editDiscussionPost.replyTo">
 							<div class="form-group">
-								<label t:type="label" t:for="selectPostType" /> <select
+								<label t:type="label" t:for="selectPostType"></label> <select
 									t:type="select" t:id="selectPostType" t:model="postTypes"
-									t:value="editDiscussionPost.type" />
+									t:value="editDiscussionPost.type" ></select>
 							</div>
 						</t:unless>
 					</p:type>
@@ -27,7 +29,7 @@
 							<label t:type="label" t:for="message"></label>
 							<textarea t:id="message" t:type="textarea"
 								t:value="editDiscussionPost.message" t:mixins="webeditor"
-								t:WebEditor.areaType="" />
+								t:WebEditor.areaType="" ></textarea>
 						</div>
 					</p:message>
 				</t:beaneditor>
@@ -38,22 +40,78 @@
 		</t:modalbox>
 	</div>
 
-	<div class="card mb-1 bg-light ${classOfPostAuthor} ${indentation}"
+	<div
+		class="card mb-1 pb-0 bg-light ${indentation} ${classOfPostAuthor}"
 		t:type="loop" t:source="allDiscussionPosts" t:value="discussionPost">
-		<div class="card-header  p-2">
+		<div class="card-header p-1">
 			<div class="row">
-				<div class="col-9" id="postAuthor">${postAuthor}</div>
+				<div class="col-9 " id="postAuthor">${postAuthor}<span
+						class="badge badge-light ml-3"> <svg t:type="svgicon"
+							t:path="${iconOfPostAuthor}" t:height="16" />${roleOfPostAuthor}</span>
+				</div>
 				<div class="col-3 float-right text-right">${discussionPost.type}
 					- ${discussionPost.postedOn}</div>
 			</div>
 		</div>
-		<div class="card-body p-2">
+		<div class="card-body pl-2 pr-2 pt-1 pb-2 ">
 			<t:outputraw t:value="discussionPost.message" />
-			<p>
-				<a href="" class="btn btn-sm btn-secondary" t:type="iconactionlink"
-					t:id="replyToPost" t:context="discussionPost"
-					t:path="corner-down-left" t:zone="zAllPosts">${message:replyTo-label}</a>
-			</p>
+			<div class="row">
+				<div class="col-3">
+					<a href="" class="btn btn-sm btn-secondary" t:type="iconactionlink"
+						t:id="replyToPost" t:context="discussionPost"
+						t:path="corner-down-left" t:zone="zAllPosts">${message:replyTo-label}</a>
+				</div>
+				<div class="col-9 text-right">
+					<div t:type="if" t:test="userInfo.isInstructor()">
+						<p class="">
+							${message:evalDiscussionPostFor-label}: <a href=""
+								class="btn btn-sm btn-success" t:type="actionlink"
+								t:id="evaluatePostIdea" t:context="discussionPost" t:path="edit"
+								t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeIdea-label}</a>
+							<a href="" class="btn btn-sm btn-outline-success"
+								t:type="actionlink" t:id="evaluatePostModel"
+								t:context="discussionPost" t:path="edit" t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeModel-label}</a>
+							<a href="" class="btn btn-sm btn-info" t:type="actionlink"
+								t:id="evaluatePostFunctionality" t:context="discussionPost"
+								t:path="edit" t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeFunctionality-label}</a>
+							<a href="" class="btn btn-sm btn-danger" t:type="actionlink"
+								t:id="evaluatePostBug" t:context="discussionPost" t:path="edit"
+								t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeBug-label}</a>
+							<a href="" class="btn btn-sm btn-outline-secondary"
+								t:type="actionlink" t:id="evaluatePostOther"
+								t:context="discussionPost" t:path="edit" t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeOther-label}</a>
+						</p>
+						<p class="mt-2" t:type="if" t:test="discussionPostEvaluations">
+							<p:then>
+								<table class="table table-sm table-dark table-hover"
+									t:exclude="discussionPostEvaluationId" t:type="grid"
+									t:source="discussionPostEvaluations"
+									t:row="discussionPostEvaluation" t:add="actions">
+									<p:actionsCell>
+										<a href="" class="btn btn-sm btn-outline-primary"
+											t:type="iconactionlink"
+											t:id="setEvaluatedPostingAsATeamDiscussionPostEvaluation"
+											t:context="discussionPostEvaluation" t:path="repeat"
+											t:zone="zAllPosts">${message:evaluatePostingAsATeam-label}</a>
+										<a href="" class="btn btn-sm btn-outline-info"
+											t:type="iconactionlink"
+											t:id="setAcceptedDiscussionPostEvaluation"
+											t:context="discussionPostEvaluation" t:path="repeat"
+											t:zone="zAllPosts">${message:setAccepted-label}</a>
+										<a href="" class="btn btn-sm btn-outline-danger"
+											t:mixins="confirm" t:type="actionlink"
+											t:id="deleteDiscussionPostEvaluation"
+											t:context="discussionPostEvaluation" t:path="trash"
+											t:zone="zAllPosts">${message:remove-label}</a>
+									</p:actionsCell>
+								</table>
+							</p:then>
+							<p:else>
+							</p:else>
+						</p>
+					</div>
+				</div>
+			</div>
 		</div>
 
 	</div>
