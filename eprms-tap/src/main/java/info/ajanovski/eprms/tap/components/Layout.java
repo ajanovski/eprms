@@ -80,8 +80,12 @@ public class Layout {
 	private UserInfo userInfo;
 
 	public String[] getStudentPageNames() {
-		return new String[] { "user/MyProjects", "user/MyProjectReports", "user/Discussions", "user/MyDatabases", "user/MyRepositories",
-				"user/MyRepositoryAuth" };
+		if (userInfo.isStudent() || userInfo.isAdministrator() || userInfo.isInstructor()) {
+			return new String[] { "user/MyProjects", "user/MyProjectReports", "user/Discussions", "user/MyDatabases",
+					"user/MyRepositories", "user/MyRepositoryAuth" };
+		} else {
+			return null;
+		}
 	}
 
 	public String[] getProjectManagerPageNames() {
