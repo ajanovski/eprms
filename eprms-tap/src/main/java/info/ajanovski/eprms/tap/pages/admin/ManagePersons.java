@@ -1,6 +1,7 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 import javax.inject.Inject;
 
@@ -30,6 +31,9 @@ public class ManagePersons {
 	private UserInfo userInfo;
 
 	@Inject
+	private SelectModelFactory selectModelFactory;
+
+	@Inject
 	private PersonManager personManager;
 
 	@Inject
@@ -38,27 +42,55 @@ public class ManagePersons {
 	@Inject
 	private Logger logger;
 
+	@InjectComponent
+	private Form frmImport;
+
+	private Boolean cancelForm = false;
+
 	@Property
 	private Person person;
+
+	@Persist
+	@Property
+	private Person personToEdit;
 
 	@Property
 	@Persist
 	private String personListToImport;
 
+	@Property
+	@Persist
+	private String searchString;
+
+	@Persist
+	@Property
+	private Person personToAddRole;
+
+	@Persist
+	@Property
+	private Role selectRole;
+
+	@Property
+	private PersonRole personRole;
+
+	@Persist
+	@Property
+	private String errors;
+
 	public List<Person> getAllPersons() {
-		return personManager.getAllPersons();
+		List<Person> list = personManager.getAllPersons();
+		if (searchString == null || searchString.equals("")) {
+			return list;
+		} else {
+			return list.stream().filter(
+					p -> (p.getFirstName() + p.getLastName() + p.getEmail() + p.getUserName()).contains(searchString))
+					.collect(Collectors.toList());
+		}
 	}
 
 	public void onActionFromImportPersons() {
 		personListToImport = "firstName,lastName,email,userName";
 	}
-
-	@InjectComponent
-	private Form frmImport;
-
-	@Persist
-	@Property
-	private String errors;
 
 	@CommitAfter
 	public void onSuccessFromFrmImport() {
@@ -74,13 +106,17 @@ public class ManagePersons {
 					try {
 						p = personManager.getPersonByUsername(lineFields[3]);
 						if (p != null) {
-							errors += ">>> Person " + p.getUserName() + " already exists, skipping.";
+							errors += ">>> Person " + p.getUserName()
+									+ " already exists, skipping creation, activating.";
+							p.setActive(true);
+							genericService.saveOrUpdate(p);
 						} else {
 							p = new Person();
 							p.setFirstName(lineFields[0]);
 							p.setLastName(lineFields[1]);
 							p.setEmail(lineFields[2]);
 							p.setUserName(lineFields[3]);
+							p.setActive(true);
 							genericService.save(p);
 							PersonRole pr = new PersonRole();
 							pr.setPerson(p);
@@ -109,9 +145,11 @@ public class ManagePersons {
 		genericService.delete(p);
 	}
 
-	@Persist
-	@Property
-	private Person personToEdit;
+	@CommitAfter
+	void onActionFromTogglePersonStatus(Person p) {
+		p.setActive(!p.getActive());
+		genericService.saveOrUpdate(p);
+	}
 
 	public void onActionFromNewPerson() {
 		personToEdit = new Person();
@@ -125,8 +163,6 @@ public class ManagePersons {
 	public void saveChanges() {
 		genericService.saveOrUpdate(personToEdit);
 	}
-
-	private Boolean cancelForm = false;
 
 	public void onCanceledFromFrmNewPerson() {
 		cancelForm = true;
@@ -142,29 +178,15 @@ public class ManagePersons {
 		personToEdit = null;
 	}
 
-	@Inject
-	private SelectModelFactory selectModelFactory;
-
-	@Persist
-	@Property
-	private Person personToAddRole;
-
-	@Persist
-	@Property
-	private Role selectRole;
-
-	@Property
-	private PersonRole personRole;
-
 	public SelectModel getRolesModel() {
 		return selectModelFactory.create(genericService.getAll(Role.class), "name");
 	}
 
-	public void onAddRole(Person p) {
+	void onAddRole(Person p) {
 		personToAddRole = p;
 	}
 
-	public void onCancelAddRole() {
+	void onCancelAddRole() {
 		personToAddRole = null;
 	}
 
@@ -185,4 +207,5 @@ public class ManagePersons {
 	public void onRemoveRole(PersonRole personRole) {
 		genericService.delete(personRole);
 	}
+
 }

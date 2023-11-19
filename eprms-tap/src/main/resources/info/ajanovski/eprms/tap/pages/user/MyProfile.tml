@@ -25,7 +25,7 @@
 			<div t:type="if" t:test="editPerson">
 				<h4 class="h4 mb-4">${message:Edit-label}:${userInfo?.userName}</h4>
 				<div t:type="beaneditform" t:id="frmEditPerson"
-					t:object="editPerson" t:exclude="personId,userName,authString"></div>
+					t:object="editPerson" t:exclude="personId,userName,authString,active"></div>
 			</div>
 		</div>
 	</div>

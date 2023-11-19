@@ -16,6 +16,16 @@
 	</span>
 </p>
 
+<p>
+<form t:type="form" t:id="frmSearch" class="form-inline col-12">
+	<div class="form-group">
+		<t:label t:for="searchString"  class="mr-3"/>
+		<t:textfield t:id="searchString" />
+	</div>
+	<t:submit t:value="OK" />
+</form>
+</p>
+
 <div t:type="if" t:test="personListToImport"
 	class="card bg-light p-3 mb-3">
 	<t:modalbox>
@@ -58,8 +68,9 @@
 	<p:rolesCell>
 		<div class="btn btn-default" t:type="loop" t:source="personRoles"
 			t:value="personRole">${personRole.role.name}<a href=""
-				class="btn btn-sm btn-danger p-0" t:type="eventlink" t:id="removeRole"
-				t:context="personRole"><img t:type="SVGIcon" t:path="trash" /></a>
+				class="btn btn-sm btn-danger p-0" t:type="eventlink"
+				t:id="removeRole" t:context="personRole"><img t:type="SVGIcon"
+				t:path="trash" /></a>
 		</div>
 		<a href="" t:type="eventlink" t:id="AddRole" t:context="person"
 			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
