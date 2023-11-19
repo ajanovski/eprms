@@ -30,6 +30,7 @@ import org.apache.tapestry5.corelib.components.Form;
 import org.apache.tapestry5.corelib.components.PasswordField;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
+import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Person;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
@@ -50,6 +51,9 @@ public class MyRepositoryAuth {
 	@Inject
 	private GenericService genericService;
 
+	@Inject
+	private Logger logger;
+
 	@Property
 	private String password;
 
@@ -59,11 +63,14 @@ public class MyRepositoryAuth {
 	@InjectComponent("AuthForm")
 	private Form authForm;
 
+	@InjectComponent("password")
+	private PasswordField pfPassword;
 	@InjectComponent("confirmPassword")
 	private PasswordField pfConfirmPassword;
 
 	public void onValidateFromAuthForm() {
 		if (password != null && confirmPassword != null && !password.equals(confirmPassword)) {
+			authForm.recordError(pfPassword, "Enter two identical and non-empty passwords.");
 			authForm.recordError(pfConfirmPassword, "Enter two identical and non-empty passwords.");
 		}
 	}
@@ -78,8 +85,9 @@ public class MyRepositoryAuth {
 				md.update(password.getBytes("UTF-8"));
 				myself.setAuthString("{SHA}" + Base64.getEncoder().encodeToString(md.digest()));
 				genericService.save(myself);
+				authForm.clearErrors();
 			} catch (Exception e) {
-				System.out.println(e);
+				logger.error("Password setup failed {}", e);
 			}
 		}
 	}
