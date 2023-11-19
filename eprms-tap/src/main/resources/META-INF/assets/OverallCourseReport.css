@@ -1,0 +1,58 @@
+.CREATED {
+	background-color: #ffc0c0ff !important;
+	color: #000000ff !important;
+}
+
+.report {
+	min-height: 5rem;
+	max-height: 10rem;
+	overflow: auto;
+	font-size: 75%;
+}
+
+.evaluation {
+	font-size: 85%;
+	max-height: 12.5rem;
+	overflow: auto;
+}
+
+table {
+	margin: 0;
+	table-layout: fixed;
+}
+
+table thead th {
+	position: sticky;
+	top: 3.5em;
+	z-index: 1;
+	width: 18vw;
+	background: white;
+}
+
+table thead th:first-child {
+	position: sticky;
+	left: 0;
+	z-index: 2;
+	width: 8vw;
+}
+
+table td {
+	background: #fff;
+}
+
+table tbody th {
+	position: relative;
+}
+
+table tbody th {
+	position: sticky;
+	left: 0;
+	background: #eee;
+	z-index: 1;
+}
+
+[role="region"][aria-labelledby][tabindex] {
+	width: 100%;
+	max-height: 98vh;
+	overflow: auto;
+}

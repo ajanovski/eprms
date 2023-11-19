@@ -1,36 +1,50 @@
 :root {
     --ck-z-default: 100;
     --ck-z-modal: calc( var(--ck-z-default) + 999 );
-
-	/* https://www.w3schools.com/colors/colors_british.asp - Carnival red */
-	--color-incorrect: #c71c2c;
-
-	/* https://www.w3schools.com/colors/colors_british.asp - Bright green / Goblin / Garland */
-	--color-correct: #74b979;
-
+	--color-incorrect-wrong: #600f16ff; 
+	--color-incorrect: #e1553eff; 	/* https://www.w3schools.com/colors/colors_british.asp - Carnival red */
+	--color-correct: #74b979ff; /* https://www.w3schools.com/colors/colors_british.asp - Bright green / Goblin / Garland */ 
+	--color-correct-better: #484837ff; /* https://www.w3schools.com/colors/colors_british.asp - Olive gree */ 
 	--color-noevaluation: #white;
 	--color-exception: #404040;
 }
 
+@media (prefers-color-scheme: dark) {
+  :root {
+  --main-bg-color: #260661ff;
+  --main-bg-color2: #260661ff;
+  --main-bg-color3: #42119cff;
+  --main-bg-color-box: #42119cff;
+  --main-bg-color-accent: #330B7Dff;
+  --main-bg-color-accent2: #00000080;
+  --main-font-color: white;
+  --main-font-color-hover: #E9FA5A;
+  --main-link-color: #A074F0;
+  --yt-font-color: #8E6600;
+  --sidebar-bg-color: #260661ff;
+  --main-border-color: rgb(0,0,0,0.15);
+  --main-underline-color: rgba(255,255,255,128);
+  --light: #080704;
+  --dark: #d4dac0;
+  --bs-body-bg: rgb(16,16,16);
+  --bs-body-color: white;
+  --bs-light-rgb: rgba(42,42,42,0.5);
+  --bs-bg-opacity: rgba(42,42,42,0.5);
+  --color-incorrect: #7b000c; 	/* https://www.w3schools.com/colors/colors_british.asp - Carnival red */
+  --color-correct: #277c2c; /* https://www.w3schools.com/colors/colors_british.asp - Bright green / Goblin / Garland */ 
+  }
+}
 
-body,
-h1,
-h2,
-h3,
-h4,
-h5,
-h6,
-.h1,
-.h2,
-.h3,
-.h4,
-.h5,
-.h6 {
+body, h1, h2, h3, h4, h5, h6, .h1, .h2, .h3, .h4, .h5, .h6 {
     font-family: 'Fira Sans', Helvetica, Arial, sans-serif !important;
 }
 
+body {
+	padding-top: 4.5em;
+}
+
 code {
-	font-family: 'Fira Mono', monospace, mono !important;
+	font-family: 'Fira Code', 'Fira Mono', monospace, mono !important;
 }
 
 .color-queryError {
@@ -58,9 +72,6 @@ p.comment {
 	border-left: 1px solid black;
 	padding-left:0.5rem;
 }
-
-
-
 
 @keyframes slidein {
   from { background: white; }

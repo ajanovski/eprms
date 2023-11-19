@@ -29,6 +29,7 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
+import info.ajanovski.eprms.model.entities.Responsibility;
 import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.model.util.ModelConstants;
@@ -47,6 +48,25 @@ public class ManageTeams {
 	@Inject
 	private GenericService genericService;
 
+	@Property
+	private Team team;
+
+	@Property
+	private TeamMember teamMember;
+
+	@Persist
+	@Property
+	private Boolean approvalOnly;
+
+	@Property
+	private Responsibility responsibility;
+
+	public void onActivate() {
+		if (approvalOnly == null) {
+			approvalOnly = true;
+		}
+	}
+
 	public List<Team> getTeams() {
 		List<Team> lista = (List<Team>) genericService.getAll(Team.class);
 		if (approvalOnly != null && approvalOnly) {
@@ -57,16 +77,6 @@ public class ManageTeams {
 			return lista;
 		}
 	}
-
-	@Property
-	private Team team;
-
-	@Property
-	private TeamMember teamMember;
-
-	@Persist
-	@Property
-	private Boolean approvalOnly;
 
 	void onActionFromToggleApprovalOnly() {
 		if (approvalOnly == null) {
@@ -86,6 +96,18 @@ public class ManageTeams {
 			genericService.saveOrUpdate(tm);
 		}
 		genericService.saveOrUpdate(t);
+	}
+
+	@CommitAfter
+	void onActionFromRemoveTeam(Team t) {
+		for (TeamMember tm : t.getTeamMembers()) {
+			genericService.delete(tm);
+		}
+		genericService.delete(t);
+	}
+
+	public List<Responsibility> getTeamResponsibilities() {
+		return team.getResponsibilities();
 	}
 
 }

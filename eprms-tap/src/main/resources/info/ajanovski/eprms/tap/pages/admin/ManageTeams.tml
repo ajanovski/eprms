@@ -19,24 +19,32 @@
 <div class="card bg-light mb-3" t:type="loop" t:source="teams"
 	t:value="team">
 	<div class="card-header">
-		<h2>${team.name}
+		<div class="float-right row">
 			<div t:type="if" t:test="approvalOnly">
 				<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
 					t:id="approveTeam" t:context="team" t:path="check">${message:approve-label}</a>
 			</div>
-		</h2>
+			<a href="" class="btn btn-sm btn-danger ml-1" t:type="iconactionlink"
+				t:id="removeTeam" t:context="team" t:path="minus">${message:remove-label}</a>
+		</div>
+		<h2>${team.name}</h2>
+		<p>${team.statusDate}</p>
 	</div>
 	<div class="card-body">
 		<p>
 			<t:outputraw t:value="team.description" />
 		</p>
-		<p>${team.statusDate}</p>
 		<p>${message:openForNewMembers-label}:
-			&nbsp;${team.openForNewMembers} Max: ${team.maxMembers}</p>
+			&nbsp;<b>${team.openForNewMembers}</b> / Max members:
+			${team.maxMembers}
+		</p>
 
 		<t:TeamMembersGrid t:team="team" t:title="false" t:actions="true"
 			t:dates="true" />
 
+		<h4>Team is Responsible for Projects</h4>
+		<p t:type="loop" t:source="teamResponsibilities"
+			t:value="responsibility">${responsibility.project.title}</p>
 	</div>
 </div>
 </html>

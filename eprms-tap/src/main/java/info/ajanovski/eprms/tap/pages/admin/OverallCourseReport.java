@@ -1,7 +1,6 @@
 package info.ajanovski.eprms.tap.pages.admin;
 
 import java.util.ArrayList;
-import java.util.Collections;
 import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -18,6 +17,7 @@ import org.apache.tapestry5.http.services.Request;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
+import org.hibernate.Session;
 import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Activity;
@@ -28,20 +28,22 @@ import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
 import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
-import info.ajanovski.eprms.model.util.CourseComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
-import info.ajanovski.eprms.model.util.WorkEvaluationComparator;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
+import info.ajanovski.eprms.tap.services.CourseManager;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ProjectManager;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
 import info.ajanovski.eprms.tap.util.AppConfig;
+import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @InstructorPage
 @AdministratorPage
-@Import(module = { "bootstrap/modal", "bootstrap/collapse", "zoneUpdateEffect" })
+@Import(module = { "bootstrap/modal", "bootstrap/collapse",
+		"zoneUpdateEffect" }, stylesheet = "OverallCourseReport.css")
 public class OverallCourseReport {
 	@SessionState
 	@Property
@@ -51,7 +53,13 @@ public class OverallCourseReport {
 	private Logger logger;
 
 	@Inject
+	private SystemConfigService systemConfigService;
+
+	@Inject
 	private ProjectManager projectManager;
+
+	@Inject
+	private CourseManager courseManager;
 
 	@Inject
 	private MessagingService messagingService;
@@ -67,9 +75,6 @@ public class OverallCourseReport {
 
 	@Inject
 	private SelectModelFactory selectModelFactory;
-
-	@InjectComponent
-	private Zone zNewWorkReportModal, zNewWorkEvaluationModal, zTable;
 
 	@Persist
 	@Property
@@ -92,7 +97,20 @@ public class OverallCourseReport {
 	@Property
 	private WorkEvaluation newWorkEvaluation;
 
-	public List<Project> getAllProjects() {
+	@InjectComponent
+	private Zone zWorkReport;
+
+	@InjectComponent
+	private Zone zTable;
+
+	@Persist
+	@Property
+	private List<Project> projectsToHide;
+
+	@Property
+	private Project hiddenProject;
+
+	public List<Project> getListOfAllActiveProjects() {
 		List<Project> list = new ArrayList<Project>();
 		if (selectedCourse == null) {
 			list = ((List<Project>) projectManager.getAllProjectsOrderByTitle()).stream()
@@ -102,6 +120,9 @@ public class OverallCourseReport {
 			list = ((List<Project>) projectManager.getAllProjectsInCourseOrderByTitle(selectedCourse)).stream()
 					.filter(p -> (p.getStatus() != null && p.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
+		}
+		if (projectsToHide != null && projectsToHide.size() > 0) {
+			list.removeIf(l -> projectsToHide.stream().anyMatch(ph -> ph.getProjectId() == l.getProjectId()));
 		}
 		return list;
 	}
@@ -132,23 +153,26 @@ public class OverallCourseReport {
 		return projectManager.getWorkEvaluationForWorkReport(workReport);
 	}
 
-	public void onAddWorkReport(Activity a) {
+	public void onActionFromAddWorkReport(Activity a) {
 		newWorkEvaluation = null;
 		newWorkReport = new WorkReport();
 		newWorkReport.setActivity(a);
 		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(zNewWorkReportModal);
+			ajaxResponseRenderer.addRender(zWorkReport);
 		}
 	}
 
 	@CommitAfter
-	public void onSuccessFromFrmAddWorkReport() {
+	void onSuccessFromFrmAddWorkReport() {
 		genericService.saveOrUpdate(newWorkReport);
 		newWorkReport = null;
 		newWorkEvaluation = null;
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender("zWorkReport", zWorkReport).addRender("zTable", zTable);
+		}
 	}
 
-	public void onAddWorkEvaluation(WorkReport wr) {
+	void onAddWorkEvaluation(WorkReport wr) {
 		WorkReport wr1 = genericService.getByPK(WorkReport.class, wr.getWorkReportId());
 		newWorkReport = null;
 		newWorkEvaluation = new WorkEvaluation();
@@ -156,21 +180,15 @@ public class OverallCourseReport {
 		newWorkEvaluation.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
 		newWorkEvaluation.setStatus(ModelConstants.EvaluationStatusCreated);
 		newWorkEvaluation.setWorkReport(wr1);
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(zNewWorkEvaluationModal);
-		}
 	}
 
-	public void onEditWorkEvaluation(WorkEvaluation wa) {
+	void onEditWorkEvaluation(WorkEvaluation wa) {
 		newWorkReport = null;
 		newWorkEvaluation = wa;
-		if (request.isXHR()) {
-			ajaxResponseRenderer.addRender(zNewWorkEvaluationModal);
-		}
 	}
 
 	@CommitAfter
-	public void onToggleWorkEvaluationStatus(WorkEvaluation wa) {
+	void onToggleWorkEvaluationStatus(WorkEvaluation wa) {
 		if (wa.getStatus().equals(ModelConstants.EvaluationStatusCreated)) {
 			wa.setStatus(ModelConstants.EvaluationStatusPublished);
 		} else {
@@ -182,12 +200,26 @@ public class OverallCourseReport {
 		}
 	}
 
+	public String getZWorkEvaluationId() {
+		return "zWorkEvaluation_" + workEvaluation.getWorkEvaluationId();
+	}
+
+	public String getZWorkEvaluationIdNew() {
+		return "zWorkEvaluation_" + newWorkEvaluation.getWorkEvaluationId();
+	}
+
 	@CommitAfter
 	public void onSuccessFromFrmAddWorkEvaluation() {
 		genericService.saveOrUpdate(newWorkEvaluation);
-		messagingService.sendWorkEvaluationNotification(newWorkEvaluation);
+		// messagingService.sendWorkEvaluationNotification(newWorkEvaluation);
+		String ident = getZWorkEvaluationIdNew();
+		logger.info("zone id = {}", ident);
 		newWorkReport = null;
 		newWorkEvaluation = null;
+	}
+
+	public void onActionFromResetListOfAllProjects() {
+		projectsToHide.clear();
 	}
 
 	public Float getProjectTotal() {
@@ -199,13 +231,13 @@ public class OverallCourseReport {
 	}
 
 	public List<Course> getAllCourses() {
-		List<Course> lista = (List<Course>) genericService.getAll(Course.class);
-		CourseComparator cc = new CourseComparator();
-		Collections.sort(lista, cc);
-		return lista;
+		return courseManager.getAllCoursesByPerson(userInfo.getPersonId());
 	}
 
 	public void onActivate() {
+		if (projectsToHide == null) {
+			projectsToHide = new ArrayList<Project>();
+		}
 		if (selectedCourse != null) {
 			selectedCourse = genericService.getByPK(Course.class, selectedCourse.getCourseId());
 		}
@@ -216,4 +248,32 @@ public class OverallCourseReport {
 		messagingService.setupMQHost(AppConfig.getString("MQHost"));
 	}
 
+	void onActionFromRemoveProjectFromListOfAllProjects(Project p) {
+		projectsToHide.add(p);
+	}
+
+	void onActionFromShowProject(Project p) {
+		projectsToHide.removeIf(ph -> ph.getProjectId() == p.getProjectId());
+	}
+
+	void onActionFromHideAllProjects() {
+		List<Project> lista = getListOfAllActiveProjects();
+		projectsToHide.addAll(lista);
+	}
+
+	public void onActionFromCancelNewWorkReport() {
+		newWorkReport = null;
+	}
+
+	public void onActionFromCancelNewWorkEvaluation() {
+		newWorkEvaluation = null;
+	}
+
+	public String[] getEvalStatusModel() {
+		return ModelConstants.AllEvaluationStatuses;
+	}
+
+	public String getPMProjectURLPrefix() {
+		return systemConfigService.getString(AppConstants.SystemParameterPMProjectURLPrefix);
+	}
 }
