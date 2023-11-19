@@ -52,4 +52,6 @@ public interface ProjectManager {
 
 	public List<TeamMember> getTeamMembershipOfPerson(Long personId);
 
+	public String getProjectURL(Project project);
+
 }

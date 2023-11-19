@@ -38,7 +38,8 @@
 	t:value="project">
 	<div class="card-header">
 		<h2>${project.title}
-			<a class="btn btn-default" data-toggle="collapse"
+			<small class="text-muted">Status: ${project.status}</small> <a
+				class="btn btn-default" data-toggle="collapse"
 				href="#collapse${project.projectId}" role="button"
 				aria-expanded="false" aria-controls="collapse${project.projectId}">
 				<svg t:type="svgicon" t:path="list" />
@@ -47,6 +48,9 @@
 	</div>
 
 	<div class="card-body collapse" id="collapse${project.projectId}">
+		<p t:type="if" t:test="projectUrl">
+			<a href="${projectUrl}">${projectUrl}</a>
+		</p>
 		<div class="card mb-3 p-4" t:type="loop" t:source="projectActivities"
 			t:value="activity">
 			<h3>${activity.title}</h3>

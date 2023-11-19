@@ -137,4 +137,8 @@ public class MyProjectReports {
 		return projectManager.getWorkEvaluationForWorkReport(workReport);
 	}
 
+	public String getProjectURL() {
+		return projectManager.getProjectURL(project);
+	}
+
 }

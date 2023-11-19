@@ -39,6 +39,7 @@ import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.model.util.WorkEvaluationComparator;
 import info.ajanovski.eprms.model.util.WorkReportComparator;
 import info.ajanovski.eprms.tap.data.ProjectDao;
+import info.ajanovski.eprms.tap.util.AppConstants;
 
 public class ProjectManagerImpl implements ProjectManager {
 
@@ -47,6 +48,9 @@ public class ProjectManagerImpl implements ProjectManager {
 
 	@Inject
 	private GenericService genericService;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	@Override
 	public List<Project> getAllProjectsOrderByTitle() {
@@ -135,6 +139,16 @@ public class ProjectManagerImpl implements ProjectManager {
 	@Override
 	public List<TeamMember> getTeamMembershipOfPerson(Long personId) {
 		return projectDao.getTeamMembershipOfPerson(personId);
+	}
+
+	@Override
+	public String getProjectURL(Project project) {
+		String baseUrl = systemConfigService.getString(AppConstants.SystemParameterPMProjectURLPrefix);
+		if (project.getCode() != null) {
+			return (baseUrl == null ? "" : baseUrl) + project.getCode();
+		} else {
+			return "";
+		}
 	}
 
 }

@@ -27,18 +27,28 @@ public class AppConstants {
 	 */
 	public static final String PageIndex = "Index";
 
+	public static final String SystemParameterDBCreationCommand = "DB-Creation-Command";
 	public static final String SystemParameterDBServerType = "DBServerType";
 	public static final String SystemParameterDBServerName = "DBServerName";
 	public static final String SystemParameterDBServerPort = "DBServerPort";
 	public static final String SystemParameterDBCreationPrefix = "DBCreationPrefix";
 	public static final String SystemParameterDBCreationOwnerSuffix = "DBCreationOwnerSuffix";
+	public static final String SystemParameterDBSSHTunnelUserCreationCommand = "DB-SSH-Tunnel-User-Creation-Command";
 	public static final String SystemParameterDBTunnelServerName = "DBTunnelServer";
 	public static final String SystemParameterDBTunnelPrefix = "DBTunnelPrefix";
-	public static final String[] AllSystemParameters = { SystemParameterDBServerType, SystemParameterDBServerName,
-			SystemParameterDBServerPort, SystemParameterDBCreationPrefix, SystemParameterDBCreationOwnerSuffix,
-			SystemParameterDBTunnelPrefix };
 
 	public static final String SystemParameterPMOverviewTicketsURL = "PM-Overview-Tickets-URL";
 	public static final String SystemParameterPMOverviewTimelineURL = "PM-Overview-Timeline-URL";
 	public static final String SystemParameterPMCreationScript = "PM-CreationScript";
+
+	public static final String SystemParameterPMProjectURLPrefix = "PM-Project-URL-Prefix";
+
+	public static final String SystemParameterRepoCreationCommand = "Repo-Creation-Command";
+
+	public static final String[] AllSystemParameters = { SystemParameterDBCreationCommand, SystemParameterDBServerType,
+			SystemParameterDBServerName, SystemParameterDBServerPort, SystemParameterDBCreationPrefix,
+			SystemParameterDBCreationOwnerSuffix, SystemParameterDBSSHTunnelUserCreationCommand,
+			SystemParameterDBTunnelServerName, SystemParameterDBTunnelPrefix, SystemParameterPMOverviewTicketsURL,
+			SystemParameterPMOverviewTimelineURL, SystemParameterPMCreationScript, SystemParameterPMProjectURLPrefix,
+			SystemParameterRepoCreationCommand };
 }
