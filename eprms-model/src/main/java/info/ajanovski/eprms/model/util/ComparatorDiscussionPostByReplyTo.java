@@ -1,5 +1,6 @@
 package info.ajanovski.eprms.model.util;
 
+import java.text.SimpleDateFormat;
 import java.util.Comparator;
 
 import info.ajanovski.eprms.model.entities.DiscussionPost;
@@ -7,10 +8,11 @@ import info.ajanovski.eprms.model.entities.DiscussionPost;
 public class ComparatorDiscussionPostByReplyTo implements Comparator<DiscussionPost> {
 
 	public String getCoding(DiscussionPost i) {
+		SimpleDateFormat dt = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss");
 		if (i.getReplyTo() == null) {
-			return Long.toString(i.getPostedOn().getTime()) + "-";
+			return dt.format(i.getPostedOn()) + "-";
 		} else {
-			return getCoding(i.getReplyTo()) + Long.toString(i.getPostedOn().getTime()) + "-";
+			return getCoding(i.getReplyTo()) + dt.format(i.getPostedOn()) + "-";
 		}
 	}
 

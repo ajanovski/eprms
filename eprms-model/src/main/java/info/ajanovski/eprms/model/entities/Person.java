@@ -36,6 +36,7 @@ public class Person implements java.io.Serializable {
 	private String email;
 	private String userName;
 	private String authString;
+	private boolean active;
 
 
 	@Id
@@ -78,7 +79,7 @@ public class Person implements java.io.Serializable {
 		this.email=email;
 	}
 
-	@Column(name = "user_name")
+	@Column(name = "user_name", unique = true)
 	public String getUserName() {
 		return this.userName;
 	}
@@ -94,6 +95,16 @@ public class Person implements java.io.Serializable {
 
 	public void setAuthString(String authString) {
 		this.authString=authString;
+	}
+
+	@NotNull
+	@Column(name = "active", nullable = false)
+	public boolean getActive() {
+		return this.active;
+	}
+
+	public void setActive(boolean active) {
+		this.active=active;
 	}
 
 }

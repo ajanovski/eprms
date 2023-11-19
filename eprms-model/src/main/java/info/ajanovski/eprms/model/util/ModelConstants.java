@@ -82,4 +82,13 @@ public class ModelConstants {
 	public static final String[] AllDiscussionPostTypes = { DiscussionPostTypeBug, DiscussionPostTypeImprovement,
 			DiscussionPostTypeTask, DiscussionPostTypeOther };
 
+	public static final String DiscussionPostEvaluationTypeIdea = "IDEA";
+	public static final String DiscussionPostEvaluationTypeModel = "MODEL";
+	public static final String DiscussionPostEvaluationTypeFunctionality = "FUNCTIONALITY";
+	public static final String DiscussionPostEvaluationTypeBug = "BUG";
+	public static final String DiscussionPostEvaluationTypeOther = "OTHER";
+	public static final String[] AllDiscussionPostEvaluationTypes = { DiscussionPostEvaluationTypeIdea,
+			DiscussionPostEvaluationTypeModel, DiscussionPostEvaluationTypeFunctionality,
+			DiscussionPostEvaluationTypeBug, DiscussionPostEvaluationTypeOther };
+
 }
