@@ -59,8 +59,8 @@
 					t:reorder="team,course,title,code,description">
 					<p:code>
 						<label t:type="label" t:for="code"></label>
-						<textfield t:id="code" t:type="textfield" t:validate="required,regexp"
-							t:value="newProject.code" />
+						<textfield t:id="code" t:type="textfield"
+							t:validate="required,regexp" t:value="newProject.code" />
 					</p:code>
 					<p:course>
 						<label t:type="label" t:for="selectCourse"></label>
@@ -133,16 +133,21 @@
 					</span> <span t:type="if" t:test="canApprove"> <a href=""
 						t:type="iconactionlink" t:id="editTeam" t:context="myTeamMember"
 						t:path="edit" class="btn btn-sm btn-info">${message:edit-label}</a>
-					</span> <a href="" t:type="iconactionlink" t:id="leaveTeam"
-						t:context="myTeamMember" t:path="minus-square" t:mixins="Confirm"
-						class="btn btn-sm btn-danger">${message:leave-label}</a>
+					</span> <span t:type="if" t:test="canLeave"> <a href=""
+						t:type="iconactionlink" t:id="leaveTeam" t:context="myTeamMember"
+						t:path="minus-square" t:mixins="Confirm"
+						class="btn btn-sm btn-danger">${message:leave-label}</a></span> <span
+						t:type="if" t:test="canRemoveTeam"> <a href=""
+						t:type="iconactionlink" t:id="removeTeam" t:context="myTeamMember"
+						t:path="minus-square" t:mixins="Confirm"
+						class="btn btn-sm btn-danger">${message:remove-label}</a></span>
 				</div>
 				<h3>${myTeamMember.team.name}
 					<small class="text-muted">${message:status-label}:
 						${myTeamMember.team.status}</small>
 				</h3>
 			</div>
-			<div class="card-body">
+			<div class="card-body" style="overflow: auto;">
 				<p class="card-text">
 					<t:outputRaw t:value="myTeamMember.team.description" />
 				</p>
@@ -155,8 +160,14 @@
 					<p:emailCell>${teamMember.person.email}</p:emailCell>
 					<p:actionsCell>
 						<div t:type="if" t:test="canApprove">
-							<a href="" class="btn btn-sm btn-primary" t:type="iconactionlink"
-								t:path="check" t:id="approveTeamMember" t:context="teamMember">${message:approve-label}</a>
+							<a href="" class="btn btn-sm btn-info p-0"
+								t:type="iconactionlink" t:path="check" t:id="approveTeamMember"
+								t:context="teamMember">${message:approve-label}</a>
+						</div>
+						<div t:type="if" t:test="canRemoveMember">
+							<a href="" class="btn btn-sm btn-danger p-0"
+								t:type="iconactionlink" t:path="minus" t:id="removeTeamMember"
+								t:context="teamMember">${message:remove-label}</a>
 						</div>
 					</p:actionsCell>
 				</table>
@@ -180,6 +191,11 @@
 					<t:if t:test="projectEditable">
 						<a class="btn btn-sm btn-info" href="" t:type="iconactionlink"
 							t:path="edit" t:id="editProject" t:context="project">${message:edit-label}
+						</a>
+					</t:if>
+					<t:if t:test="canRemoveProject">
+						<a class="btn btn-sm btn-danger" href="" t:type="iconactionlink"
+							t:path="minus" t:id="removeProject" t:context="project">${message:remove-label}
 						</a>
 					</t:if>
 				</div>

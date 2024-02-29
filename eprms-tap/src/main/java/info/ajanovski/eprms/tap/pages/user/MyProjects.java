@@ -354,12 +354,80 @@ public class MyProjects {
 		}
 	}
 
+	public boolean isCanLeave() {
+		if (myTeamMember.getTeam().getTeamMembers().stream()
+				.anyMatch(p -> p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() != null
+						&& !p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
+			if (teamMember != null && !(teamMember.getStatus() != null
+					&& teamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted))) {
+				return true;
+			} else {
+				if (teamMember == null) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isCanRemoveTeam() {
+		if (myTeamMember.getTeam().getTeamMembers().stream()
+				.anyMatch(p -> p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() != null
+						&& p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
+			if (myTeamMember.getTeam().getTeamMembers().size() == 1
+					&& myTeamMember.getTeam().getStatus().equals(ModelConstants.TeamStatusProposed)) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+
+	public boolean isCanRemoveMember() {
+		// Only coordinators can remove members
+		if (myTeamMember.getTeam().getTeamMembers().stream()
+				.anyMatch(tm -> tm.getPerson().getPersonId() == getMyself().getPersonId() && tm.getRole() != null
+						&& tm.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
+			if (teamMember != null
+					&& !(teamMember.getStatus() != null
+							&& teamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted))
+					&& teamMember.getPerson().getPersonId() != getMyself().getPersonId()) {
+				return true;
+			} else {
+				if (teamMember == null) {
+					return true;
+				} else {
+					return false;
+				}
+			}
+		} else {
+			return false;
+		}
+	}
+
 	public void onActionFromAddMembers(TeamMember tm) {
 		newMember = new String("brindeks");
 		addToTeam = tm.getTeam();
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(zJNTModal);
 		}
+	}
+
+	@CommitAfter
+	public void onActionFromRemoveTeamMember(TeamMember tm) {
+		genericService.delete(tm);
+	}
+
+	@CommitAfter
+	public void onActionFromRemoveTeam(TeamMember tm) {
+		Team t = tm.getTeam();
+		genericService.delete(tm);
+		genericService.delete(t);
 	}
 
 	public void onCancelAddMembers() {
@@ -414,6 +482,25 @@ public class MyProjects {
 		} else {
 			return false;
 		}
+	}
+
+	public boolean isCanRemoveProject() {
+		if (project != null) {
+			if ((project.getStatus() == null || project.getStatus().equals(ModelConstants.ProjectStatusProposed))) {
+				return true;
+			} else {
+				return false;
+			}
+		} else {
+			return false;
+		}
+	}
+	
+	@CommitAfter
+	void onActionFromRemoveProject(Project p) {
+		p.getCourseProjects().forEach(cp -> genericService.delete(cp));
+		p.getResponsibilities().forEach(r -> genericService.delete(r));
+		genericService.delete(p);
 	}
 
 	public String getProjectURL() {
