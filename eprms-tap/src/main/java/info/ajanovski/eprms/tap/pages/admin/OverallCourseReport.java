@@ -17,7 +17,6 @@ import org.apache.tapestry5.http.services.Request;
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
-import org.hibernate.Session;
 import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Activity;
@@ -110,14 +109,24 @@ public class OverallCourseReport {
 	@Property
 	private Project hiddenProject;
 
+	@Persist
+	@Property
+	private List<CourseActivityType> activitiesToHide;
+
+	@Property
+	private CourseActivityType hiddenActivity;
+
+	@Property
+	private Project project;
+
 	public List<Project> getListOfAllActiveProjects() {
 		List<Project> list = new ArrayList<Project>();
 		if (selectedCourse == null) {
-			list = ((List<Project>) projectManager.getAllProjectsOrderByTitle()).stream()
+			list = ((List<Project>) projectManager.getAllProjects()).stream()
 					.filter(p -> (p.getStatus() != null && p.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
 		} else {
-			list = ((List<Project>) projectManager.getAllProjectsInCourseOrderByTitle(selectedCourse)).stream()
+			list = ((List<Project>) projectManager.getAllProjectsInCourse(selectedCourse)).stream()
 					.filter(p -> (p.getStatus() != null && p.getStatus().equals(ModelConstants.ProjectStatusActive)))
 					.collect(Collectors.toList());
 		}
@@ -127,22 +136,23 @@ public class OverallCourseReport {
 		return list;
 	}
 
-	@Property
-	private Project project;
-
-	public Activity getActivity() {
-		return project.getActivities().stream().filter(a -> a.getActivityType()
-				.getActivityTypeId() == courseActivityType.getActivityType().getActivityTypeId()).findFirst()
-				.orElse(null);
-	}
-
 	public List<CourseActivityType> getSelectedCourseCourseActivityTypes() {
 		List<CourseActivityType> list = selectedCourse.getCourseActivityTypes();
 
 		CourseActivityTypeHierarchicalComparator comparator = new CourseActivityTypeHierarchicalComparator();
 		list.sort(comparator);
 
+		if (activitiesToHide != null && activitiesToHide.size() > 0) {
+			list.removeIf(l -> activitiesToHide.stream()
+					.anyMatch(ah -> ah.getCourseActivityTypeId() == l.getCourseActivityTypeId()));
+		}
 		return list;
+	}
+
+	public Activity getActivity() {
+		return project.getActivities().stream().filter(a -> a.getActivityType()
+				.getActivityTypeId() == courseActivityType.getActivityType().getActivityTypeId()).findFirst()
+				.orElse(null);
 	}
 
 	public List<WorkReport> getWorkReportsForActivity() {
@@ -222,6 +232,10 @@ public class OverallCourseReport {
 		projectsToHide.clear();
 	}
 
+	public void onActionFromResetListOfAllActivities() {
+		activitiesToHide.clear();
+	}
+
 	public Float getProjectTotal() {
 		return projectManager.sumPoints(project);
 	}
@@ -238,6 +252,9 @@ public class OverallCourseReport {
 		if (projectsToHide == null) {
 			projectsToHide = new ArrayList<Project>();
 		}
+		if (activitiesToHide == null) {
+			activitiesToHide = new ArrayList<CourseActivityType>();
+		}
 		if (selectedCourse != null) {
 			selectedCourse = genericService.getByPK(Course.class, selectedCourse.getCourseId());
 		}
@@ -252,13 +269,26 @@ public class OverallCourseReport {
 		projectsToHide.add(p);
 	}
 
+	void onActionFromRemoveActivityFromListOfAllActivities(CourseActivityType cat) {
+		activitiesToHide.add(cat);
+	}
+
 	void onActionFromShowProject(Project p) {
 		projectsToHide.removeIf(ph -> ph.getProjectId() == p.getProjectId());
+	}
+
+	void onActionFromShowActivity(CourseActivityType cat) {
+		activitiesToHide.removeIf(ph -> ph.getCourseActivityTypeId() == cat.getCourseActivityTypeId());
 	}
 
 	void onActionFromHideAllProjects() {
 		List<Project> lista = getListOfAllActiveProjects();
 		projectsToHide.addAll(lista);
+	}
+
+	void onActionFromHideAllActivities() {
+		List<CourseActivityType> lista = getSelectedCourseCourseActivityTypes();
+		activitiesToHide.addAll(lista);
 	}
 
 	public void onActionFromCancelNewWorkReport() {
@@ -275,5 +305,10 @@ public class OverallCourseReport {
 
 	public String getPMProjectURLPrefix() {
 		return systemConfigService.getString(AppConstants.SystemParameterPMProjectURLPrefix);
+	}
+
+	public String gethiddenActivityActivityTypeCode() {
+		return genericService.getByPK(hiddenActivity.getClass(), hiddenActivity.getCourseActivityTypeId())
+				.getActivityType().getCode();
 	}
 }
