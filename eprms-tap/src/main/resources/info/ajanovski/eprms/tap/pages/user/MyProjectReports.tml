@@ -54,41 +54,39 @@
 		<div class="card mb-3 p-4" t:type="loop" t:source="projectActivities"
 			t:value="activity">
 			<h3>${activity.title}</h3>
-			<div class="card mb-3 p-3 bg-light" t:type="loop"
-				t:source="workReportsForActivity" t:value="workReport">
-				<div class="d-flex">
-					<div class="mr-auto">
-						<h4>${message:report-label}</h4>
-					</div>
-					<div class="p-2">
-						<div t:type="unless" t:test="workReport.workEvaluations">
-							<a href="" class="btn btn-secondary" t:id="EditWorkReport"
-								t:type="eventlink" t:context="workReport"><svg
-									t:type="svgicon" t:path="edit" /> ${message:edit-label}</a> <a
-								href="" class="btn btn-danger" t:id="DeleteWorkReport"
-								t:type="eventlink" t:mixins="Confirm" t:context="workReport"><svg
-									t:type="svgicon" t:path="trash" /> ${message:remove-label}</a>
-						</div>
+			<div class="card mb-3 bg-light report" t:type="loop"
+					t:source="workReportsForActivity" t:value="workReport">
+				<div class="card-header p-2">
+					<h4>${message:report-label}: ${workReport.title}</h4>
+					<div t:type="unless" t:test="workReport.workEvaluations">
+						<a href="" class="pt-2 btn btn-secondary" t:id="EditWorkReport"
+							t:type="eventlink" t:context="workReport"><svg
+								t:type="svgicon" t:path="edit" /> ${message:edit-label}</a> <a
+							href="" class="btn btn-danger" t:id="DeleteWorkReport"
+							t:type="eventlink" t:mixins="Confirm" t:context="workReport"><svg
+								t:type="svgicon" t:path="trash" /> ${message:remove-label}</a>
 					</div>
 				</div>
-				<div t:type="beandisplay" t:object="workReport"
-					t:exclude="workReportId" t:add="person">
-					<p:person>${workReport?.person?.lastName}</p:person>
-					<p:description>
-						<t:outputraw t:value="workReport.description" />
-					</p:description>
-				</div>
-				<div class="card mb-3 p-3 bg-info text-white" t:type="loop"
-					t:source="workEvaluationsForWorkReport" t:value="workEvaluation">
-					<h5>${message:evaluation-label}</h5>
-					<div t:type="if" t:test="evaluationPublished">
-						<div t:type="beandisplay" t:object="workEvaluation"
-							t:exclude="workEvaluationId,status">
-							<p:description>
-								<t:outputRaw t:value="workEvaluation.description" />
-							</p:description>
+				<div class="card-body">
+					<div t:type="beandisplay" t:object="workReport"
+						t:exclude="workReportId,title" t:add="person">
+						<p:person>${workReport?.person?.lastName}</p:person>
+						<p:description>
+							<t:outputraw t:value="workReport.description" />
+						</p:description>
+					</div>
+					<div class="card mb-3 bg-info text-white" t:type="loop"
+						t:source="workEvaluationsForWorkReport" t:value="workEvaluation">
+						<div class="card-header p-2"><h5>${message:evaluation-label}: ${workEvaluation.title}</h5></div>
+						<div class="card-body p-2" t:type="if" t:test="evaluationPublished">
+							<div t:type="beandisplay" t:object="workEvaluation"
+								t:exclude="workEvaluationId,status,title">
+								<p:description>
+									<t:outputRaw t:value="workEvaluation.description" />
+								</p:description>
+							</div>
+							<p:else><div class="card-body bg-light text-dark p-2">${message:in-progress-label}</div></p:else>
 						</div>
-						<p:else>${message:in-progress-label}</p:else>
 					</div>
 				</div>
 			</div>
