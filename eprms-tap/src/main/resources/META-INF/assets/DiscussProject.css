@@ -44,3 +44,8 @@
 	width: 100%;
 }
 
+.card-body .box {
+	background: var(--light);
+	color: var(--dark);
+	padding: 0.5em;
+}
