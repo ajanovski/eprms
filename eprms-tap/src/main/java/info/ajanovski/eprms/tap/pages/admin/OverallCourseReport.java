@@ -31,6 +31,7 @@ import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
+import info.ajanovski.eprms.tap.components.ModalBox;
 import info.ajanovski.eprms.tap.services.CourseManager;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ProjectManager;
@@ -101,6 +102,18 @@ public class OverallCourseReport {
 
 	@InjectComponent
 	private Zone zTable;
+
+	@InjectComponent
+	private Zone zWorkEvaluation;
+
+	@InjectComponent
+	private Zone zAll;
+
+	@InjectComponent
+	private ModalBox newWorkEvaluationModal;
+
+	@InjectComponent
+	private ModalBox newWorkReportModal;
 
 	@Persist
 	@Property
@@ -177,6 +190,7 @@ public class OverallCourseReport {
 		genericService.saveOrUpdate(newWorkReport);
 		newWorkReport = null;
 		newWorkEvaluation = null;
+		newWorkReportModal.hide();
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender("zWorkReport", zWorkReport).addRender("zTable", zTable);
 		}
@@ -195,6 +209,9 @@ public class OverallCourseReport {
 	void onEditWorkEvaluation(WorkEvaluation wa) {
 		newWorkReport = null;
 		newWorkEvaluation = wa;
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zWorkEvaluation);
+		}
 	}
 
 	@CommitAfter
@@ -226,6 +243,14 @@ public class OverallCourseReport {
 		logger.info("zone id = {}", ident);
 		newWorkReport = null;
 		newWorkEvaluation = null;
+		newWorkEvaluationModal.hide();
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zTable);
+		}
+	}
+
+	public List<Project> getListHiddenProjects() {
+		return projectManager.orderProjectList(projectsToHide);
 	}
 
 	public void onActionFromResetListOfAllProjects() {
@@ -293,10 +318,20 @@ public class OverallCourseReport {
 
 	public void onActionFromCancelNewWorkReport() {
 		newWorkReport = null;
+		newWorkEvaluation = null;
+		newWorkReportModal.hide();
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAll);
+		}
 	}
 
 	public void onActionFromCancelNewWorkEvaluation() {
+		newWorkReport = null;
 		newWorkEvaluation = null;
+		newWorkEvaluationModal.hide();
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAll).addRender(zWorkEvaluation);
+		}
 	}
 
 	public String[] getEvalStatusModel() {

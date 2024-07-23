@@ -38,10 +38,10 @@ public class ModalBox implements ClientElement {
 		return closeBox;
 	}
 
-	void setupRender() {
+	void afterRender() {
 		JSONObject json = new JSONObject();
-		json.put("keyboard", true);
-		json.put("backdrop", "static");
+		json.put("keyboard", false);
+		json.put("backdrop", "true");
 		json.put("focus", true);
 		javaScriptSupport.require("ModalBox").invoke("activate").with(componentClientId, json);
 	}
