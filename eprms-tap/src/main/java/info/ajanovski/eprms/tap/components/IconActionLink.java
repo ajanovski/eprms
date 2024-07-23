@@ -39,4 +39,12 @@ public class IconActionLink extends Any {
 	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL, name = "class")
 	private String theClass;
 
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL)
+	private Boolean async;
+
+	@Property
+	@Parameter(required = false, defaultPrefix = BindingConstants.LITERAL)
+	private String[] mixins;
+
 }
