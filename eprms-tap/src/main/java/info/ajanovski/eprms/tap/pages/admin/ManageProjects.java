@@ -167,7 +167,7 @@ public class ManageProjects {
 	}
 
 	public List<Project> getAllProjects() {
-		List<Project> list = (List<Project>) projectManager.getAllProjectsOrderByTitle();
+		List<Project> list = (List<Project>) projectManager.getAllProjects();
 		if (selectedCourse == null) {
 			return new ArrayList<Project>();
 		} else {

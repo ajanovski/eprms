@@ -30,13 +30,13 @@ import info.ajanovski.eprms.model.entities.TeamMember;
 
 public interface ProjectDao {
 
-	public List<Project> getAllProjectsOrderByTitle();
+	public List<Project> getAllProjects();
 
 	public List<CourseProject> getProjectCourses(Project p);
 
 	public Float sumPoints(Project p);
 
-	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse);
+	public List<Project> getAllProjectsInCourse(Course selectedCourse);
 
 	public List<Project> getProjectByPerson(Long personId);
 

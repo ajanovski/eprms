@@ -32,7 +32,9 @@ import info.ajanovski.eprms.model.entities.WorkReport;
 
 public interface ProjectManager {
 
-	public List<Project> getAllProjectsOrderByTitle();
+	public List<Project> getAllProjects();
+	
+	public List<Project> orderProjectList(List<Project> list);
 
 	public List<CourseProject> getProjectCourses(Project p);
 
@@ -40,7 +42,7 @@ public interface ProjectManager {
 
 	public Float sumPoints(Project p);
 
-	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse);
+	public List<Project> getAllProjectsInCourse(Course selectedCourse);
 
 	public List<Project> getProjectByPerson(Long personId);
 

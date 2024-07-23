@@ -36,6 +36,7 @@ import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
 import info.ajanovski.eprms.model.util.ModelConstants;
+import info.ajanovski.eprms.model.util.ProjectCodeComparator;
 import info.ajanovski.eprms.model.util.WorkEvaluationComparator;
 import info.ajanovski.eprms.model.util.WorkReportComparator;
 import info.ajanovski.eprms.tap.data.ProjectDao;
@@ -53,8 +54,8 @@ public class ProjectManagerImpl implements ProjectManager {
 	private SystemConfigService systemConfigService;
 
 	@Override
-	public List<Project> getAllProjectsOrderByTitle() {
-		return projectDao.getAllProjectsOrderByTitle();
+	public List<Project> getAllProjects() {
+		return projectDao.getAllProjects();
 	}
 
 	@Override
@@ -88,8 +89,8 @@ public class ProjectManagerImpl implements ProjectManager {
 	}
 
 	@Override
-	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse) {
-		return projectDao.getAllProjectsInCourseOrderByTitle(selectedCourse);
+	public List<Project> getAllProjectsInCourse(Course selectedCourse) {
+		return projectDao.getAllProjectsInCourse(selectedCourse);
 	}
 
 	@Override
@@ -149,6 +150,13 @@ public class ProjectManagerImpl implements ProjectManager {
 		} else {
 			return "";
 		}
+	}
+
+	@Override
+	public List<Project> orderProjectList(List<Project> list) {
+		ProjectCodeComparator pcc = new ProjectCodeComparator();
+		Collections.sort(list, pcc);
+		return list;
 	}
 
 }

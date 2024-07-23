@@ -43,16 +43,19 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Project> getAllProjectsOrderByTitle() {
-		return getEntityManager().createQuery("from Project order by lower(title)").getResultList();
+	public List<Project> getAllProjects() {
+		return getEntityManager().createQuery("""
+				from Project order by lower(title)
+				""", Project.class).getResultList();
 	}
 
 	@Override
 	@SuppressWarnings("unchecked")
 	public List<CourseProject> getProjectCourses(Project p) {
 		if (p != null) {
-			return getEntityManager().createQuery("from CourseProject cp where cp.project.projectId=:projectId")
-					.setParameter("projectId", p.getProjectId()).getResultList();
+			return getEntityManager().createQuery("""
+					from CourseProject cp where cp.project.projectId=:projectId
+					""").setParameter("projectId", p.getProjectId()).getResultList();
 		} else {
 			return null;
 		}
@@ -85,16 +88,24 @@ public class ProjectDaoImpl implements ProjectDao {
 
 	@Override
 	@SuppressWarnings("unchecked")
-	public List<Project> getAllProjectsInCourseOrderByTitle(Course selectedCourse) {
+	public List<Project> getAllProjectsInCourse(Course selectedCourse) {
 		if (selectedCourse != null) {
-			return getEntityManager().createQuery("""
-					select p
-					from CourseProject cp
-					join cp.project p
-					join cp.course c
-					where c.courseId=:courseId
-					order by lower(p.title)
-					""").setParameter("courseId", selectedCourse.getCourseId()).getResultList();
+			return getEntityManager().createNativeQuery("""
+					select p.*
+					from {h-schema}course_project cp
+					join {h-schema}project p on cp.project_id=p.project_id
+					join {h-schema}course c on cp.course_id=c.course_id
+					where c.course_id=:courseId
+					order by
+						(
+						select min(submission_date)
+						from {h-schema}work_report wr
+						join {h-schema}activity a on wr.activity_id=a.activity_id
+						where a.project_id=p.project_id and
+							  not exists (select * from {h-schema}work_evaluation we
+							  			  where we.work_report_id=wr.work_report_id)
+						), p.title
+					""", Project.class).setParameter("courseId", selectedCourse.getCourseId()).getResultList();
 		} else {
 			return null;
 		}
