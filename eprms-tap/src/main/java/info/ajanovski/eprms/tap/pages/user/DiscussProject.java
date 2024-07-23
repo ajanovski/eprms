@@ -260,12 +260,16 @@ public class DiscussProject {
 	}
 
 	@CommitAfter
-	public void onActionFromSetAcceptedDiscussionPostEvaluation(DiscussionPostEvaluation discussionPostEvaluation) {
-		if (discussionPostEvaluation.getAccepted() != null) {
-			discussionPostEvaluation.setAccepted(!discussionPostEvaluation.getAccepted());
-		} else {
-			discussionPostEvaluation.setAccepted(true);
+	public void onActionFromAcceptDiscussionPostEvaluation(DiscussionPostEvaluation discussionPostEvaluation) {
+		discussionPostEvaluation.setAccepted(true);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
 		}
+	}
+
+	@CommitAfter
+	public void onActionFromRejectDiscussionPostEvaluation(DiscussionPostEvaluation discussionPostEvaluation) {
+		discussionPostEvaluation.setAccepted(false);
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(zAllPosts);
 		}

@@ -41,9 +41,10 @@
 	</div>
 
 	<div
-		class="card mb-1 pb-0 bg-light ${indentation} ${classOfPostAuthor}"
+		class="card bg-light mb-1 pb-0 ${indentation} ${classOfPostAuthor}" 
 		t:type="loop" t:source="allDiscussionPosts" t:value="discussionPost">
-		<div class="card-header p-1">
+		<div t:type="zone" t:id="postZone" id="postZone${discussionPost.discussionPostId}">
+		<div id="" class="card-header p-1">
 			<div class="row">
 				<div class="col-9 " id="postAuthor">${postAuthor}<span
 						class="badge badge-light ml-3"> <svg t:type="svgicon"
@@ -68,11 +69,12 @@
 								class="btn btn-sm btn-success" t:type="actionlink"
 								t:id="evaluatePostIdea" t:context="discussionPost" t:path="edit"
 								t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeIdea-label}</a>
-							<a href="" class="btn btn-sm btn-outline-success"
-								t:type="actionlink" t:id="evaluatePostModel"
+							<a href="" t:id="evaluatePostModel" 
+								t:type="actionlink" class="btn btn-sm btn-outline-success"
 								t:context="discussionPost" t:path="edit" t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeModel-label}</a>
-							<a href="" class="btn btn-sm btn-info" t:type="actionlink"
-								t:id="evaluatePostFunctionality" t:context="discussionPost"
+							<a href="" t:id="evaluatePostFunctionality" 
+								t:type="actionlink" class="btn btn-sm btn-info" 
+								t:context="discussionPost"
 								t:path="edit" t:zone="zAllPosts">${message:DiscussionPostEvaluationTypeFunctionality-label}</a>
 							<a href="" class="btn btn-sm btn-danger" t:type="actionlink"
 								t:id="evaluatePostBug" t:context="discussionPost" t:path="edit"
@@ -84,25 +86,30 @@
 						<p class="mt-2" t:type="if" t:test="discussionPostEvaluations">
 							<p:then>
 								<table class="table table-sm table-dark table-hover"
-									t:exclude="discussionPostEvaluationId" t:type="grid"
+									t:exclude="discussionPostEvaluationId, evaluatedOn,discussionPost" t:type="grid"
 									t:source="discussionPostEvaluations"
 									t:row="discussionPostEvaluation" t:add="actions">
 									<p:actionsCell>
-										<a href="" class="btn btn-sm btn-outline-primary"
+										<a href="" class="btn btn-sm p-1 pt-0 btn-outline-primary"
 											t:type="iconactionlink"
 											t:id="setEvaluatedPostingAsATeamDiscussionPostEvaluation"
 											t:context="discussionPostEvaluation" t:path="repeat"
-											t:zone="zAllPosts">${message:evaluatePostingAsATeam-label}</a>
-										<a href="" class="btn btn-sm btn-outline-info"
+											t:zone="zAllPosts" t:async="true">${message:evaluatePostingAsATeam-label}</a>
+										<a href="" class="btn btn-sm p-1 btn-outline-light"
 											t:type="iconactionlink"
-											t:id="setAcceptedDiscussionPostEvaluation"
-											t:context="discussionPostEvaluation" t:path="repeat"
-											t:zone="zAllPosts">${message:setAccepted-label}</a>
-										<a href="" class="btn btn-sm btn-outline-danger"
-											t:mixins="confirm" t:type="actionlink"
+											t:id="acceptDiscussionPostEvaluation"
+											t:context="discussionPostEvaluation" t:path="thumbs-up"
+											t:zone="zAllPosts" t:async="true">${message:setAccepted-label}</a>
+										<a href="" class="btn btn-sm p-1 btn-outline-info"
+											t:type="iconactionlink"
+											t:id="rejectDiscussionPostEvaluation"
+											t:context="discussionPostEvaluation" t:path="thumbs-down"
+											t:zone="zAllPosts" t:async="true">${message:setRejected-label}</a>
+										<a href="" class="btn btn-sm p-1 btn-outline-danger"
+											t:type="iconactionlink"
 											t:id="deleteDiscussionPostEvaluation"
 											t:context="discussionPostEvaluation" t:path="trash"
-											t:zone="zAllPosts">${message:remove-label}</a>
+											t:zone="zAllPosts" t:async="true" t:mixins="confirm" >${message:remove-label}</a>
 									</p:actionsCell>
 								</table>
 							</p:then>
@@ -113,7 +120,7 @@
 				</div>
 			</div>
 		</div>
-
+	</div>
 	</div>
 
 	<a href="" class="btn btn-primary" t:type="iconactionlink"
