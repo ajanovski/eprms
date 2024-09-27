@@ -86,10 +86,20 @@
 						<p class="mt-2" t:type="if" t:test="discussionPostEvaluations">
 							<p:then>
 								<table class="table table-sm table-dark table-hover"
-									t:exclude="discussionPostEvaluationId, evaluatedOn,discussionPost" t:type="grid"
+									t:exclude="discussionPostEvaluationId, discussionPost, message" t:type="grid"
 									t:source="discussionPostEvaluations"
 									t:row="discussionPostEvaluation" t:add="actions">
 									<p:actionsCell>
+										<a href="" class="btn btn-sm p-1 pt-0 btn-outline-primary"
+											t:type="iconactionlink"
+											t:id="setEvaluatedPostingAddPoints"
+											t:context="discussionPostEvaluation" t:path="plus"
+											t:zone="zAllPosts" t:async="true">${message:plus-label}</a>
+										<a href="" class="btn btn-sm p-1 pt-0 btn-outline-primary"
+											t:type="iconactionlink"
+											t:id="setEvaluatedPostingSubtractPoints"
+											t:context="discussionPostEvaluation" t:path="minus"
+											t:zone="zAllPosts" t:async="true">${message:minus-label}</a>
 										<a href="" class="btn btn-sm p-1 pt-0 btn-outline-primary"
 											t:type="iconactionlink"
 											t:id="setEvaluatedPostingAsATeamDiscussionPostEvaluation"

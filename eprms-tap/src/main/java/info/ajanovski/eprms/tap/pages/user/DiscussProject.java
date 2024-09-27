@@ -288,6 +288,34 @@ public class DiscussProject {
 		}
 	}
 
+	@CommitAfter
+	public void onActionFromSetEvaluatedPostingAddPoints(DiscussionPostEvaluation discussionPostEvaluation) {
+		if (discussionPostEvaluation.getPoints() == null) {
+			discussionPostEvaluation.setPoints(1);
+		} else {
+			discussionPostEvaluation.setPoints(discussionPostEvaluation.getPoints() + 1);
+		}
+		genericService.saveOrUpdate(discussionPostEvaluation);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
+	@CommitAfter
+	public void onActionFromSetEvaluatedPostingSubtractPoints(DiscussionPostEvaluation discussionPostEvaluation) {
+		if (discussionPostEvaluation.getPoints() != null) {
+			if (discussionPostEvaluation.getPoints() > 0) {
+				discussionPostEvaluation.setPoints(discussionPostEvaluation.getPoints() - 1);
+			} else {
+				discussionPostEvaluation.setPoints(null);
+			}
+		}
+		genericService.saveOrUpdate(discussionPostEvaluation);
+		if (request.isXHR()) {
+			ajaxResponseRenderer.addRender(zAllPosts);
+		}
+	}
+
 	public String getPMProjectURLPrefix() {
 		return systemConfigService.getString(AppConstants.SystemParameterPMProjectURLPrefix);
 	}

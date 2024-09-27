@@ -71,6 +71,7 @@ public class DiscussionDaoImpl implements DiscussionDao {
 							DiscussionPostEvaluation dpe
 							join dpe.discussionPost dp
 						where dp.discussionPostId=:discussionPostId
+						order by dpe.evaluatedOn
 					""").setParameter("discussionPostId", discussionPostId).getResultList();
 			if (l != null && l.size() > 0) {
 				return l;
