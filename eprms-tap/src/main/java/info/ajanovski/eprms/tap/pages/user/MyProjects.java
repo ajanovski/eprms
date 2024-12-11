@@ -6,8 +6,6 @@ import java.util.Date;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
-
 import org.apache.tapestry5.SelectModel;
 import org.apache.tapestry5.annotations.Import;
 import org.apache.tapestry5.annotations.InjectComponent;
@@ -17,6 +15,7 @@ import org.apache.tapestry5.annotations.SessionState;
 import org.apache.tapestry5.corelib.components.Zone;
 import org.apache.tapestry5.hibernate.annotations.CommitAfter;
 import org.apache.tapestry5.http.services.Request;
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.apache.tapestry5.services.SelectModelFactory;
 import org.apache.tapestry5.services.ajax.AjaxResponseRenderer;
 import org.slf4j.Logger;
@@ -38,7 +37,6 @@ import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.services.ProjectManager;
 import info.ajanovski.eprms.tap.services.SystemConfigService;
-import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage

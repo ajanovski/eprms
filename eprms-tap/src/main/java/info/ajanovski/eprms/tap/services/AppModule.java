@@ -48,6 +48,7 @@ import org.apache.tapestry5.services.ApplicationStateCreator;
 import org.apache.tapestry5.services.ApplicationStateManager;
 import org.apache.tapestry5.services.ComponentRequestFilter;
 import org.apache.tapestry5.services.ComponentSource;
+import org.apache.tapestry5.services.ExceptionReporter;
 import org.apache.tapestry5.services.PersistentLocale;
 import org.hibernate.Session;
 import org.slf4j.Logger;
@@ -193,14 +194,13 @@ public class AppModule {
 						userInfo.setPersonId(loggedInPerson.getPersonId());
 						userInfo.setUserRoles(userRoles);
 						logger.debug("userInfo is now initialized");
-
 					}
 
 					return userInfo;
 
 				} catch (Exception e) {
 					if (userInfo.getUserName() != null) {
-						logger.error("userName {} is not found", userInfo.getUserName());
+						logger.error("userName {} is not found {}", userInfo.getUserName(), e);
 					} else {
 						logger.error("userName is empty");
 					}
@@ -221,7 +221,7 @@ public class AppModule {
 	@Contribute(BeanValidatorSource.class)
 	public static void provideBeanValidatorConfigurer(OrderedConfiguration<BeanValidatorConfigurer> configuration) {
 		configuration.add("noXMLBeanValidatorConfigurer", new BeanValidatorConfigurer() {
-			public void configure(javax.validation.Configuration<?> configuration) {
+			public void configure(jakarta.validation.Configuration<?> configuration) {
 				configuration.ignoreXmlConfiguration();
 			}
 		});
@@ -229,6 +229,20 @@ public class AppModule {
 
 	public Logger buildLogger(final Logger logger) {
 		return logger;
+	}
+
+	/**
+	 * By default, Tapestry's ExceptionReporter implementation writes verbose text
+	 * files to the "build/exceptions" directory. This replaces that implementation
+	 * with one that does nothing. (The exceptions still get logged elsewhere.)
+	 */
+	@Decorate(serviceInterface = ExceptionReporter.class)
+	public static ExceptionReporter preventExceptionFileWriting(final ExceptionReporter exceptionReporter) {
+		return new ExceptionReporter() {
+			@Override
+			public void reportException(Throwable exception) {
+			}
+		};
 	}
 
 }

@@ -26,7 +26,7 @@ import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
-import javax.inject.Inject;
+import org.apache.tapestry5.ioc.annotations.Inject;
 
 import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;

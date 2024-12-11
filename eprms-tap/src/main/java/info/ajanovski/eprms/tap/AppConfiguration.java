@@ -22,21 +22,15 @@ package info.ajanovski.eprms.tap;
 
 import java.util.EnumSet;
 
-import javax.servlet.DispatcherType;
-import javax.servlet.ServletContext;
-import javax.servlet.ServletException;
-import javax.servlet.SessionTrackingMode;
-
 import org.apache.tapestry5.TapestryFilter;
-import org.jasig.cas.client.authentication.AuthenticationFilter;
-import org.jasig.cas.client.session.SingleSignOutFilter;
-import org.jasig.cas.client.session.SingleSignOutHttpSessionListener;
-import org.jasig.cas.client.util.HttpServletRequestWrapperFilter;
-import org.jasig.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
-import org.springframework.boot.web.embedded.tomcat.TomcatServletWebServerFactory;
+import org.apereo.cas.client.authentication.AuthenticationFilter;
+import org.apereo.cas.client.session.SingleSignOutFilter;
+import org.apereo.cas.client.session.SingleSignOutHttpSessionListener;
+import org.apereo.cas.client.util.HttpServletRequestWrapperFilter;
+import org.apereo.cas.client.validation.Cas20ProxyReceivingTicketValidationFilter;
 import org.springframework.boot.web.server.ErrorPage;
+import org.springframework.boot.web.server.ErrorPageRegistrar;
 import org.springframework.boot.web.servlet.ServletContextInitializer;
-import org.springframework.boot.web.servlet.server.ConfigurableServletWebServerFactory;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
@@ -44,6 +38,10 @@ import org.springframework.http.HttpStatus;
 
 import info.ajanovski.eprms.tap.util.AppConfig;
 import info.ajanovski.eprms.tap.util.UTF8Filter;
+import jakarta.servlet.DispatcherType;
+import jakarta.servlet.ServletContext;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.SessionTrackingMode;
 
 @Configuration
 @ComponentScan({ "info.ajanovski.eprms.tap" })
@@ -58,6 +56,7 @@ public class AppConfiguration {
 				servletContext.setInitParameter("tapestry.development-modules",
 						"info.ajanovski.eprms.tap.services.DevelopmentModule");
 				servletContext.setInitParameter("tapestry.qa-modules", "info.ajanovski.eprms.tap.services.QaModule");
+                //servletContext.setInitParameter("tapestry.use-external-spring-context", "true");
 
 				servletContext.setInitParameter("artifactParameterName", "ticket");
 				servletContext.setInitParameter("casServerLogoutUrl",
@@ -88,17 +87,26 @@ public class AppConfiguration {
 
 				servletContext.addListener(SingleSignOutHttpSessionListener.class);
 
+                //servletContext.addFilter("app", TapestrySpringFilter.class).addMappingForUrlPatterns(EnumSet.of(DispatcherType.REQUEST, DispatcherType.ERROR), false, "/*");
+
 				servletContext.setSessionTrackingModes(EnumSet.of(SessionTrackingMode.COOKIE));
 			}
 		};
 	}
 
-	@Bean
-	public ConfigurableServletWebServerFactory webServerFactory() {
-		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
-		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error404"));
-		return factory;
-	}
+    @Bean
+    public ErrorPageRegistrar errorPageRegistrar() {
+        return registry -> {
+            registry.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error404"));
+        };
+    }
+
+    //	@Bean
+//	public ConfigurableServletWebServerFactory webServerFactory() {
+//		TomcatServletWebServerFactory factory = new TomcatServletWebServerFactory();
+//		factory.addErrorPages(new ErrorPage(HttpStatus.NOT_FOUND, "/error404"));
+//		return factory;
+//	}
 
 //	@Bean(name = "messageSource")
 //	public MessageSource getMessageResource() {

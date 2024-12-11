@@ -23,8 +23,7 @@ package info.ajanovski.eprms.tap.data;
 
 import java.util.List;
 
-import javax.inject.Inject;
-
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Session;
 
 import info.ajanovski.eprms.model.entities.Course;

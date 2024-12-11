@@ -23,11 +23,10 @@ package info.ajanovski.eprms.tap.data;
 
 import java.util.List;
 
-import javax.persistence.Query;
-
 import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Session;
 import org.hibernate.exception.DataException;
+import org.hibernate.query.Query;
 import org.slf4j.Logger;
 
 import info.ajanovski.eprms.model.entities.Person;

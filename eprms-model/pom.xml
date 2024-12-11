@@ -5,7 +5,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>model</artifactId>
-	<version>0.0.11-SNAPSHOT</version>
+	<version>0.0.12-SNAPSHOT</version>
 
 	<name>EPRMS - Educational Project and Resource Management System - Model</name>
 
@@ -25,9 +25,9 @@
 	</developers>
 
 	<properties>
-		<maven.compiler.source>17</maven.compiler.source>
-		<maven.compiler.target>17</maven.compiler.target>
-		<java.version>17</java.version>
+		<maven.compiler.source>21</maven.compiler.source>
+		<maven.compiler.target>21</maven.compiler.target>
+		<java.version>21</java.version>
 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 		<project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

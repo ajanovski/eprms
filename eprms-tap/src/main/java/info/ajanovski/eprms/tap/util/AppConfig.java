@@ -4,8 +4,7 @@ import java.io.UnsupportedEncodingException;
 import java.util.MissingResourceException;
 import java.util.ResourceBundle;
 
-import javax.inject.Inject;
-
+import org.apache.tapestry5.ioc.annotations.Inject;
 import org.slf4j.Logger;
 
 public class AppConfig {
