@@ -13,7 +13,7 @@
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>eprms-tap</artifactId>
-	<version>0.0.14-SNAPSHOT-jakarta</version>
+	<version>0.0.15-SNAPSHOT-jakarta</version>
 	<name>EPRMS - Educational Project and Resource Management System</name>
 
 	<packaging>war</packaging>
@@ -68,7 +68,7 @@
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>model</artifactId>
-			<version>0.0.12-SNAPSHOT</version>
+			<version>0.0.13-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
@@ -233,6 +233,19 @@
 			<version>${cas-client-version}</version>
 		</dependency>
 
+		<!-- jaxb for error -->
+		<dependency>
+			<groupId>jakarta.xml.bind</groupId>
+			<artifactId>jakarta.xml.bind-api</artifactId>
+			<version>2.3.3</version>
+		</dependency>
+		<!-- Runtime, com.sun.xml.bind module -->
+		<dependency>
+			<groupId>org.glassfish.jaxb</groupId>
+			<artifactId>jaxb-runtime</artifactId>
+			<version>2.3.9</version>
+		</dependency>
+
 		<dependency>
 			<groupId>org.glassfish</groupId>
 			<artifactId>javax.json</artifactId>
@@ -265,19 +278,7 @@
 			<artifactId>firacode</artifactId>
 			<version>1.205.0</version>
 		</dependency>
-		<!-- jaxb for error -->
-		<dependency>
-			<groupId>jakarta.xml.bind</groupId>
-			<artifactId>jakarta.xml.bind-api</artifactId>
-			<version>2.3.3</version>
-		</dependency>
 
-		<!-- Runtime, com.sun.xml.bind module -->
-		<dependency>
-			<groupId>org.glassfish.jaxb</groupId>
-			<artifactId>jaxb-runtime</artifactId>
-			<version>2.3.9</version>
-		</dependency>
 	</dependencies>
 
 	<dependencyManagement>

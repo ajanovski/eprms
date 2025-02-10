@@ -28,6 +28,7 @@ import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
 import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
+import info.ajanovski.eprms.model.util.ProjectCodeComparator;
 import info.ajanovski.eprms.mq.MessagingService;
 import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
@@ -146,6 +147,7 @@ public class OverallCourseReport {
 		if (projectsToHide != null && projectsToHide.size() > 0) {
 			list.removeIf(l -> projectsToHide.stream().anyMatch(ph -> ph.getProjectId() == l.getProjectId()));
 		}
+		list = list.stream().sorted(new ProjectCodeComparator()).toList();
 		return list;
 	}
 
@@ -180,6 +182,7 @@ public class OverallCourseReport {
 		newWorkEvaluation = null;
 		newWorkReport = new WorkReport();
 		newWorkReport.setActivity(a);
+		newWorkReport.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(zWorkReport);
 		}
