@@ -3,6 +3,12 @@
 
 <h1>${message:user/MyDatabases-pagelink}</h1>
 
+<t:outputRaw t:value="message:url-db-instructions"></t:outputRaw>
+<p>
+	<a href="${URLDBSoftware}">${URLDBSoftware}</a>
+</p>
+
+
 <div class="card mb-3" t:type="loop" t:source="projectDatabases"
 	t:value="database">
 	<div class="card-body">
@@ -10,34 +16,6 @@
 			<h2>Project: ${database.project.title}</h2>
 			<h3>Database: ${database.name}</h3>
 		</div>
-		<p>
-			The professor recommends using the DBEAVER software (opensource and
-			free), that he can support via a ready-made package (tested at the
-			premises of the Faculty, available for Windows and Linux). You need
-			to download the 7Z package, unpack it to a folder of choice and start
-			the script START_DBEAVER, otherwise it will not work correctly. The
-			packages are available here: <a
-				href="https://bazi.finki.ukim.mk/materijali/Software/">https://bazi.finki.ukim.mk/materijali/Software/</a>
-		</p>
-		<p>The package includes a sample connection configuration, that
-			will be visible if correctly starting via the START_DBEAVER script,
-			and you will have to edit the connection line before attempting a
-			connection.</p>
-		<p>
-			<span class="bg-danger text-light">Note: do not double click
-				the connection line before you have configured it, as the server
-				will block your IP address immediately! </span>
-		</p>
-		<p>So, before attempting a connection make sure that you have
-			correctly configured the SSH tunnel parameters, by right-clicking the
-			connection configuration line and choosing the Edit option and use
-			the parameters shown below. You need to carefully configure two sets
-			of parameters in the DBEAVER connection configuration: SSH tunnel
-			parameters and database connection parameters. The two sets are in
-			two separate tabs of the connection configuration window, and you
-			need two separate passwords (for the tunnel and for the database).</p>
-		<p>Detailed instructions are included as a PDF file in the
-			software package.</p>
 		<table class="table table-sm">
 			<tr class="table-primary">
 				<td>SSH - Settings - Host/IP (Tunneling server)</td>

@@ -32,6 +32,7 @@ import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.annotations.StudentPage;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.ResourceManager;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @StudentPage
@@ -48,11 +49,18 @@ public class MyDatabases {
 	@Inject
 	private ResourceManager resourceManager;
 
+	@Inject
+	private SystemConfigService systemConfigService;
+
 	@Property
 	private Database database;
 
 	public List<Database> getProjectDatabases() {
 		return resourceManager.getActiveDatabasesByProject(userInfo.getPersonId());
+	}
+
+	public String getURLDBSoftware() {
+		return systemConfigService.getString("URL-DB-Software");
 	}
 
 }
