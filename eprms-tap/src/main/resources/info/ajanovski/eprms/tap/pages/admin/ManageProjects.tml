@@ -31,33 +31,36 @@
 		<div class="col-12" t:type="unless" t:test="newProject">
 			<div class="card">
 				<div class="card-body">
-					<div class="float-right">
-						<a t:type="actionlink" t:id="NewProject" class="btn btn-primary"><img
-							t:type="SVGIcon" t:path="plus-square" /> ${message:new-label}
-							${message:Project-label}</a>
-					</div>
-					<div class="float-right mr-4">
-						<form t:type="form" id="selectStatus" class="form-inline">
-							<div class="form-group">
-								<label t:type="label" t:for="selectStatus" class="mr-2"></label><select
-									t:id="selectStatus" t:type="select"
-									t:model="ModelProjectStatuses" t:value="selectedStatus"
-									t:zone="projectZone" onchange="this.form.submit(); "></select>
-							</div>
-							<t:submit t:value="OK" />
-						</form>
-					</div>
-
-					<form t:type="form" id="selectProject" class="form-inline">
-						<div class="form-group">
-							<label t:type="label" t:for="selectProject" class="mr-2"></label><select
-								t:id="selectProject" t:type="select" t:model="projectModel"
-								t:value="selectedProject" t:zone="projectZone"
-								onchange="this.form.submit(); "></select>
+					<div class="row">
+						<div class="col-7">
+							<form t:type="form" id="selectProject" class="form form-inline">
+								<div class="form-group col-12">
+									<label t:type="label" t:for="selectProject" class="mr-2"></label><select
+										t:id="selectProject" t:type="select" t:model="projectModel"
+										class="col-9 mr-1" t:value="selectedProject"
+										t:zone="projectZone" onchange="this.form.submit(); "></select>
+									<t:submit t:value="OK" />
+								</div>
+							</form>
 						</div>
-						<t:submit t:value="OK" />
-					</form>
-
+						<div class="col-2">
+							<a t:type="actionlink" t:id="NewProject"
+								class="btn btn-primary"><img t:type="SVGIcon"
+								t:path="plus-square" /> ${message:new-label}
+								${message:Project-label}</a>
+						</div>
+						<div class="col-3">
+							<form t:type="form" id="selectStatus" class="form form-inline">
+								<div class="form-group mr-1">
+									<label t:type="label" t:for="selectStatus" class="mr-2"></label><select
+										t:id="selectStatus" t:type="select"
+										t:model="ModelProjectStatuses" t:value="selectedStatus"
+										t:zone="projectZone" onchange="this.form.submit(); "></select>
+								</div>
+								<t:submit t:value="OK" />
+							</form>
+						</div>
+					</div>
 				</div>
 			</div>
 		</div>
