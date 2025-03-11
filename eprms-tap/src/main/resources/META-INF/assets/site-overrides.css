@@ -120,3 +120,7 @@ nav.navbar {
 	border-left: 1px solid;
 	padding: 0.5em;
 }
+
+div.palette select { 
+	width: 30em !important; 
+}
