@@ -44,9 +44,8 @@
 							</form>
 						</div>
 						<div class="col-2">
-							<a t:type="actionlink" t:id="NewProject"
-								class="btn btn-primary"><img t:type="SVGIcon"
-								t:path="plus-square" /> ${message:new-label}
+							<a t:type="actionlink" t:id="NewProject" class="btn btn-primary"><img
+								t:type="SVGIcon" t:path="plus-square" /> ${message:new-label}
 								${message:Project-label}</a>
 						</div>
 						<div class="col-3">
@@ -107,7 +106,7 @@
 										<label t:type="label" t:for="inCourses"></label>
 										<div t:type="palette" t:id="inCourses"
 											t:encoder="courseEncoder" t:model="coursesModel"
-											t:selected="inCourses" t:size="3"></div>
+											t:selected="inCourses" t:size="5"></div>
 									</div>
 								</p:courses>
 							</t:beaneditor>
@@ -150,17 +149,20 @@
 
 			<div class="card mb-3" t:type="if" t:test="newTm">
 				<div class="card-body">
-					<h3>${message:TeamMember-label}</h3>
-					<form class="form-horizontal" t:id="teamMemberForm"
-						t:type="beaneditform" t:object="newTm" t:exclude="teamMemberId"
-						t:add="person" t:reorder="person, positionNumber, role"
-						t:submitLabel="OK">
-						<p:person>
-							<label t:type="label" t:for="selectPerson"></label>
-							<select t:id="selectPerson" t:type="select" t:source="persons"
-								t:value="newTm.person" t:model="personModel"></select>
-						</p:person>
-					</form>
+					<t:modalbox>
+						<h3>${message:TeamMember-label}</h3>
+						<form class="form-horizontal" t:id="teamMemberForm"
+							t:type="beaneditform" t:object="newTm" t:exclude="teamMemberId"
+							t:add="person" t:reorder="person, positionNumber, role"
+							t:submitLabel="OK" t:cancel="true">
+							<p:person>
+								<!-- select t:id="selectPerson" t:type="select" t:source="persons"
+									t:value="newTm.person" t:model="personModel"></select -->
+								<input t:type="textfield" t:id="selectPerson"
+									t:value="personSearch" t:autocomplete="on" t:mixins="formgroup,autocomplete" size="100" />
+							</p:person>
+						</form>
+					</t:modalbox>
 				</div>
 			</div>
 

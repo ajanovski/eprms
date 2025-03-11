@@ -25,6 +25,8 @@ import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
 import org.apache.tapestry5.SelectModel;
@@ -56,6 +58,7 @@ import info.ajanovski.eprms.tap.annotations.AdministratorPage;
 import info.ajanovski.eprms.tap.annotations.InstructorPage;
 import info.ajanovski.eprms.tap.services.CourseManager;
 import info.ajanovski.eprms.tap.services.GenericService;
+import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.services.ProjectManager;
 import info.ajanovski.eprms.tap.services.SystemConfigService;
 import info.ajanovski.eprms.tap.services.TranslationService;
@@ -96,6 +99,9 @@ public class ManageProjects {
 
 	@Inject
 	private PersistentLocale persistentLocale;
+
+	@Inject
+	private PersonManager personManager;
 
 	@Inject
 	private Messages messages;
@@ -162,6 +168,9 @@ public class ManageProjects {
 	@Persist
 	@Property
 	private Course selectedCourse;
+
+	@Property
+	private String personSearch;
 
 	void onActivate() {
 	}
@@ -289,9 +298,24 @@ public class ManageProjects {
 		};
 	}
 
+	private Boolean cancelTeamMemberForm=false;
+	
+	public void onCanceledFromTeamMemberForm() {
+		cancelTeamMemberForm=true;
+	}
+
 	@CommitAfter
 	public void onSuccessFromTeamMemberForm() {
-		genericService.save(newTm);
+		if (!cancelTeamMemberForm) {
+			if (personSearch != null && personSearch.length() > 0) {
+				Pattern pattern = Pattern.compile("\\[(.*?)\\]");
+				Matcher matcher = pattern.matcher(personSearch);
+				if (matcher.find()) {
+					newTm.setPerson(personManager.getPersonByUsername(matcher.group(1)));
+				}
+			}
+			genericService.save(newTm);
+		}
 		newTm = null;
 	}
 
@@ -354,7 +378,8 @@ public class ManageProjects {
 	private Person person;
 
 	public List<Person> getPersons() {
-		return (List<Person>) genericService.getAll(Person.class);
+		return ((List<Person>) genericService.getAll(Person.class)).stream()
+				.sorted((o1, o2) -> o1.getUserName().compareTo(o2.getUserName())).toList();
 	}
 
 	public SelectModel getPersonModel() {
@@ -454,4 +479,15 @@ public class ManageProjects {
 
 		}
 	}
+
+	public List<String> onProvideCompletionsFromSelectPerson(String input) {
+		List<String> list = new ArrayList<String>();
+		if (input != null && input.length() > 0) {
+			getPersons().stream()
+					.filter(p -> (p.getFirstName() + p.getLastName() + p.getEmail() + p.getUserName()).contains(input))
+					.forEach(p -> list.add(p.getFirstName() + " " + p.getLastName() + " [" + p.getUserName() + "]"));
+		}
+		return list;
+	}
+
 }
