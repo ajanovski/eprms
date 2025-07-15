@@ -48,7 +48,7 @@
 		<servlet-version>5.0.0</servlet-version>
 		<json-version>1.1.4</json-version>
 
-		<postgresql-version>42.7.4</postgresql-version>
+		<postgresql-version>42.7.7</postgresql-version>
 		<cas-client-version>4.0.4</cas-client-version>
 	</properties>
 
@@ -63,7 +63,7 @@
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>model</artifactId>
-			<version>0.0.13-SNAPSHOT</version>
+			<version>0.0.14-SNAPSHOT</version>
 		</dependency>
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
