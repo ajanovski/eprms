@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="course_activity_type")
+@Table (schema="eprms_main", name="course_activity_type")
 public class CourseActivityType implements java.io.Serializable {
 	private long courseActivityTypeId;
 	private int positionNumber;

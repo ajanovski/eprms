@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="repository")
+@Table (schema="eprms_main", name="repository")
 public class Repository implements java.io.Serializable {
 	private long repositoryId;
 	private String title;

@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_util", name="role")
+@Table (schema="eprms_util", name="role")
 public class Role implements java.io.Serializable {
 	private long roleId;
 	private String name;

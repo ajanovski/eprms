@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="activity")
+@Table (schema="eprms_main", name="activity")
 public class Activity implements java.io.Serializable {
 	private long activityId;
 	private String title;

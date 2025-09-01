@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_util", name="system_parameters")
+@Table (schema="eprms_util", name="system_parameters")
 public class SystemParameter implements java.io.Serializable {
 	private long systemParameterId;
 	private String code;

@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_util", name="translations")
+@Table (schema="eprms_util", name="translations")
 public class Translation implements java.io.Serializable {
 	private long translationId;
 	private String className;

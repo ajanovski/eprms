@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="", name="database")
+@Table (schema="eprms_main", name="database")
 public class Database implements java.io.Serializable {
 	private long databaseId;
 	private String type;

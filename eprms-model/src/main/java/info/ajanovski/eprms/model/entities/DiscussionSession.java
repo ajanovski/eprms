@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="discussion_session")
+@Table (schema="eprms_main", name="discussion_session")
 public class DiscussionSession implements java.io.Serializable {
 	private long discussionSessionId;
 	private Date startDate;

@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table(schema = "epm_main", name = "discussion_post")
+@Table(schema = "eprms_main", name = "discussion_post")
 public class DiscussionPost implements java.io.Serializable {
 	private long discussionPostId;
 	private String type;

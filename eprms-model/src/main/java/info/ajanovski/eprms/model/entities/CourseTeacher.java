@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="course_teacher")
+@Table (schema="eprms_main", name="course_teacher")
 public class CourseTeacher implements java.io.Serializable {
 	private long courseTeacherId;
 	private Date fromDate;

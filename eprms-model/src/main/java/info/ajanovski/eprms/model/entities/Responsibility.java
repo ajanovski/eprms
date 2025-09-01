@@ -28,7 +28,7 @@ import javax.validation.constraints.*;
 /*
 */
 @Entity
-@Table (schema="epm_main", name="responsibility")
+@Table (schema="eprms_main", name="responsibility")
 public class Responsibility implements java.io.Serializable {
 	private long responsibilityId;
 	private Project project;

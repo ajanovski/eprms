@@ -29,7 +29,7 @@ import javax.validation.constraints.*;
 Denotes which CourseProjects are open for discussions in the selected DiscussionSession
 */
 @Entity
-@Table (schema="epm_main", name="discussion_on_course_project")
+@Table (schema="eprms_main", name="discussion_on_course_project")
 public class DiscussionOnCourseProject implements java.io.Serializable {
 	private long discussionOnCourseProjectId;
 	private DiscussionSession discussionSession;
