@@ -376,6 +376,7 @@ public class MyProjects {
 				.anyMatch(p -> p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() != null
 						&& p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
 			if (myTeamMember.getTeam().getTeamMembers().size() == 1
+					&& myTeamMember.getTeam().getStatus()!=null 
 					&& myTeamMember.getTeam().getStatus().equals(ModelConstants.TeamStatusProposed)) {
 				return true;
 			} else {
@@ -493,7 +494,7 @@ public class MyProjects {
 			return false;
 		}
 	}
-	
+
 	@CommitAfter
 	void onActionFromRemoveProject(Project p) {
 		p.getCourseProjects().forEach(cp -> genericService.delete(cp));
