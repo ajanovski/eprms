@@ -183,6 +183,7 @@ public class OverallCourseReport {
 		newWorkReport = new WorkReport();
 		newWorkReport.setActivity(a);
 		newWorkReport.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
+		newWorkReport.setTitle(systemConfigService.getString(AppConstants.SystemParameterTplNewWorkReportByAdmin));
 		if (request.isXHR()) {
 			ajaxResponseRenderer.addRender(zWorkReport);
 		}
@@ -203,6 +204,7 @@ public class OverallCourseReport {
 		WorkReport wr1 = genericService.getByPK(WorkReport.class, wr.getWorkReportId());
 		newWorkReport = null;
 		newWorkEvaluation = new WorkEvaluation();
+		newWorkEvaluation.setTitle(systemConfigService.getString(AppConstants.SystemParameterTplNewWorkEvaluation));
 		newWorkEvaluation.setEvaluationDate(new Date());
 		newWorkEvaluation.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
 		newWorkEvaluation.setStatus(ModelConstants.EvaluationStatusCreated);

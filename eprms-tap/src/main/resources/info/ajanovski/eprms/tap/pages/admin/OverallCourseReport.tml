@@ -159,13 +159,16 @@
 							t:source="workReportsForActivity" t:value="workReport">
 
 							<div class="report">
-								<p class="mb-1">
-									<strong>${workReport.title}</strong> <t:if
-											t:test="workReport.person">
-											<br /> -
-										${workReport?.person?.lastName} ${workReport?.person?.firstName}</t:if>
-								</p>
+								<div class="float-right">
+									<t:if t:test="workReport.person">
+									- ${workReport?.person?.lastName} ${workReport?.person?.firstName}
+									</t:if>
+									- ${workReport?.submissionDate}   
+								</div>
+								<p><strong>${workReport.title}</strong></p>
+								<t:if t:test="workReport.description">
 								<t:outputraw t:value="workReport.description" />
+								</t:if>
 							</div>
 
 							<div
@@ -176,26 +179,29 @@
 
 									<div class="row">
 										<div class="col-2">
-											<p>
-												<a class="btn btn-sm btn-primary p-0" href=""
+											<p><a class="btn btn-sm btn-primary p-0" href=""
 													t:type="eventlink" t:id="editWorkEvaluation"
 													t:context="workEvaluation" t:async="true" ><img t:type="svgicon"
-													t:path="edit"/></a><br /> <a
+													t:path="edit"/></a>   <span
+													class="ml-3 badge badge-dark text-nowrap">${workEvaluation.points}</span>
+													<a
 													class="btn btn-sm btn-secondary p-0" href=""
 													t:type="eventlink" t:id="toggleWorkEvaluationStatus"
 													t:context="workEvaluation" t:async="true"><img
-													t:type="svgicon" t:path="toggle-left" /></a> <br /> <span
-													class="badge badge-dark text-nowrap">${workEvaluation.points}</span>
+													t:type="svgicon" t:path="toggle-left" /></a>
 											</p>
 										</div>
 										<div class="col-10">
+											<div class="float-right">
+                                                                                                       <t:if  t:test="workEvaluation">
+                                                                                                                <span class="small">-
+                                                                                                                        ${workEvaluation?.person?.lastName}
+                                                                                                                        ${workEvaluation?.person?.firstName}       
+                                                                                                                - ${workEvaluation?.evaluationDate}</span>
+                                                                                                        </t:if>
+											</div>
 											<p class="mb-0">
-												<strong>${workEvaluation.title} <t:if
-														t:test="workEvaluation">
-														<br />-<span class="small">
-															${workEvaluation?.person?.lastName}
-															${workEvaluation?.person?.firstName}</span>
-													</t:if></strong>
+												<strong>${workEvaluation.title}</strong>
 											</p>
 											<t:outputRaw t:value="workEvaluation.description" />
 										</div>
@@ -204,7 +210,7 @@
 							</div>
 
 							<p class="mt-2 text-right ">
-								<a href="" class="p-1 btn btn-sm btn-primary"
+								<a href="" class="p-1 btn btn-sm btn-link"
 									t:type="eventlink" t:id="addWorkEvaluation"
 									t:context="workReport"><img t:type="svgicon" t:path="corner-down-left" />
 									${message:evaluation-label}</a>

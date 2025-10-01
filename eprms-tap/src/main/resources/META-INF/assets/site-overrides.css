@@ -7,6 +7,9 @@
 	--color-correct-better: #484837ff; /* https://www.w3schools.com/colors/colors_british.asp - Olive gree */ 
 	--color-noevaluation: #white;
 	--color-exception: #404040;
+	--main-bg-color-accent: #eceef3ff;
+	--main-bg-color-accent2: #00000080;
+	--inlinecomment-bg-color: #cfef60;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -32,6 +35,7 @@
   --bs-bg-opacity: rgba(42,42,42,0.5);
   --color-incorrect: #7b000c; 	/* https://www.w3schools.com/colors/colors_british.asp - Carnival red */
   --color-correct: #277c2c; /* https://www.w3schools.com/colors/colors_british.asp - Bright green / Goblin / Garland */ 
+		--inlinecomment-bg-color: #8faf10;
   }
 }
 
@@ -123,4 +127,64 @@ nav.navbar {
 
 div.palette select { 
 	width: 30em !important; 
+}
+
+
+
+
+
+@media ( prefers-color-scheme : dark) {
+	a {
+		color: #E2F72F;
+	}
+	a:hover {
+		color: #A1B400;
+	}
+	body {
+		background-color: var(--main-bg-color2);
+		color: var(--main-font-color);
+	}
+	.card {
+		background-color: var(--main-bg-color) !important;
+		border-color: var(--main-bg-color3) !important;
+	}
+	.card-header {
+		background-color: var(--main-bg-color-accent) !important;
+	}
+    .testType .card-header.bg-success {
+            background-color: var(--color-correct) !important;
+    }
+	.card-header h3 {
+		color: var(--main-font-color) !important;
+	}
+	.bg-light {
+		background-color: var(--main-bg-color3) !important;
+	}
+	.table {
+		color: var(--main-font-color);
+		background-color: var(--main-bg-color) !important;
+	}
+	.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+		background-color: var(--main-bg-color-accent);
+		color: var(--main-font-color-hover);
+	}
+	.dropdown-menu {
+		background-color: var(--main-bg-color2);
+	}
+	.dropdown-menu a {
+		color: var(--main-link-color) !important;
+	}
+	pre {
+		color: var(--main-font-color);
+	}
+	.modal-content {
+		background-color: var(--main-bg-color2);
+		border-color: var(--main-bg-color2);
+	}
+	.cke_wysiwyg_frame {
+		background-color: #6060ff !important;
+	}
+	p.comment {
+		background: #7C8B00;
+	}
 }

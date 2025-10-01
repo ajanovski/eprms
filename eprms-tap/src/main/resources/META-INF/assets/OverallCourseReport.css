@@ -37,7 +37,7 @@ table thead th:first-child {
 }
 
 table td {
-	background: #fff;
+/*	background: #fff;*/
 }
 
 table tbody th {
@@ -47,7 +47,7 @@ table tbody th {
 table tbody th {
 	position: sticky;
 	left: 0;
-	background: #eee;
+/*	background: #eee;*/
 	z-index: 1;
 }
 
