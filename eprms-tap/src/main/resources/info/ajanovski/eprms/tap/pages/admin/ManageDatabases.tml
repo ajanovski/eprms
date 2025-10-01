@@ -21,8 +21,8 @@
 </div>
 
 <div t:type="if" t:test="isOnlyShowNotCreated">
-	<a t:type="iconactionlink" t:id="activateDatabases"
-		class="btn btn-secondary">Activate databases</a>
+	<p><a t:type="iconactionlink" t:id="activateDatabases"
+		class="btn btn-secondary">Activate databases</a></p>
 	<code>
 		<t:loop t:source="databases" t:value="database">${DBCreationCommand} "${database.name}"
 			"${database.owner}" "${database.password}"<br />

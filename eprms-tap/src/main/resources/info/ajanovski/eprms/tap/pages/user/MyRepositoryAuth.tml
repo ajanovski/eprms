@@ -5,6 +5,8 @@
 
 <p>Please enter your new password for repository authentication.</p>
 
+<p>Note: Please have in mind that the new password will be active only after aproximately 10 minutes.</p>
+
 <form t:type="form" t:id="AuthForm">
 
 	<div class="form-group">
