@@ -51,4 +51,7 @@ public class AppConstants {
 			SystemParameterDBTunnelServerName, SystemParameterDBTunnelPrefix, SystemParameterPMOverviewTicketsURL,
 			SystemParameterPMOverviewTimelineURL, SystemParameterPMCreationScript, SystemParameterPMProjectURLPrefix,
 			SystemParameterRepoCreationCommand };
+
+	public static final String SystemParameterTplNewWorkReportByAdmin = "TPL-Work-Report-Title-By-Admin";
+	public static final String SystemParameterTplNewWorkEvaluation = "TPL-Work-Evaluation-Title";
 }
