@@ -44,7 +44,8 @@
 
 		<h4>Team is Responsible for Projects</h4>
 		<p t:type="loop" t:source="teamResponsibilities"
-			t:value="responsibility">${responsibility.project.title}</p>
+			t:value="responsibility" class="bg-primary p-2">${responsibility.project.code}
+			- ${responsibility.project.title} [${responsibility.project.status}]</p>
 	</div>
 </div>
 </html>
