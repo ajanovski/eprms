@@ -15,7 +15,7 @@
 		<p:activityType>
 			<div class="form-group">
 				<label t:type="label" t:for="selectActivityType"></label> <select
-					t:id="selectActivityType" t:type="select" t:model="listTypes"
+					t:id="selectActivityType" t:type="select" t:model="activityTypeModel"
 					t:value="newActivity.activityType"></select>
 			</div>
 		</p:activityType>
