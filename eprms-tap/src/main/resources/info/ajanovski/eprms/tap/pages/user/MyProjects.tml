@@ -16,7 +16,7 @@
 	<t:if t:test="chooseATeam">
 		<t:ModalBox t:id="JTModal">
 			<a href="" t:type="eventlink" t:id="cancelJoinTeam"
-				class="btn btn-default float-right">${message:cancel-label}</a>
+				class="btn btn-secondary float-right">${message:cancel-label}</a>
 			<h3>${message:Join-label}&nbsp;${message:Team-label}</h3>
 			<div class="card bg-light mb-3" t:type="loop"
 				t:source="listOfJoinableTeams" t:value="joinableTeam">
@@ -30,6 +30,22 @@
 					<t:outputraw t:value="joinableTeam.description" />
 					<p></p>
 					<t:TeamMembersGrid t:team="joinableTeam" />
+					
+					<p>Proposed Project(s):</p>
+					
+					<div class="" t:type="loop" t:source="joinableTeam.responsibilities" t:value="joinableTeamResponsbility">
+						<div class="card" t:type="loop" t:source="joinableTeamResponsbility.project.courseProjects" 
+							t:value="joinableTeamResponsbilityCourseProject">
+							<div class="card-header">
+								${joinableTeamResponsbilityCourseProject.project.title}<br/>
+								${joinableTeamResponsbilityCourseProject.course.title}
+							</div>
+							<div class="card-body">
+								<t:outputraw t:value="joinableTeamResponsbilityCourseProject.project.description">
+								</t:outputraw>
+							</div>
+						</div>
+					</div>
 				</div>
 			</div>
 		</t:ModalBox>
@@ -126,7 +142,7 @@
 			class="card bg-light mb-3">
 			<div class="card-header">
 				<div class="float-right">
-					<span t:type="if" t:test="canApprove"> <a href=""
+					<span t:type="if" t:test="projectCoordinator"> <a href=""
 						t:type="iconactionlink" t:id="addMembers" t:context="myTeamMember"
 						t:path="edit" class="btn btn-sm btn-secondary">${message:add-label}
 							${message:teamMember-label}</a>
@@ -206,6 +222,9 @@
 				<h3>${project.title}</h3>
 				<p t:type="if" t:test="projectUrl">
 					<a href="${projectUrl}">${projectUrl}</a>
+				</p>
+				<p t:type="loop" t:source="project.courseProjects" t:value="listedCourseProject">
+					${listedCourseProject.course.title}
 				</p>
 			</div>
 			<div class="card-body">

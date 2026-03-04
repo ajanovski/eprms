@@ -77,9 +77,10 @@ public class MyProjects {
 
 	@Inject
 	private ProjectManager projectManager;
-
 	@Inject
 	private GenericService genericService;
+	@Inject
+	private PersonManager personManager;
 
 	@Property
 	private Project project;
@@ -129,6 +130,15 @@ public class MyProjects {
 
 	@Property
 	private Team joinableTeam;
+	
+	@Property
+	private CourseProject listedCourseProject;
+	
+	@Property
+	private Responsibility joinableTeamResponsbility;
+	
+	@Property
+	private CourseProject joinableTeamResponsbilityCourseProject;
 
 	public void setupRender() {
 		if (teamNew == null) {
@@ -333,19 +343,36 @@ public class MyProjects {
 		teamToEdit = tm.getTeam();
 	}
 
-	public boolean isCanApprove() {
-		if (myTeamMember.getTeam().getTeamMembers().stream()
-				.anyMatch(p -> p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() != null
-						&& p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
-			if (teamMember != null && !(teamMember.getStatus() != null
-					&& teamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted))) {
-				return true;
-			} else {
-				if (teamMember == null) {
+	public boolean isProjectCoordinator() {
+		if (myTeamMember.getPerson().getPersonId() == getMyself().getPersonId()) {
+			// This myTeamMember is the logged-in user
+			if (myTeamMember.getRole() != null
+					&& myTeamMember.getRole().equals(ModelConstants.TeamMemberRoleCoordinator)) {
+				// this myTeamMember is a Team Coordinator
+				if (myTeamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted)) {
+					// this myTeamMember is ACTIVE
 					return true;
 				} else {
+					// this myTeamMember is NOT ACTIVE
 					return false;
 				}
+			} else {
+				// this myTeamMember is NOT a Team Coordinator
+				return false;
+			}
+		} else {
+			// this myteammember is not the logged-in user
+			return false;
+		}
+	}
+
+	public boolean isCanApprove() {
+		if (isProjectCoordinator()) {
+			if (myTeamMember.getTeam().getResponsibilities().stream()
+					.allMatch(r -> r.getProject().getStatus().equals(ModelConstants.ProjectStatusProposed))) {
+				return true;
+			} else {
+				return false;
 			}
 		} else {
 			return false;
@@ -353,30 +380,30 @@ public class MyProjects {
 	}
 
 	public boolean isCanLeave() {
-		if (myTeamMember.getTeam().getTeamMembers().stream()
-				.anyMatch(p -> p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() != null
-						&& !p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
-			if (teamMember != null && !(teamMember.getStatus() != null
-					&& teamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted))) {
+		if (!isProjectCoordinator()) {
+			if (myTeamMember.getTeam().getResponsibilities().stream()
+					.allMatch(r -> r.getProject().getStatus().equals(ModelConstants.ProjectStatusProposed))) {
 				return true;
 			} else {
-				if (teamMember == null) {
-					return true;
-				} else {
-					return false;
-				}
+				return false;
 			}
 		} else {
 			return false;
 		}
+		/*
+		 * if (myTeamMember.getTeam().getTeamMembers().stream() .anyMatch(p ->
+		 * p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() !=
+		 * null && !p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) { if
+		 * (teamMember != null && !(teamMember.getStatus() != null &&
+		 * teamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted))) {
+		 * return true; } else { if (teamMember == null) { return true; } else { return
+		 * false; } } } else { return false; }
+		 */
 	}
 
 	public boolean isCanRemoveTeam() {
-		if (myTeamMember.getTeam().getTeamMembers().stream()
-				.anyMatch(p -> p.getPerson().getPersonId() == getMyself().getPersonId() && p.getRole() != null
-						&& p.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
-			if (myTeamMember.getTeam().getTeamMembers().size() == 1
-					&& myTeamMember.getTeam().getStatus()!=null 
+		if (isProjectCoordinator()) {
+			if (myTeamMember.getTeam().getTeamMembers().size() == 1 && myTeamMember.getTeam().getStatus() != null
 					&& myTeamMember.getTeam().getStatus().equals(ModelConstants.TeamStatusProposed)) {
 				return true;
 			} else {
@@ -388,10 +415,7 @@ public class MyProjects {
 	}
 
 	public boolean isCanRemoveMember() {
-		// Only coordinators can remove members
-		if (myTeamMember.getTeam().getTeamMembers().stream()
-				.anyMatch(tm -> tm.getPerson().getPersonId() == getMyself().getPersonId() && tm.getRole() != null
-						&& tm.getRole().equals(ModelConstants.TeamMemberRoleCoordinator))) {
+		if (isProjectCoordinator()) {
 			if (teamMember != null
 					&& !(teamMember.getStatus() != null
 							&& teamMember.getStatus().equals(ModelConstants.TeamMemberStatusAccepted))
@@ -435,9 +459,6 @@ public class MyProjects {
 			ajaxResponseRenderer.addRender(zJNTModal);
 		}
 	}
-
-	@Inject
-	private PersonManager personManager;
 
 	@CommitAfter
 	public void onValidateFromFrmAddMembers() {

@@ -39,7 +39,7 @@
 	<div class="card-header">
 		<h2>${project.title}
 			<small class="text-muted">Status: ${project.status}</small> <a
-				class="btn btn-default" data-toggle="collapse"
+				class="btn btn-sm btn-outline-secondary" data-toggle="collapse"
 				href="#collapse${project.projectId}" role="button"
 				aria-expanded="false" aria-controls="collapse${project.projectId}">
 				<svg t:type="svgicon" t:path="list" />

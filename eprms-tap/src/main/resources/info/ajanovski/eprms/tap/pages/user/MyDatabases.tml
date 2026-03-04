@@ -16,6 +16,8 @@
 			<h2>Project: ${database.project.title}</h2>
 			<h3>Database: ${database.name}</h3>
 		</div>
+		
+		<p>SSH tunnel to database server</p>
 		<table class="table table-sm">
 			<tr class="table-primary">
 				<td>SSH - Settings - Host/IP (Tunneling server)</td>
@@ -29,6 +31,10 @@
 				<td>SSH - Settings - Password:</td>
 				<td>${database.tunnelPassword}</td>
 			</tr>
+         </table>
+         
+         <p>Database connection</p>
+         <table class="table table-sm">
 			<tr class="table-secondary">
 				<td>Main - Server - Host (Database server)</td>
 				<td>${database.server}</td>
