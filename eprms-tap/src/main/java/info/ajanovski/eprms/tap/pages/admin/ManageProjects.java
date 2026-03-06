@@ -262,6 +262,13 @@ public class ManageProjects {
 	public void onActionFromNewRepository(Project p) {
 		newRp = new Repository();
 		newRp.setProject(p);
+		String repoURLPrefix = systemConfigService.getString(AppConstants.SystemParameterRepoCreationURLPrefix);
+		String repoSuffix = systemConfigService.getString(AppConstants.SystemParameterRepoCreationSuffix);
+		String repoType = systemConfigService.getString(AppConstants.SystemParameterRepoCreationType);
+		String prjCode = p.getCode().toLowerCase().replace("-", "_").replace(" ", "_");
+		newRp.setTitle(prjCode);
+		newRp.setUrl(repoURLPrefix + prjCode + repoSuffix);
+		newRp.setType(repoType);
 	}
 
 	public List<Course> getAllCourses() {
@@ -298,10 +305,10 @@ public class ManageProjects {
 		};
 	}
 
-	private Boolean cancelTeamMemberForm=false;
-	
+	private Boolean cancelTeamMemberForm = false;
+
 	public void onCanceledFromTeamMemberForm() {
-		cancelTeamMemberForm=true;
+		cancelTeamMemberForm = true;
 	}
 
 	@CommitAfter
@@ -362,6 +369,14 @@ public class ManageProjects {
 		newDb = null;
 	}
 
+	public void onCancelNewDatabase() {
+		newDb = null;
+	}
+	
+	public void onCancelNewRepository() {
+		newRp = null;
+	}
+	
 	@CommitAfter
 	public void onSuccessFromNewRepositoryForm() {
 		genericService.save(newRp);
@@ -460,8 +475,8 @@ public class ManageProjects {
 	}
 
 	@CommitAfter
-	void onActionFromChangeStatus(Project p) {
-		projectManager.cycleStatus(p);
+	void onActionFromApproveProjectAndTeam(Project p) {
+		projectManager.approveProjectAndTeam(p);
 	}
 
 	public String[] getModelProjectStatuses() {

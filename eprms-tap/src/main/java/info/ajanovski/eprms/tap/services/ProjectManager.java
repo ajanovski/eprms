@@ -48,6 +48,8 @@ public interface ProjectManager {
 
 	public void cycleStatus(Project p);
 
+	public void approveProjectAndTeam(Project p);
+	
 	public List<WorkEvaluation> getWorkEvaluationForWorkReport(WorkReport workReport);
 
 	public List<WorkReport> getWorkReportsForActivity(Activity activity);

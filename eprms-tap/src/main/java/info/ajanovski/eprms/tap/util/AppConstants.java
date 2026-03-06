@@ -44,14 +44,19 @@ public class AppConstants {
 	public static final String SystemParameterPMProjectURLPrefix = "PM-Project-URL-Prefix";
 
 	public static final String SystemParameterRepoCreationCommand = "Repo-Creation-Command";
+	public static final String SystemParameterRepoCreationURLPrefix = "Repo-Creation-URL-Prefix";
+	public static final String SystemParameterRepoCreationSuffix = "Repo-Creation-Suffix";
+	public static final String SystemParameterRepoCreationType = "Repo-Creation-Type";
 
 	public static final String[] AllSystemParameters = { SystemParameterDBCreationCommand, SystemParameterDBServerType,
 			SystemParameterDBServerName, SystemParameterDBServerPort, SystemParameterDBCreationPrefix,
 			SystemParameterDBCreationOwnerSuffix, SystemParameterDBSSHTunnelUserCreationCommand,
 			SystemParameterDBTunnelServerName, SystemParameterDBTunnelPrefix, SystemParameterPMOverviewTicketsURL,
 			SystemParameterPMOverviewTimelineURL, SystemParameterPMCreationScript, SystemParameterPMProjectURLPrefix,
-			SystemParameterRepoCreationCommand };
+			SystemParameterRepoCreationCommand, SystemParameterRepoCreationURLPrefix, SystemParameterRepoCreationSuffix,
+			SystemParameterRepoCreationType };
 
 	public static final String SystemParameterTplNewWorkReportByAdmin = "TPL-Work-Report-Title-By-Admin";
 	public static final String SystemParameterTplNewWorkEvaluation = "TPL-Work-Evaluation-Title";
+
 }

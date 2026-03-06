@@ -113,7 +113,7 @@
 							<div class="form-row">
 								<t:submit t:value="OK" />
 								<a href="" t:type="eventlink" t:id="cancelNewProject"
-									class="btn btn-default">${message:cancel-label}</a>
+									class="btn btn-secondary">${message:cancel-label}</a>
 							</div>
 						</form>
 					</t:modalbox>
@@ -127,7 +127,8 @@
 						<form t:id="NewTeamForm" t:type="form">
 							<t:beaneditor t:object="newTeam" t:exclude="teamId" />
 							<t:submit t:value="OK" />
-							<a t:type="eventlink" t:id="cancelNewTeam">${message:cancel-label}</a>
+							<a t:type="eventlink" t:id="cancelNewTeam"
+								class="btn btn-secondary">${message:cancel-label}</a>
 						</form>
 					</t:modalbox>
 				</div>
@@ -141,7 +142,8 @@
 							<select t:type="select" t:model="allTeamsModel"
 								t:value="linkResponsibility.team" />
 							<t:submit t:value="OK" />
-							<a t:type="eventlink" t:id="cancelLinkTeam">${message:cancel-label}</a>
+							<a t:type="eventlink" t:id="cancelLinkTeam"
+								class="btn btn-secondary">${message:cancel-label}</a>
 						</form>
 					</t:modalbox>
 				</div>
@@ -159,7 +161,8 @@
 								<!-- select t:id="selectPerson" t:type="select" t:source="persons"
 									t:value="newTm.person" t:model="personModel"></select -->
 								<input t:type="textfield" t:id="selectPerson"
-									t:value="personSearch" t:autocomplete="on" t:mixins="formgroup,autocomplete" size="100" />
+									t:value="personSearch" t:autocomplete="on"
+									t:mixins="formgroup,autocomplete" size="100" />
 							</p:person>
 						</form>
 					</t:modalbox>
@@ -169,18 +172,25 @@
 			<div class="card mb-3" t:type="if" t:test="newDb">
 				<div class="card-body">
 					<h3>${message:Database-label}</h3>
-					<form class="form-horizontal" t:id="newDatabaseForm"
-						t:type="beaneditform" t:object="newDb"
-						t:exclude="databaseId,dateCreated" t:submitLabel="OK"></form>
+					<form class="form-horizontal"  t:id="newDatabaseForm" t:type="form">
+						<t:beaneditor t:object="newDb" t:exclude="databaseId,dateCreated" />
+						<t:submit t:value="OK" />
+						<a t:type="eventlink" t:id="cancelNewDatabase"
+							class="btn btn-secondary">${message:cancel-label}</a>
+					</form>
+
 				</div>
 			</div>
 
 			<div class="card mb-3" t:type="if" t:test="newRp">
 				<div class="card-body">
 					<h3>${message:Repository-label}</h3>
-					<form class="form-horizontal" t:id="newRepositoryForm"
-						t:type="beaneditform" t:object="newRp"
-						t:exclude="repositoryId,dateCreated" t:submitLabel="OK"></form>
+					<form class="form-horizontal"  t:id="newRepositoryForm" t:type="form">
+						<t:beaneditor t:object="newRp" t:exclude="repositoryId,dateCreated" />
+						<t:submit t:value="OK" />
+						<a t:type="eventlink" t:id="cancelNewRepository"
+							class="btn btn-secondary">${message:cancel-label}</a>
+					</form>
 				</div>
 			</div>
 
@@ -224,10 +234,10 @@
 				</p>
 
 				<h3>${project.title}
-					<small class="text-muted ml-3">Code: ${project.code} -
+					<br/><small class="text-muted ml-3">Code: ${project.code} -
 						Status: ${project.status} <a t:type="iconactionlink"
-						t:context="project" t:id="changeStatus" class="btn"
-						t:path="repeat"></a>
+						t:context="project" t:id="approveProjectAndTeam"
+						class="btn btn-sm btn-primary" t:path="check-square"></a>
 					</small>
 				</h3>
 				<p t:type="if" t:test="projectCourses">

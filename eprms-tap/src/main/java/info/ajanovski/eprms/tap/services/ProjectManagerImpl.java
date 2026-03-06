@@ -32,6 +32,8 @@ import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
+import info.ajanovski.eprms.model.entities.Responsibility;
+import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
@@ -113,6 +115,20 @@ public class ProjectManagerImpl implements ProjectManager {
 			p.setStatus(Arrays.asList(ModelConstants.AllProjectStatuses).get(index));
 		} else {
 			p.setStatus(ModelConstants.AllProjectStatuses[0]);
+		}
+	}
+
+	@Override
+	public void approveProjectAndTeam(Project p) {
+		p.setStatus(ModelConstants.ProjectStatusActive);
+		genericService.saveOrUpdate(p);
+		// set all teams to accepted and all team members to accepted
+		for (Responsibility r : p.getResponsibilities()) {
+			Team t = r.getTeam();
+			t.setStatus(ModelConstants.TeamStatusAccepted);
+			for (TeamMember tm : t.getTeamMembers()) {
+				tm.setStatus(ModelConstants.TeamMemberStatusAccepted);
+			}
 		}
 	}
 
