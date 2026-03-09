@@ -4,26 +4,50 @@
 
 <h1>${message:admin/SystemParameters-pagelink}</h1>
 
-<div t:type="if" t:test="editSystemParameter">
-	<form t:type="beaneditform" t:object="editSystemParameter"
-		t:id="editSystemParameter" t:exclude="systemParameterId" />
+<div t:type="if" t:test="modeCreate" class="card card-body">
+	<form t:type="form" t:id="FrmCreateSystemParameter">
+		<t:errors globalOnly="false" />
+		<t:beaneditor t:object="editorSystemParam"
+			t:exclude="systemParameterId" />
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-4">
+				<button t:type="submit" t:value="OK" />
+				<a href="" t:type="eventlink" t:event="cancelNewSystemParameter"
+					class="btn btn-secondary">${message:cancel-label}</a>
+			</div>
+		</div>
+	</form>
+</div>
+
+<div t:type="if" t:test="modeUpdate" class="card card-body">
+	<form t:type="form" t:id="updateForm">
+		<t:errors globalOnly="false" />
+		<t:beaneditor t:object="editorSystemParam" />
+		<div class="form-group">
+			<div class="col-sm-4 col-sm-offset-4">
+				<button t:type="submit" t:value="OK" />
+				<a href="" t:type="eventlink" t:event="cancelUpdate"
+					t:context="editorSystemParamId" class="btn btn-secondary">${message:cancel-label}</a>
+			</div>
+		</div>
+	</form>
 </div>
 
 <p>
 	<a href="" t:type="actionlink" class="btn btn-sm btn-primary"
-		t:id="newSystemParameter"><t:svgicon
-				t:path="plus" />${message:new-label}</a>
+		t:id="newSystemParameter"><t:svgicon t:path="plus" />${message:new-label}</a>
 </p>
 
 <table class="table table-sm" t:type="grid" t:source="systemParameters"
-	t:row="systemParameter" t:exclude="systemParameterId" t:add="icons">
+	t:row="listedSystemParameter" t:exclude="systemParameterId"
+	t:add="icons">
 	<p:iconsCell>
 		<a href="" t:type="actionlink" class="btn btn-sm btn-primary"
-			t:id="editParameter" t:context="systemParameter"><t:svgicon
+			t:id="editParameter" t:context="listedSystemParameter"><t:svgicon
 				t:path="edit" />${message:edit-label}</a>
-		<a href="" t:type="actionlink" class="btn btn-sm btn-danger"
-			t:id="deleteParameter" t:context="systemParameter"><t:svgicon
-				t:path="trash" />${message:remove-label}</a>
+		<a href="" t:type="actionlink" t:mixins="confirm"
+			class="btn btn-sm btn-danger" t:id="deleteParameter"
+			t:context="listedSystemParameter"><t:svgicon t:path="trash" />${message:remove-label}</a>
 	</p:iconsCell>
 </table>
 
