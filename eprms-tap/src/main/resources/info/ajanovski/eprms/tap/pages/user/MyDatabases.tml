@@ -18,7 +18,7 @@
 		</div>
 		
 		<p>SSH tunnel to database server</p>
-		<table class="table table-sm">
+		<table class="table table-bordered">
 			<tr class="table-primary">
 				<td>SSH - Settings - Host/IP (Tunneling server)</td>
 				<td>${database.tunnelServer}</td>
@@ -34,20 +34,20 @@
          </table>
          
          <p>Database connection</p>
-         <table class="table table-sm">
-			<tr class="table-secondary">
+         <table class="table table-bordered">
+			<tr>
 				<td>Main - Server - Host (Database server)</td>
 				<td>${database.server}</td>
 			</tr>
-			<tr class="table-secondary">
+			<tr>
 				<td>Main - Server - Database (Database Name):</td>
 				<td>${database.name}</td>
 			</tr>
-			<tr class="table-secondary">
+			<tr>
 				<td>Main - Authentication - Username (Database User):</td>
 				<td>${database.owner}</td>
 			</tr>
-			<tr class="table-secondary">
+			<tr>
 				<td>Main - Authentication - Password (Database User Password):</td>
 				<td>${database.password}</td>
 			</tr>
