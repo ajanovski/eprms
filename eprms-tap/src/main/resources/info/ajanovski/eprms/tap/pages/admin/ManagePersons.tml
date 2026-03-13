@@ -19,7 +19,7 @@
 <p>
 <form t:type="form" t:id="frmSearch" class="form-inline col-12">
 	<div class="form-group">
-		<t:label t:for="searchString"  class="mr-3"/>
+		<t:label t:for="searchString" class="mr-3" />
 		<t:textfield t:id="searchString" />
 	</div>
 	<t:submit t:value="OK" />
@@ -36,9 +36,11 @@
 					t:object="personListToImport" />
 			</div>
 			<input t:type="submit" t:value="OK" /> <a href="" t:type="eventlink"
-				t:id="cancelImport">${message:cancel-label}</a>
+				t:id="cancelImport" class="btn btn-secondary">${message:cancel-label}</a>
 		</form>
-		<p class="bg-warning p-1 mt-3">${errors}</p>
+		<div class="bg-warning p-1 mt-3">
+			<pre>${errors}</pre>
+		</div>
 	</t:modalbox>
 </div>
 
@@ -53,7 +55,8 @@
 					t:model="rolesModel" />
 			</div>
 			<input t:type="submit" t:value="OK" /> <a href="" t:type="eventlink"
-				t:id="cancelAddRole">${message:cancel-label} </a>
+				t:id="cancelAddRole" class="btn btn-secondary">${message:cancel-label}
+			</a>
 		</form>
 	</t:modalbox>
 </div>
@@ -66,11 +69,10 @@
 <table class="table table-sm" t:type="grid" t:source="allPersons"
 	t:row="person" t:exclude="personId,authString" t:add="roles,actions">
 	<p:rolesCell>
-		<div class="btn btn-default" t:type="loop" t:source="personRoles"
-			t:value="personRole">${personRole.role.name}<a href=""
-				class="btn btn-sm btn-danger p-0" t:type="eventlink"
-				t:id="removeRole" t:context="personRole"><img t:type="SVGIcon"
-				t:path="trash" /></a>
+		<div t:type="loop" t:source="personRoles" t:value="personRole">${personRole.role.name}<a
+				href="" class="btn btn-sm btn-danger p-0 ml-1 mb-1"
+				t:type="eventlink" t:id="removeRole" t:context="personRole"><img
+				t:type="SVGIcon" t:path="trash" /></a>
 		</div>
 		<a href="" t:type="eventlink" t:id="AddRole" t:context="person"
 			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
@@ -81,10 +83,10 @@
 			class="btn btn-sm btn-primary"><img t:type="SVGIcon"
 			t:path="edit" /> ${message:edit-label}</a>
 		<a href="" t:type="actionlink" t:id="TogglePersonStatus"
-			t:context="person" class="btn btn-sm btn-secondary"><img
+			t:context="person" class="btn btn-sm btn-warning"><img
 			t:type="SVGIcon" t:path="slash" /> ${message:toggle-status-label}</a>
 		<a href="" t:type="actionlink" t:id="DeletePerson" t:context="person"
-			class="btn btn-sm btn-secondary"><img t:type="SVGIcon"
+			class="btn btn-sm btn-danger"><img t:type="SVGIcon"
 			t:path="trash" /> ${message:remove-label}</a>
 	</p:actionsCell>
 </table>

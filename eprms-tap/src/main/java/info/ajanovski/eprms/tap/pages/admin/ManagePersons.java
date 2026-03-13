@@ -207,4 +207,9 @@ public class ManagePersons {
 		genericService.delete(personRole);
 	}
 
+	public void onCancelImport() {
+		personListToImport = null;
+		errors = null;
+	}
+
 }
