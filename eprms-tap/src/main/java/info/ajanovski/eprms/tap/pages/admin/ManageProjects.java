@@ -20,8 +20,6 @@
 
 package info.ajanovski.eprms.tap.pages.admin;
 
-import java.math.BigInteger;
-import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -60,10 +58,10 @@ import info.ajanovski.eprms.tap.services.CourseManager;
 import info.ajanovski.eprms.tap.services.GenericService;
 import info.ajanovski.eprms.tap.services.PersonManager;
 import info.ajanovski.eprms.tap.services.ProjectManager;
+import info.ajanovski.eprms.tap.services.ResourceManager;
 import info.ajanovski.eprms.tap.services.SystemConfigService;
 import info.ajanovski.eprms.tap.services.TranslationService;
 import info.ajanovski.eprms.tap.util.AppConfig;
-import info.ajanovski.eprms.tap.util.AppConstants;
 import info.ajanovski.eprms.tap.util.UserInfo;
 
 @InstructorPage
@@ -102,6 +100,9 @@ public class ManageProjects {
 
 	@Inject
 	private PersonManager personManager;
+
+	@Inject
+	private ResourceManager resourceManager;
 
 	@Inject
 	private Messages messages;
@@ -234,41 +235,33 @@ public class ManageProjects {
 	}
 
 	public void onActionFromNewDatabase(Project p) {
-		newDb = new Database();
-		newDb.setProject(p);
-		String dbPrefix = systemConfigService.getString(AppConstants.SystemParameterDBCreationPrefix);
-		String tunnelPrefix = systemConfigService.getString(AppConstants.SystemParameterDBTunnelPrefix);
-		String ownerSuffix = systemConfigService.getString(AppConstants.SystemParameterDBCreationOwnerSuffix);
-		String prjcode = p.getCode().toLowerCase().replace("-", "_").replace(" ", "_");
-		newDb.setType(systemConfigService.getString(AppConstants.SystemParameterDBServerType));
-		newDb.setServer(systemConfigService.getString(AppConstants.SystemParameterDBServerName));
-		newDb.setPort(systemConfigService.getString(AppConstants.SystemParameterDBServerPort));
-		String dbName = (dbPrefix + prjcode).toLowerCase().replace("-", "_").replace(" ", "_");
-		newDb.setName(dbName);
-		newDb.setOwner(dbName + ownerSuffix);
-		newDb.setPassword(generateRandomHexToken(6));
-		newDb.setTunnelServer(systemConfigService.getString(AppConstants.SystemParameterDBTunnelServerName));
-		newDb.setTunnelUser(tunnelPrefix + prjcode);
-		newDb.setTunnelPassword(generateRandomHexToken(4));
+		newDb = resourceManager.createDatabase(p);
 	}
 
-	public static String generateRandomHexToken(int byteLength) {
-		SecureRandom secureRandom = new SecureRandom();
-		byte[] token = new byte[byteLength];
-		secureRandom.nextBytes(token);
-		return new BigInteger(1, token).toString(16);
+	@CommitAfter
+	public void onActionFromCreateManyDatabases() {
+		if (getProjects() != null && getProjects().size() > 0) {
+			for (Project p : getProjects()) {
+				Database db = resourceManager.createDatabase(p);
+				genericService.save(db);
+			}
+		}
+
+	}
+
+	@CommitAfter
+	public void onActionFromCreateManyRepos() {
+		if (getProjects() != null && getProjects().size() > 0) {
+			for (Project p : getProjects()) {
+				Repository r = resourceManager.createRepo(p);
+				genericService.save(r);
+			}
+		}
+
 	}
 
 	public void onActionFromNewRepository(Project p) {
-		newRp = new Repository();
-		newRp.setProject(p);
-		String repoURLPrefix = systemConfigService.getString(AppConstants.SystemParameterRepoCreationURLPrefix);
-		String repoSuffix = systemConfigService.getString(AppConstants.SystemParameterRepoCreationSuffix);
-		String repoType = systemConfigService.getString(AppConstants.SystemParameterRepoCreationType);
-		String prjCode = p.getCode().toLowerCase().replace("-", "_").replace(" ", "_");
-		newRp.setTitle(prjCode);
-		newRp.setUrl(repoURLPrefix + prjCode + repoSuffix);
-		newRp.setType(repoType);
+		newRp = resourceManager.createRepo(p);
 	}
 
 	public List<Course> getAllCourses() {
@@ -372,11 +365,11 @@ public class ManageProjects {
 	public void onCancelNewDatabase() {
 		newDb = null;
 	}
-	
+
 	public void onCancelNewRepository() {
 		newRp = null;
 	}
-	
+
 	@CommitAfter
 	public void onSuccessFromNewRepositoryForm() {
 		genericService.save(newRp);

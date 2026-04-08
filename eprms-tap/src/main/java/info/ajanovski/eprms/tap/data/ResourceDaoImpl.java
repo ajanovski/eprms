@@ -21,6 +21,8 @@
 
 package info.ajanovski.eprms.tap.data;
 
+import java.math.BigInteger;
+import java.security.SecureRandom;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,12 +30,18 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 import org.hibernate.Session;
 
 import info.ajanovski.eprms.model.entities.Database;
+import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.Repository;
+import info.ajanovski.eprms.tap.services.SystemConfigService;
+import info.ajanovski.eprms.tap.util.AppConstants;
 
 public class ResourceDaoImpl implements ResourceDao {
 
 	@Inject
 	private Session session;
+
+	@Inject
+	private SystemConfigService systemConfigService;
 
 	private Session getEntityManager() {
 		return session.getSession();
@@ -89,4 +97,47 @@ public class ResourceDaoImpl implements ResourceDao {
 		}
 
 	}
+
+	public static String generateRandomHexToken(int byteLength) {
+		SecureRandom secureRandom = new SecureRandom();
+		byte[] token = new byte[byteLength];
+		secureRandom.nextBytes(token);
+		return new BigInteger(1, token).toString(16);
+	}
+
+	@Override
+	public Database createDatabase(Project p) {
+		Database db = new Database();
+		db.setProject(p);
+		String dbPrefix = systemConfigService.getString(AppConstants.SystemParameterDBCreationPrefix);
+		String tunnelPrefix = systemConfigService.getString(AppConstants.SystemParameterDBTunnelPrefix);
+		String ownerSuffix = systemConfigService.getString(AppConstants.SystemParameterDBCreationOwnerSuffix);
+		String prjcode = p.getCode().toLowerCase().replace("-", "_").replace(" ", "_");
+		db.setType(systemConfigService.getString(AppConstants.SystemParameterDBServerType));
+		db.setServer(systemConfigService.getString(AppConstants.SystemParameterDBServerName));
+		db.setPort(systemConfigService.getString(AppConstants.SystemParameterDBServerPort));
+		String dbName = (dbPrefix + prjcode).toLowerCase().replace("-", "_").replace(" ", "_");
+		db.setName(dbName);
+		db.setOwner(dbName + ownerSuffix);
+		db.setPassword(generateRandomHexToken(6));
+		db.setTunnelServer(systemConfigService.getString(AppConstants.SystemParameterDBTunnelServerName));
+		db.setTunnelUser(tunnelPrefix + prjcode);
+		db.setTunnelPassword(generateRandomHexToken(4));
+		return (db);
+	}
+
+	@Override
+	public Repository createRepo(Project p) {
+		Repository r = new Repository();
+		r.setProject(p);
+		String repoURLPrefix = systemConfigService.getString(AppConstants.SystemParameterRepoCreationURLPrefix);
+		String repoSuffix = systemConfigService.getString(AppConstants.SystemParameterRepoCreationSuffix);
+		String repoType = systemConfigService.getString(AppConstants.SystemParameterRepoCreationType);
+		String prjCode = p.getCode().toLowerCase().replace("-", "_").replace(" ", "_");
+		r.setTitle(prjCode);
+		r.setUrl(repoURLPrefix + prjCode + repoSuffix);
+		r.setType(repoType);
+		return r;
+	}
+
 }

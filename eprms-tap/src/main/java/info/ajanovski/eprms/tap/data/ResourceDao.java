@@ -24,6 +24,7 @@ package info.ajanovski.eprms.tap.data;
 import java.util.List;
 
 import info.ajanovski.eprms.model.entities.Database;
+import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.Repository;
 
 public interface ResourceDao {
@@ -35,5 +36,9 @@ public interface ResourceDao {
 	public List<Repository> getRepositoriesByProject(long personId);
 
 	public List<Database> getDatabasesByProject(long personId);
+
+	public Database createDatabase(Project p);
+	
+	public Repository createRepo(Project p);
 
 }

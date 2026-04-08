@@ -23,6 +23,7 @@ package info.ajanovski.eprms.tap.services;
 import java.util.List;
 
 import info.ajanovski.eprms.model.entities.Database;
+import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.Repository;
 
 public interface ResourceManager {
@@ -42,5 +43,9 @@ public interface ResourceManager {
 	public List<Database> getDatabasesByProject(long personId);
 
 	public List<Database> getActiveDatabasesByProject(long personId);
+	
+	public Database createDatabase(Project p);
+	
+	public Repository createRepo(Project p);
 
 }

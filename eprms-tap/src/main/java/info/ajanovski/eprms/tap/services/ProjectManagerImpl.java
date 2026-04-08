@@ -120,7 +120,7 @@ public class ProjectManagerImpl implements ProjectManager {
 
 	@Override
 	public void approveProjectAndTeam(Project p) {
-		p.setStatus(ModelConstants.ProjectStatusActive);
+		p.setStatus(ModelConstants.ProjectStatusCreation);
 		genericService.saveOrUpdate(p);
 		// set all teams to accepted and all team members to accepted
 		for (Responsibility r : p.getResponsibilities()) {

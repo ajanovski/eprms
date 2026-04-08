@@ -26,27 +26,28 @@ import java.util.stream.Collectors;
 import org.apache.tapestry5.ioc.annotations.Inject;
 
 import info.ajanovski.eprms.model.entities.Database;
+import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.Repository;
 import info.ajanovski.eprms.tap.data.ResourceDao;
 
 public class ResourceManagerImpl implements ResourceManager {
 
 	@Inject
-	private ResourceDao repositoryDao;
+	private ResourceDao resourceDao;
 
 	@Override
 	public List<Repository> getRepositoriesByPerson(long personId) {
-		return repositoryDao.getRepositoriesByPerson(personId);
+		return resourceDao.getRepositoriesByPerson(personId);
 	}
 
 	@Override
 	public List<Repository> getRepositoriesByTeam(long personId) {
-		return repositoryDao.getRepositoriesByTeam(personId);
+		return resourceDao.getRepositoriesByTeam(personId);
 	}
 
 	@Override
 	public List<Repository> getRepositoriesByProject(long personId) {
-		return repositoryDao.getRepositoriesByProject(personId);
+		return resourceDao.getRepositoriesByProject(personId);
 	}
 
 	@Override
@@ -69,13 +70,23 @@ public class ResourceManagerImpl implements ResourceManager {
 
 	@Override
 	public List<Database> getDatabasesByProject(long personId) {
-		return repositoryDao.getDatabasesByProject(personId);
+		return resourceDao.getDatabasesByProject(personId);
 	}
 
 	@Override
 	public List<Database> getActiveDatabasesByProject(long personId) {
 		return getDatabasesByProject(personId).stream().filter(p -> p.getDateCreated() != null)
 				.collect(Collectors.toList());
+	}
+
+	@Override
+	public Database createDatabase(Project p) {
+		return resourceDao.createDatabase(p);
+	}
+
+	@Override
+	public Repository createRepo(Project p) {
+		return resourceDao.createRepo(p);
 	}
 
 }
