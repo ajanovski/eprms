@@ -16,13 +16,14 @@
 
 		<div class="col-md-8 text-md-left ml-3 mt-3">
 			<h4 class="h4 mb-4">${message:greeting-title}</h4>
-			<p class="font-weight-normal">${message:greeting}</p>
-			<p>${message:greeting-url-link-prefix}
-				<a class="btn btn-success" href="${message:greeting-url}">${message:greeting-url-link-title}</a>
+			<p class="font-weight-normal">${message:greeting}
+				<span>${message:greeting-url-link-prefix} <a
+					href="${message:greeting-url}">${message:greeting-url-link-title}</a>
+				</span>
 			</p>
-		<div class="">
-			<a t:type="pagelink" t:page="user/MyProfile">Login / Access</a>
-		</div>
+			<div class="">
+				<a class="btn btn-primary" t:type="pagelink" t:page="user/MyProfile">Login&nbsp;/&nbsp;Access</a>
+			</div>
 
 		</div>
 
