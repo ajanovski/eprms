@@ -6,11 +6,11 @@
 </t:if>
 
 <table t:type="grid" class="table table-sm" t:source="teamMembers"
-	t:row="teamMember" t:model="beanModel">
+	style="font-size: 80%;" t:row="teamMember" t:model="beanModel">
 	<p:actionsCell>
 		<t:if t:test="actions">
 			<a t:type="actionlink" t:context="teamMember" t:id="deleteTeamMember"
-				role="button" class="btn btn-danger btn-sm "><img
+				role="button" class="btn btn-sm btn-danger p-0 pl-1 pr-1"><img
 				t:type="SVGIcon" t:path="user-minus" /> ${message:remove-label}</a>
 		</t:if>
 	</p:actionsCell>

@@ -175,6 +175,10 @@ public class ManageProjects {
 
 	void onActivate() {
 	}
+	
+	public boolean isRoleAdministrator() {
+		return personManager.isAdministrator(userInfo.getPersonId());
+	}
 
 	public List<Project> getAllProjects() {
 		List<Project> list = (List<Project>) projectManager.getAllProjects();
@@ -236,28 +240,6 @@ public class ManageProjects {
 
 	public void onActionFromNewDatabase(Project p) {
 		newDb = resourceManager.createDatabase(p);
-	}
-
-	@CommitAfter
-	public void onActionFromCreateManyDatabases() {
-		if (getProjects() != null && getProjects().size() > 0) {
-			for (Project p : getProjects()) {
-				Database db = resourceManager.createDatabase(p);
-				genericService.save(db);
-			}
-		}
-
-	}
-
-	@CommitAfter
-	public void onActionFromCreateManyRepos() {
-		if (getProjects() != null && getProjects().size() > 0) {
-			for (Project p : getProjects()) {
-				Repository r = resourceManager.createRepo(p);
-				genericService.save(r);
-			}
-		}
-
 	}
 
 	public void onActionFromNewRepository(Project p) {
@@ -472,6 +454,31 @@ public class ManageProjects {
 		projectManager.approveProjectAndTeam(p);
 	}
 
+	@CommitAfter
+	void onActionFromActiveProject(Project p) {
+		p.setStatus(ModelConstants.ProjectStatusActive);
+	}
+
+	@CommitAfter
+	void onActionFromFailProject(Project p) {
+		p.setStatus(ModelConstants.ProjectStatusFailed);
+	}
+
+	@CommitAfter
+	void onActionFromPauseProject(Project p) {
+		p.setStatus(ModelConstants.ProjectStatusPaused);
+	}
+
+	@CommitAfter
+	void onActionFromFinishProject(Project p) {
+		p.setStatus(ModelConstants.ProjectStatusFinished);
+	}
+
+	@CommitAfter
+	void onActionFromCreationProject(Project p) {
+		p.setStatus(ModelConstants.ProjectStatusCreation);
+	}
+
 	public String[] getModelProjectStatuses() {
 		return ModelConstants.AllProjectStatuses;
 	}
@@ -496,6 +503,28 @@ public class ManageProjects {
 					.forEach(p -> list.add(p.getFirstName() + " " + p.getLastName() + " [" + p.getUserName() + "]"));
 		}
 		return list;
+	}
+
+	@CommitAfter
+	public void onActionFromCreateManyDatabases() {
+		if (getProjects() != null && getProjects().size() > 0) {
+			for (Project p : getProjects()) {
+				Database db = resourceManager.createDatabase(p);
+				genericService.save(db);
+			}
+		}
+
+	}
+
+	@CommitAfter
+	public void onActionFromCreateManyRepos() {
+		if (getProjects() != null && getProjects().size() > 0) {
+			for (Project p : getProjects()) {
+				Repository r = resourceManager.createRepo(p);
+				genericService.save(r);
+			}
+		}
+
 	}
 
 }
