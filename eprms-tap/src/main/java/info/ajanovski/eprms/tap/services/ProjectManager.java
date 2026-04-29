@@ -58,4 +58,6 @@ public interface ProjectManager {
 
 	public String getProjectURL(Project project);
 
+	public void AddAllCourseActivies(Project p, Course c);
+
 }

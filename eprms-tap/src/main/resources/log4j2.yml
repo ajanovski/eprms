@@ -67,3 +67,7 @@ configuration:
         name: org.hibernate
         level: info
 
+      -
+        name: org.apereo.cas.client
+        level: info
+

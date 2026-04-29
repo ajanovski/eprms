@@ -30,6 +30,7 @@ import org.apache.tapestry5.ioc.annotations.Inject;
 
 import info.ajanovski.eprms.model.entities.Activity;
 import info.ajanovski.eprms.model.entities.Course;
+import info.ajanovski.eprms.model.entities.CourseActivityType;
 import info.ajanovski.eprms.model.entities.CourseProject;
 import info.ajanovski.eprms.model.entities.Project;
 import info.ajanovski.eprms.model.entities.Responsibility;
@@ -37,6 +38,7 @@ import info.ajanovski.eprms.model.entities.Team;
 import info.ajanovski.eprms.model.entities.TeamMember;
 import info.ajanovski.eprms.model.entities.WorkEvaluation;
 import info.ajanovski.eprms.model.entities.WorkReport;
+import info.ajanovski.eprms.model.util.CourseActivityTypeHierarchicalComparator;
 import info.ajanovski.eprms.model.util.ModelConstants;
 import info.ajanovski.eprms.model.util.ProjectCodeComparator;
 import info.ajanovski.eprms.model.util.WorkEvaluationComparator;
@@ -173,6 +175,20 @@ public class ProjectManagerImpl implements ProjectManager {
 		ProjectCodeComparator pcc = new ProjectCodeComparator();
 		Collections.sort(list, pcc);
 		return list;
+	}
+
+	@Override
+	public void AddAllCourseActivies(Project p, Course c) {
+		List<CourseActivityType> listCAT = genericService.getByPK(Course.class, c.getCourseId())
+				.getCourseActivityTypes();
+		listCAT.sort(new CourseActivityTypeHierarchicalComparator());
+		for (CourseActivityType cat : listCAT) {
+			Activity a = new Activity();
+			a.setProject(p);
+			a.setActivityType(cat.getActivityType());
+			a.setTitle(cat.getActivityType().getTitle());
+			genericService.save(a);
+		}
 	}
 
 }

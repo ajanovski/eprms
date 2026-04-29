@@ -527,4 +527,14 @@ public class ManageProjects {
 
 	}
 
+	@CommitAfter
+	public void onActionFromAddAllCourseActivities() {
+		if (getProjects() != null && getProjects().size() > 0) {
+			for (Project p : getProjects()) {
+				projectManager.AddAllCourseActivies(p,selectedCourse);
+			}
+		}
+
+	}
+
 }

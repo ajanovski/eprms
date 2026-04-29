@@ -47,6 +47,36 @@ body {
 	padding-top: 4.5em;
 }
 
+.projectStatusACTIVE {
+	padding: 0.25em;
+	background: green;
+	color: white;
+}
+
+.projectStatusPAUSED {
+	padding: 0.25em;
+	background: yellow;
+	color: black;
+}
+
+.projectStatusFAILED {
+	padding: 0.25em;
+	background: red;
+	color: yellow;
+}
+
+.projectStatusPROPOSED {
+	padding: 0.25em;
+	background: #c0c0c0;
+	color: black;
+}
+
+.projectStatusCREATION {
+	padding: 0.25em;
+	background: white;
+	color: black;
+}
+
 code {
 	font-family: 'Fira Code', 'Fira Mono', monospace, mono !important;
 }
@@ -188,3 +218,4 @@ div.palette select {
 		background: #7C8B00;
 	}
 }
+

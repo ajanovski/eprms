@@ -77,27 +77,6 @@ public class OverallCourseReport {
 	@Inject
 	private SelectModelFactory selectModelFactory;
 
-	@Persist
-	@Property
-	private Course selectedCourse;
-
-	@Property
-	private CourseActivityType courseActivityType;
-
-	@Property
-	private WorkReport workReport;
-
-	@Property
-	private WorkEvaluation workEvaluation;
-
-	@Persist
-	@Property
-	private WorkReport newWorkReport;
-
-	@Persist
-	@Property
-	private WorkEvaluation newWorkEvaluation;
-
 	@InjectComponent
 	private Zone zWorkReport;
 
@@ -116,16 +95,41 @@ public class OverallCourseReport {
 	@InjectComponent
 	private ModalBox newWorkReportModal;
 
+	
+	
+	@Persist
+	@Property
+	private Course selectedCourse;
+
+	@Persist
+	@Property
+	private WorkReport newWorkReport;
+
+	@Persist
+	@Property
+	private WorkEvaluation newWorkEvaluation;
+
 	@Persist
 	@Property
 	private List<Project> projectsToHide;
 
-	@Property
-	private Project hiddenProject;
-
 	@Persist
 	@Property
 	private List<CourseActivityType> activitiesToHide;
+	
+	
+	
+	@Property
+	private CourseActivityType courseActivityType;
+
+	@Property
+	private WorkReport workReport;
+
+	@Property
+	private WorkEvaluation workEvaluation;
+
+	@Property
+	private Project hiddenProject;
 
 	@Property
 	private CourseActivityType hiddenActivity;
@@ -295,11 +299,11 @@ public class OverallCourseReport {
 		messagingService.setupMQHost(AppConfig.getString("MQHost"));
 	}
 
-	void onActionFromRemoveProjectFromListOfAllProjects(Project p) {
+	void onActionFromHideProjectFromListOfAllProjects(Project p) {
 		projectsToHide.add(p);
 	}
 
-	void onActionFromRemoveActivityFromListOfAllActivities(CourseActivityType cat) {
+	void onActionFromHideActivityFromListOfAllActivities(CourseActivityType cat) {
 		activitiesToHide.add(cat);
 	}
 
