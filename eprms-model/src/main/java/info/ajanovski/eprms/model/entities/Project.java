@@ -21,14 +21,25 @@
 
 package info.ajanovski.eprms.model.entities;
 
-import java.util.*;
-import javax.persistence.*;
-import javax.validation.constraints.*;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Pattern;
 
 /*
 */
 @Entity
-@Table (schema="eprms_main", name="Project")
+@Table(schema = "eprms_main", name = "Project")
 public class Project implements java.io.Serializable {
 	private long projectId;
 	private String title;
@@ -45,7 +56,6 @@ public class Project implements java.io.Serializable {
 	private List<Activity> activities = new ArrayList<Activity>();
 	private List<CourseProject> courseProjects = new ArrayList<CourseProject>();
 
-
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 
@@ -56,7 +66,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setProjectId(long projectId) {
-		this.projectId=projectId;
+		this.projectId = projectId;
 	}
 
 	@NotNull
@@ -66,7 +76,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setTitle(String title) {
-		this.title=title;
+		this.title = title;
 	}
 
 	@Column(name = "description", length = 1000000)
@@ -75,7 +85,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setDescription(String description) {
-		this.description=description;
+		this.description = description;
 	}
 
 	@Column(name = "start_date")
@@ -84,7 +94,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setStartDate(Date startDate) {
-		this.startDate=startDate;
+		this.startDate = startDate;
 	}
 
 	@Column(name = "finish_date")
@@ -93,17 +103,18 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setFinishDate(Date finishDate) {
-		this.finishDate=finishDate;
+		this.finishDate = finishDate;
 	}
 
 	@NotNull
-	@Column(name = "code", nullable = false)
+	@Column(name = "code", unique = true, nullable = false)
+	@Pattern(regexp = "^[a-zA-Z0-9]+[a-zA-Z0-9\\-\\_\\.]+[a-zA-Z0-9\\-\\_\\.]*[a-zA-Z0-9]+$")
 	public String getCode() {
 		return this.code;
 	}
 
 	public void setCode(String code) {
-		this.code=code;
+		this.code = code;
 	}
 
 	@Column(name = "status")
@@ -112,7 +123,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setStatus(String status) {
-		this.status=status;
+		this.status = status;
 	}
 
 	@Column(name = "accepting_new_responsibilities")
@@ -121,7 +132,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setAcceptingNewResponsibilities(Boolean acceptingNewResponsibilities) {
-		this.acceptingNewResponsibilities=acceptingNewResponsibilities;
+		this.acceptingNewResponsibilities = acceptingNewResponsibilities;
 	}
 
 	@Column(name = "max_responsibilities")
@@ -130,7 +141,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setMaxResponsibilities(Integer maxResponsibilities) {
-		this.maxResponsibilities=maxResponsibilities;
+		this.maxResponsibilities = maxResponsibilities;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
@@ -139,7 +150,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setResponsibilities(List<Responsibility> responsibilities) {
-		this.responsibilities=responsibilities;
+		this.responsibilities = responsibilities;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
@@ -148,7 +159,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setRepositories(List<Repository> repositories) {
-		this.repositories=repositories;
+		this.repositories = repositories;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
@@ -157,7 +168,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setDatabases(List<Database> databases) {
-		this.databases=databases;
+		this.databases = databases;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
@@ -166,7 +177,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setActivities(List<Activity> activities) {
-		this.activities=activities;
+		this.activities = activities;
 	}
 
 	@OneToMany(fetch = FetchType.LAZY, mappedBy = "project")
@@ -175,7 +186,7 @@ public class Project implements java.io.Serializable {
 	}
 
 	public void setCourseProjects(List<CourseProject> courseProjects) {
-		this.courseProjects=courseProjects;
+		this.courseProjects = courseProjects;
 	}
 
 }
