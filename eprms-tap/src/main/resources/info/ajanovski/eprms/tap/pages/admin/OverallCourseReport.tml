@@ -4,8 +4,8 @@
 
 <h1>${message:admin/OverallCourseReport-pagelink}</h1>
 
-
-<form t:type="form" id="selectProject" class="form-inline col-12 mb-3">
+<form t:type="form" t:id="frmSelectCourse"
+	class="form-inline col-12 mb-3">
 	<div class="form-group">
 		<label t:type="label" t:for="selectCourse" class="mr-2"></label><select
 			t:id="selectCourse" t:type="select" t:model="coursesModel"
@@ -14,51 +14,67 @@
 	<t:submit t:value="OK" />
 </form>
 
-<p>
-	<a class="btn btn-sm btn-warning p-0 pl-1 pr-1 mb-1" href=""
-		t:id="HideAllProjects" t:type="IconActionLink" t:path="eye-off">${message:hide-all-label}
-		${message:projects-label}</a>
-	<t:if t:test="projectsToHide">
-		<a class="btn btn-sm btn-secondary p-0 pl-1 pr-1 mb-1" href=""
-			t:id="ResetListOfAllProjects" t:type="IconActionLink" t:path="list">${message:show-all-label}</a>
-		<br />
-		<b>${message:hidden-projects-label}:</b>
-		<span class="" t:type="loop" t:source="listHiddenProjects"
-			t:value="hiddenProject"><a href=""
-			class="btn btn-sm btn-outline-light p-0 pl-1 pr-1"
-			t:type="iconactionlink" t:path="eye" t:id="showProject"
-			t:context="hiddenProject">${hiddenProject.code}</a></span>
-	</t:if>
-</p>
-
-<p>
-	<a class="btn btn-sm btn-warning p-0 pl-1 pr-1 mb-1" href=""
-		t:id="HideAllActivities" t:type="IconActionLink" t:path="eye-off">${message:hide-all-label}
-		${message:activities-label}</a>
-	<t:if t:test="activitiesToHide">
-		<a class="btn btn-sm btn-secondary p-0 pl-1 pr-1 mb-1" href=""
-			t:id="ResetListOfAllActivities" t:type="IconActionLink" t:path="list">${message:show-all-label}</a>
-		<br />
-		<b>${message:hidden-activities-label}:</b>
-		<span class="" t:type="loop" t:source="activitiesToHide"
-			t:value="hiddenActivity"><a href=""
-			class="btn btn-sm btn-outline-light p-0 pl-1 pr-1 "
-			t:type="iconactionlink" t:path="eye" t:id="showActivity"
-			t:context="hiddenActivity">${hiddenActivityActivityTypeCode}</a></span>
-	</t:if>
-</p>
-
 <div t:type="zone" t:id="zAll" id="zAll">
 
+	<p>
+		<a class="btn btn-sm btn-warning p-0 pl-1 pr-1 mb-1" href=""
+			t:id="HideAllProjects" t:type="IconActionLink" t:path="eye-off"
+			t:async="true">${message:hide-all-label}
+			${message:projects-label}</a>
+		<t:if t:test="projectsToHide">
+			<a class="btn btn-sm btn-secondary p-0 pl-1 pr-1 mb-1" href=""
+				t:id="ResetListOfAllProjects" t:type="IconActionLink" t:path="list"
+				t:async="true">${message:show-all-label}</a>
+			<br />
+			<b>${message:hidden-projects-label}:</b>
+			<span class="" t:type="loop" t:source="listHiddenProjects"
+				t:value="hiddenProject"><a href=""
+				class="btn btn-sm btn-outline-light p-0 pl-1 pr-1"
+				t:type="iconactionlink" t:path="eye" t:id="showProject"
+				t:async="true" t:context="hiddenProject">${hiddenProject.code}</a></span>
+		</t:if>
+	</p>
+
+	<p>
+		<a class="btn btn-sm btn-warning p-0 pl-1 pr-1 mb-1" href=""
+			t:id="HideAllActivities" t:type="IconActionLink" t:path="eye-off"
+			t:async="true">${message:hide-all-label}
+			${message:activities-label}</a>
+		<t:if t:test="activitiesToHide">
+			<a class="btn btn-sm btn-secondary p-0 pl-1 pr-1 mb-1" href=""
+				t:id="ResetListOfAllActivities" t:type="IconActionLink"
+				t:path="list" t:async="true">${message:show-all-label}</a>
+			<br />
+			<b>${message:hidden-activities-label}:</b>
+			<span class="" t:type="loop" t:source="activitiesToHide"
+				t:value="hiddenActivity"><a href=""
+				class="btn btn-sm btn-outline-light p-0 pl-1 pr-1 "
+				t:type="iconactionlink" t:path="eye" t:id="showActivity"
+				t:context="hiddenActivity" t:async="true">${hiddenActivityActivityTypeCode}</a></span>
+		</t:if>
+	</p>
+
 	<div t:type="zone" t:id="zWorkReport" id="zWorkReport">
-		<div t:type="if" t:test="newWorkReport">
-			<t:ModalBox t:id="newWorkReportModal">
+		<div t:type="if" t:test="ModeCreateWorkReport">
+			<t:ModalBox t:id="createWorkReportModal">
 				<h2>${message:Report-label}</h2>
-				<form t:id="frmAddWorkReport" t:type="form" t:zone="zAll"
+				<form t:id="frmCreateWorkReport" t:type="form" t:zone="zAll"
 					t:async="true">
-					<t:beaneditor t:object="newWorkReport" t:exclude="workReportId" />
+					<t:beaneditor t:object="editorWorkReport" t:exclude="workReportId" />
 					<t:submit t:value="OK" />
-					<a href="" t:type="actionlink" t:id="cancelNewWorkReport"
+					<a href="" t:type="actionlink" t:id="cancelCreateWorkReport"
+						t:zone="zAll" t:async="true">${message:cancel-label}</a>
+				</form>
+			</t:ModalBox>
+		</div>
+		<div t:type="if" t:test="ModeUpdateWorkReport">
+			<t:ModalBox t:id="updateWorkReportModal">
+				<h2>${message:Report-label}</h2>
+				<form t:id="frmUpdateWorkReport" t:type="form" t:zone="zAll"
+					t:async="true">
+					<t:beaneditor t:object="editorWorkReport" t:exclude="workReportId" />
+					<t:submit t:value="OK" />
+					<a href="" t:type="actionlink" t:id="cancelUpdateWorkReport"
 						t:zone="zAll" t:async="true">${message:cancel-label}</a>
 				</form>
 			</t:ModalBox>
@@ -66,21 +82,21 @@
 	</div>
 
 	<div t:type="zone" t:id="zWorkEvaluation" id="zWorkEvaluation">
-		<div t:type="if" t:test="newWorkEvaluation">
-			<t:ModalBox t:id="newWorkEvaluationModal">
-				<form t:id="frmAddWorkEvaluation" t:type="form" t:zone="zAll"
+		<div t:type="if" t:test="ModeCreateWorkEvaluation">
+			<t:ModalBox t:id="createWorkEvaluationModal">
+				<form t:id="frmCreateWorkEvaluation" t:type="form" t:zone="zAll"
 					t:async="true">
-					<t:beaneditor t:object="newWorkEvaluation"
+					<t:beaneditor t:object="editorWorkEvaluation"
 						t:exclude="workEvaluationId,points,percentEvaluated,status,evaluationDate"
 						t:add="mtitle,pctPoints" t:reorder="mtitle,title,description">
 						<p:mtitle>
 							<h3>${message:Evaluation-label}
-								<small class="text-muted">${newWorkEvaluation.workReport.activity.title}</small>
+								<small class="text-muted">${editorWorkEvaluation.workReport?.activity.title}</small>
 							</h3>
 						</p:mtitle>
 						<p:description>
 							<textarea t:type="textarea"
-								t:value="newWorkEvaluation.description" t:mixins="webeditor"
+								t:value="editorWorkEvaluation.description" t:mixins="webeditor"
 								t:WebEditor.areaType=""></textarea>
 						</p:description>
 						<p:pctPoints>
@@ -88,20 +104,20 @@
 								<div class="col-3">
 									<div class="form-group">
 										<label t:type="label" t:for="points" /> <input t:id="points"
-											t:type="textfield" t:value="newWorkEvaluation.points" />
+											t:type="textfield" t:value="editorWorkEvaluation.points" />
 									</div>
 								</div>
 								<div class="col-3">
 									<div class="form-group">
 										<label t:type="label" t:for="percentEvaluated" /> <input
 											t:id="percentEvaluated" t:type="textfield"
-											t:value="newWorkEvaluation.percentEvaluated" />
+											t:value="editorWorkEvaluation.percentEvaluated" />
 									</div>
 								</div>
 								<div class="col-3">
 									<div class="form-group">
 										<label t:type="label" t:for="status" /> <select t:id="status"
-											t:type="select" t:value="newWorkEvaluation.status"
+											t:type="select" t:value="editorWorkEvaluation.status"
 											t:model="evalStatusModel"></select>
 									</div>
 								</div>
@@ -109,14 +125,69 @@
 									<div class="form-group">
 										<label t:type="label" t:for="evaluationDate" /> <input
 											t:id="evaluationDate" t:type="DateField"
-											t:value="newWorkEvaluation.evaluationDate" />
+											t:value="editorWorkEvaluation.evaluationDate" />
 									</div>
 								</div>
 							</div>
 						</p:pctPoints>
 					</t:beaneditor>
 					<t:submit t:value="OK" />
-					<a href="" t:type="actionlink" t:id="cancelNewWorkEvaluation"
+					<a href="" t:type="actionlink" t:id="cancelCreateWorkEvaluation"
+						t:zone="zAll" t:async="true">${message:cancel-label}</a>
+				</form>
+			</t:ModalBox>
+		</div>
+		<div t:type="if" t:test="ModeUpdateWorkEvaluation">
+			<t:ModalBox t:id="updateWorkEvaluationModal">
+				<form t:id="frmUpdateWorkEvaluation" t:type="form" t:zone="zAll"
+					t:async="true">
+					<t:beaneditor t:object="editorWorkEvaluation"
+						t:exclude="workEvaluationId,points,percentEvaluated,status,evaluationDate"
+						t:add="mtitle,pctPoints" t:reorder="mtitle,title,description">
+						<p:mtitle>
+							<h3>${message:Evaluation-label}
+								<small class="text-muted">${editorWorkEvaluation.workReport.activity.title}</small>
+							</h3>
+						</p:mtitle>
+						<p:description>
+							<textarea t:type="textarea"
+								t:value="editorWorkEvaluation.description" t:mixins="webeditor"
+								t:WebEditor.areaType=""></textarea>
+						</p:description>
+						<p:pctPoints>
+							<div class="row">
+								<div class="col-3">
+									<div class="form-group">
+										<label t:type="label" t:for="points" /> <input
+											t:type="textfield" t:value="editorWorkEvaluation.points" />
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-group">
+										<label t:type="label" t:for="percentEvaluated" /> <input
+											t:type="textfield"
+											t:value="editorWorkEvaluation.percentEvaluated" />
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-group">
+										<label t:type="label" t:for="status" /> <select
+											t:type="select" t:value="editorWorkEvaluation.status"
+											t:model="evalStatusModel"></select>
+									</div>
+								</div>
+								<div class="col-3">
+									<div class="form-group">
+										<label t:type="label" t:for="evaluationDate" /> <input
+											t:type="DateField"
+											t:value="editorWorkEvaluation.evaluationDate" />
+									</div>
+								</div>
+							</div>
+						</p:pctPoints>
+					</t:beaneditor>
+					<t:submit t:value="OK" />
+					<a href="" t:type="actionlink" t:id="cancelUpdateWorkEvaluation"
 						t:zone="zAll" t:async="true">${message:cancel-label}</a>
 				</form>
 			</t:ModalBox>
@@ -131,7 +202,8 @@
 
 				<thead class="thead-dark">
 					<tr>
-						<th scope="col">${message:Project-label}</th>
+						<th scope="col">${message:Project-label}/
+							${message:Activity-label}</th>
 
 						<th scope="col" t:type="loop" t:source="ListOfAllActiveProjects"
 							t:value="project">
@@ -143,8 +215,8 @@
 									href="${PMProjectURLPrefix}${project.code}/report/6">Tickets</a>
 								<a class="btn btn-sm btn-outline-warning p-0 pl-1 pr-1 " href=""
 									t:id="HideProjectFromListOfAllProjects" t:type="IconActionLink"
-									t:context="project" t:path="eye-off"></a><br />Total: <span
-									class="badge text-nowrap">${projectTotal}</span>
+									t:context="project" t:path="eye-off" t:async="true"></a><br />Total:
+								<span class="badge text-nowrap">${projectTotal}</span>
 							</p>
 						</th>
 					</tr>
@@ -154,87 +226,84 @@
 					<tr t:type="loop" t:source="selectedCourseCourseActivityTypes"
 						t:value="courseActivityType">
 
-
-						<th class="">${courseActivityType.activityType.title}<a
+						<th class="small">${courseActivityType.activityType.title}<a
 							class="btn btn-sm btn-outline-warning p-0 pl-1 pr-1" href=""
 							t:id="HideActivityFromListOfAllActivities"
 							t:type="IconActionLink" t:context="courseActivityType"
-							t:path="eye-off"></a></th>
+							t:path="eye-off" t:async="true"></a></th>
 
 						<td class="" t:type="loop" t:source="ListOfAllActiveProjects"
 							t:value="project">
 
+							<div class="card p-1 bg-light mb-2 font-small report" t:type="loop"
+								t:source="workReportsForActivity" t:value="listedWorkReport">
 
-							<div class="card bg-light p-1 mt-1 font-small" t:type="loop"
-								t:source="workReportsForActivity" t:value="workReport">
+								<div class="card-header report">
+									<t:if t:test="workReportEditable">
+										<a class="float-right btn btn-sm btn-primary p-0" href=""
+											t:type="eventlink" t:id="updateWorkReport"
+											t:context="listedWorkReport" t:async="true"><img
+											t:type="svgicon" t:path="edit" /></a>
+									</t:if>
+									<strong>${listedWorkReport.title}</strong> <br /> <span
+										class="text-muted small mr-1" style=""><t:output
+											format="message:date-format-yms"
+											value="listedWorkReport?.submissionDate" />
+										${listedWorkReportPersonName}</span>
 
-								<div class="report">
-									<div class="float-right">
-										<t:if t:test="workReport.person">
-									- ${workReport?.person?.lastName} ${workReport?.person?.firstName}
-									</t:if>
-										- ${workReport?.submissionDate}
-									</div>
-									<p>
-										<strong>${workReport.title}</strong>
-									</p>
-									<t:if t:test="workReport.description">
-										<t:outputraw t:value="workReport.description" />
-									</t:if>
 								</div>
 
-								<div
-									class="card p-1 mt-2 bg-info text-light evaluation ${workEvaluation.status}"
-									t:type="loop" t:source="workEvaluationsForWorkReport"
-									t:value="workEvaluation">
-									<div id="">
+								<div class="card-body">
+									<p t:type="if" t:test="listedWorkReport.description"
+										class="report">
+										<t:outputraw t:value="listedWorkReport.description" />
+									</p>
 
-										<div class="row">
-											<div class="col-2">
-												<p>
-													<a class="btn btn-sm btn-primary p-0" href=""
-														t:type="eventlink" t:id="editWorkEvaluation"
-														t:context="workEvaluation" t:async="true"><img
-														t:type="svgicon" t:path="edit" /></a> <span
-														class="ml-3 badge badge-dark text-nowrap">${workEvaluation.points}</span>
-													<a class="btn btn-sm btn-secondary p-0" href=""
-														t:type="eventlink" t:id="toggleWorkEvaluationStatus"
-														t:context="workEvaluation" t:async="true"><img
-														t:type="svgicon" t:path="toggle-left" /></a>
-												</p>
+									<div
+										class="card evaluation mt-3 ${listedWorkEvaluation.status}"
+										t:type="loop" t:source="workEvaluationsForWorkReport"
+										t:value="listedWorkEvaluation">
+										<div class="card-header p-2">
+											<div class="float-right">
+												<span class="badge badge-pill badge-info pt-2 pb-2">${listedWorkEvaluation.points}</span>
+												<a class="btn btn-sm btn-secondary p-0" href=""
+													t:type="eventlink" t:id="toggleWorkEvaluationStatus"
+													t:context="listedWorkEvaluation" t:async="true"><img
+													t:type="svgicon" t:path="toggle-left" /></a> <a
+													class="btn btn-sm btn-primary p-0" href=""
+													t:type="eventlink" t:id="updateWorkEvaluation"
+													t:context="listedWorkEvaluation" t:async="true"><img
+													t:type="svgicon" t:path="edit" /></a>
 											</div>
-											<div class="col-10">
-												<div class="float-right">
-													<t:if t:test="workEvaluation">
-														<span class="small">-
-															${workEvaluation?.person?.lastName}
-															${workEvaluation?.person?.firstName} -
-															${workEvaluation?.evaluationDate}</span>
-													</t:if>
-												</div>
-												<p class="mb-0">
-													<strong>${workEvaluation.title}</strong>
-												</p>
-												<t:outputRaw t:value="workEvaluation.description" />
-											</div>
+											<strong>${listedWorkEvaluation.title}</strong> <br />
+											<t:if t:test="listedWorkEvaluation">
+												<span class="small"><t:output
+														format="message:date-format-yms"
+														value="listedWorkEvaluation?.evaluationDate" />
+													${listedWorkEvaluationPersonName}</span>
+											</t:if>
+										</div>
+										<div class="card-body p-2">
+											<t:outputRaw t:value="listedWorkEvaluation.description" />
 										</div>
 									</div>
-								</div>
 
-								<p class="mt-2 text-right ">
-									<a href="" class="p-1 btn btn-sm btn-link" t:type="eventlink"
-										t:id="addWorkEvaluation" t:context="workReport"><img
-										t:type="svgicon" t:path="corner-down-left" />
-										${message:evaluation-label}</a>
-								</p>
+									<p class="mt-2 text-right ">
+										<a href="" class="p-1 btn btn-sm btn-info" t:type="eventlink"
+											t:async="true" t:id="createWorkEvaluation"
+											t:context="listedWorkReport"><img t:type="svgicon"
+											t:path="plus-square" /> ${message:evaluation-label}</a>
+									</p>
+
+								</div>
 
 							</div>
 
 							<p class="mt-2">
 								<t:if t:test="activity">
-									<a href="" class="btn btn-sm btn-light" t:type="iconactionlink"
-										t:id="addWorkReport" t:async="true" t:context="activity"
-										t:path="file-plus">${message:report-label}</a>
+									<a href="" class="btn btn-sm btn-outline-primary"
+										t:type="iconactionlink" t:id="createWorkReport" t:async="true"
+										t:context="activity" t:path="file-plus">${message:report-label}</a>
 								</t:if>
 							</p>
 

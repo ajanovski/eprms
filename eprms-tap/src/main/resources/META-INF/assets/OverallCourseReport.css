@@ -1,11 +1,26 @@
-.CREATED {
-	background-color: #ffc0c0ff !important;
-	color: #000000ff !important;
+.CREATED .card-header {
+	background: #606080 !important;
+	color: #c0c0c0 !important;
+}
+
+.CREATED .card-body {
+	background: #9090a0 !important;
+	color: #404040 !important;
+}
+
+.PUBLISHED .card-header {
+	background: #282860 !important;
+	color: #ffffff !important;
+}
+
+.PUBLISHED .card-body {
+	background: #e0e0f0 !important;
+	color: #000000 !important;
 }
 
 .report {
 	min-height: 5rem;
-	max-height: 10rem;
+	max-height: 25rem;
 	overflow: auto;
 	font-size: 75%;
 }
@@ -56,3 +71,4 @@ table tbody th {
 	max-height: 98vh;
 	overflow: auto;
 }
+
