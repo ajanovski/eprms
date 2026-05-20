@@ -235,8 +235,9 @@
 						<td class="" t:type="loop" t:source="ListOfAllActiveProjects"
 							t:value="project">
 
-							<div class="card p-1 bg-light mb-2 font-small report" t:type="loop"
-								t:source="workReportsForActivity" t:value="listedWorkReport">
+							<div class="card p-1 bg-light mb-2 font-small report"
+								t:type="loop" t:source="workReportsForActivity"
+								t:value="listedWorkReport">
 
 								<div class="card-header report">
 									<t:if t:test="workReportEditable">
@@ -254,10 +255,7 @@
 								</div>
 
 								<div class="card-body">
-									<p t:type="if" t:test="listedWorkReport.description"
-										class="report">
-										<t:outputraw t:value="listedWorkReport.description" />
-									</p>
+									<t:if t:test="listedWorkReport.description" class="report"><t:outputraw t:value="listedWorkReport.description" /></t:if>
 
 									<div
 										class="card evaluation mt-3 ${listedWorkEvaluation.status}"

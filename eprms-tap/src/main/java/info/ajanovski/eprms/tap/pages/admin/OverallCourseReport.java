@@ -241,6 +241,8 @@ public class OverallCourseReport {
 			editorWorkReport = new WorkReport();
 			editorWorkReport
 					.setTitle(systemConfigService.getString(AppConstants.SystemParameterTplNewWorkReportByAdmin));
+			Date d = new Date();
+			editorWorkReport.setSubmissionDate(d);
 		}
 	}
 
@@ -257,8 +259,6 @@ public class OverallCourseReport {
 		try {
 			editorWorkReport.setActivity(genericService.getByPK(Activity.class, editorWorkReportActivityId));
 			editorWorkReport.setPerson(genericService.getByPK(Person.class, userInfo.getPersonId()));
-			Date d = new Date();
-			editorWorkReport.setSubmissionDate(d);
 			genericService.saveOrUpdate(editorWorkReport);
 		} catch (Exception e) {
 			frmCreateWorkReport.recordError(e.getMessage());
