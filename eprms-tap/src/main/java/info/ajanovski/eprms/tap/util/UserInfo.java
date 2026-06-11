@@ -87,9 +87,4 @@ public class UserInfo {
 		}
 	}
 
-	public void impersonate(String inUsername) throws Exception {
-		this.userName = inUsername;
-//		this.setupUser();
-	}
-
 }
