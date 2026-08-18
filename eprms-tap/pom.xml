@@ -1,15 +1,18 @@
-<?xml version="1.0" encoding="UTF-8" standalone="no"?><project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 https://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 	<parent>
 		<groupId>org.springframework.boot</groupId>
 		<artifactId>spring-boot-starter-parent</artifactId>
 		<version>3.1.12</version>
-		<relativePath/>
+		<relativePath />
 	</parent>
 
 	<groupId>info.ajanovski.eprms</groupId>
 	<artifactId>eprms-tap</artifactId>
-	<version>0.0.24-SNAPSHOT</version>
+	<version>0.0.25-SNAPSHOT</version>
 	<name>EPRMS - Educational Project and Resource Management System</name>
 
 	<packaging>war</packaging>
@@ -35,21 +38,36 @@
 		<maven-compiler-version>3.13.0</maven-compiler-version>
 		<maven-surefire-version>3.5.0</maven-surefire-version>
 		<maven-enforcer-version>3.0.0</maven-enforcer-version>
+		<maven-resources-plugin-version>2.6</maven-resources-plugin-version>
+		
 		<maven.compiler.source>21</maven.compiler.source>
 		<maven.compiler.target>21</maven.compiler.target>
 		<java.version>21</java.version>
 
+		<eprms-model-version>0.0.16-SNAPSHOT</eprms-model-version>
+		<eprms-mq-version>0.0.2-SNAPSHOT</eprms-mq-version>
+
 		<spring-boot-version>3.1.12</spring-boot-version>
-		<tapestry-version>5.9.0</tapestry-version>
-		<jackson-version>2.18.7</jackson-version>
-		<log4j-version>2.25.4</log4j-version>
+		<tapestry-version>5.9.1</tapestry-version>
+		<jackson-version>2.18.9</jackson-version>
+		<log4j-version>2.25.5</log4j-version>
 		<junit-version>5.8.2</junit-version>
 		<yasson-version>2.0.4</yasson-version>
 		<servlet-version>5.0.0</servlet-version>
 		<json-version>1.1.4</json-version>
+		<jaxb-runtime-version>2.3.9</jaxb-runtime-version>
+		<jakarta.xml.bind-api-version>2.3.3</jakarta.xml.bind-api-version>
 
-		<postgresql-version>42.7.11</postgresql-version>
-		<cas-client-version>4.0.4</cas-client-version>
+		<hibernate-hikaricp-version>5.4.33.Final</hibernate-hikaricp-version>
+		<hikaricp-version>7.1.0</hikaricp-version>
+		<postgresql-version>42.7.13</postgresql-version>
+		<cas-client-version>4.1.1</cas-client-version>
+
+		<webjars-locator-version>0.52</webjars-locator-version>
+		<font-firasans-version>3.0.5</font-firasans-version>
+		<font-firacode-version>1.205.0</font-firacode-version>
+		<feather-icons-version>4.29.2</feather-icons-version>
+		<ckeditor-version>4.19.0</ckeditor-version>
 	</properties>
 
 	<repositories>
@@ -63,12 +81,12 @@
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>model</artifactId>
-			<version>0.0.16-SNAPSHOT</version>
+			<version>${eprms-model-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>info.ajanovski.eprms</groupId>
 			<artifactId>mq</artifactId>
-			<version>0.0.3-SNAPSHOT</version>
+			<version>${eprms-mq-version}</version>
 		</dependency>
 		<!-- Spring -->
 		<dependency>
@@ -214,12 +232,12 @@
 		<dependency>
 			<groupId>com.zaxxer</groupId>
 			<artifactId>HikariCP</artifactId>
-			<version>6.2.1</version>
+			<version>${hikaricp-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.hibernate</groupId>
 			<artifactId>hibernate-hikaricp</artifactId>
-			<version>5.4.33.Final</version>
+			<version>${hibernate-hikaricp-version}</version>
 		</dependency>
 
 		<dependency>
@@ -232,13 +250,13 @@
 		<dependency>
 			<groupId>jakarta.xml.bind</groupId>
 			<artifactId>jakarta.xml.bind-api</artifactId>
-			<version>2.3.3</version>
+			<version>${jakarta.xml.bind-api-version}</version>
 		</dependency>
 		<!-- Runtime, com.sun.xml.bind module -->
 		<dependency>
 			<groupId>org.glassfish.jaxb</groupId>
 			<artifactId>jaxb-runtime</artifactId>
-			<version>2.3.9</version>
+			<version>${jaxb-runtime-version}</version>
 		</dependency>
 
 		<dependency>
@@ -251,27 +269,27 @@
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>webjars-locator</artifactId>
-			<version>0.52</version>
+			<version>${webjars-locator-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>fontsource-fira-sans</artifactId>
-			<version>3.0.5</version>
+			<version>${font-firasans-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>feather-icons</artifactId>
-			<version>4.29.1</version>
+			<version>${feather-icons-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars</groupId>
 			<artifactId>ckeditor</artifactId>
-			<version>4.19.0</version>
+			<version>${ckeditor-version}</version>
 		</dependency>
 		<dependency>
 			<groupId>org.webjars.npm</groupId>
 			<artifactId>firacode</artifactId>
-			<version>1.205.0</version>
+			<version>${font-firacode-version}</version>
 		</dependency>
 
 	</dependencies>
@@ -281,7 +299,7 @@
 			<dependency>
 				<groupId>org.hibernate.orm</groupId>
 				<artifactId>hibernate-core</artifactId>
-				<version>5.4.33.Final</version>
+				<version>${hibernate-hikaricp-version}</version>
 			</dependency>
 		</dependencies>
 	</dependencyManagement>
@@ -404,7 +422,7 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-resources-plugin</artifactId>
-				<version>2.6</version>
+				<version>${maven-resources-plugin-version}</version>
 			</plugin>
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
